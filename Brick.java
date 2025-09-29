@@ -1,16 +1,16 @@
 class Brick extends GameObject {
-  int hitPoints;
+  private int hitPoints;
 
   Brick(double x, double y, double w, double h, int hp) {
     super(x, y, w, h);
     this.hitPoints = hp;
   }
 
-  void takeHit() {
+  public void takeHit() {
     hitPoints--;
   }
 
-  boolean isDestroyed() {
+  public boolean isDestroyed() {
     return hitPoints <= 0;
   }
 }

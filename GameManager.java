@@ -1,10 +1,11 @@
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-class GameManager {
+public class GameManager {
   int width, height;
   GraphicsContext gc;
   Main.GameState gameState = Main.GameState.READY;
@@ -12,46 +13,70 @@ class GameManager {
   Ball ball;
   List<Brick> bricks = new ArrayList<>();
   boolean pressedLeft = false, pressedRight = false;
+  Rectangle map;
 
-  GameManager(int width, int height, GraphicsContext gc) {
+  public GameManager(int width, int height, Rectangle map, GraphicsContext gc) {
     this.width = width;
     this.height = height;
     this.gc = gc;
+    this.map = map;
     initLevel();
   }
 
-  void initLevel() {
-    paddle = new Paddle(width / 2 - 60, height - 40, 120, 16);
-    ball = new Ball(width / 2 - 8, height - 70, 8);
-    bricks.clear();
-    int rows = 4, cols = 8;
+  private void initLevel() {
+    paddle = new Paddle(map.width / 2 - 60 + map.x, map.height - 40 + map.y);
 
-    double brickW = (width - 60) / cols;
+    ball = new Ball(map.width / 2 - 60 + map.x + 50 - 8, map.height - 40 + map.y - 16);
+    bricks.clear();
+
+
+    int rows = 8, cols = 8;
+    int[][] arr = {
+        {0, 2, 0, 0, 0, 0, 2, 0}, // hàng 0
+        {2, 0, 0, 0, 0, 0, 0, 2}, // hàng 1
+        {0, 0, 0, 0, 0, 0, 0, 0}, // hàng 2
+        {0, 0, 0, 2, 2, 0, 0, 0}, // hàng 3
+        {0, 0, 0, 2, 2, 0, 0, 0}, // hàng 4
+        {0, 0, 0, 0, 0, 0, 0, 0}, // hàng 5
+        {2, 0, 0, 0, 0, 0, 0, 2}, // hàng 6
+        {0, 2, 0, 0, 0, 0, 2, 0}  // hàng 7
+    };
+
+    double brickW = (map.width - 60) / cols;
     double brickH = 20;
 
     for (int r = 0; r < rows; r++) {
       for (int c = 0; c < cols; c++) {
-        double bx = 30 + c * brickW;
-        double by = 50 + r * (brickH + 6);
-        bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
+          if(arr[r][c] == 0){
+            continue;
+          } else {
+            double bx = 30 + c * brickW + map.x;
+            double by = 50 + r * (brickH + 6) + map.y;
+            if(arr[r][c] == 1) {
+              bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
+            } else {
+              by = 50 + r * (brickH) + map.y;
+              bricks.add(new EternalBrick(bx, by, brickW, brickH));
+            }
+          }
       }
     }
     gameState = Main.GameState.READY;
   }
 
-  void startGame() {
+  public void startGame() {
     gameState = Main.GameState.RUNNING;
   }
 
-  void reset() {
+  public void reset() {
     initLevel();
   }
 
-  void onBallLost() {
+  public void onBallLost() {
     gameState = Main.GameState.GAMEOVER;
   }
 
-  void update() {
+  public void update() {
     if (pressedLeft) {
       paddle.moveLeft();
     } else if (pressedRight) {
@@ -62,16 +87,17 @@ class GameManager {
     if (gameState == Main.GameState.RUNNING) {
       paddle.update(this);
       ball.update(this);
-      if (ball.checkCollision(paddle)) {
-        ball.bounceOff(paddle);
+      if (ball.checkCollision(paddle) != Ball.BallCollision.NONE) {
+        ball.bounceOff(paddle, ball.checkCollision(paddle));
         ball.y = paddle.y - ball.height - 1;
       }
+
       Iterator<Brick> it = bricks.iterator();
       while (it.hasNext()) {
         Brick b = it.next();
-        if (ball.checkCollision(b)) {
+        if (ball.checkCollision(b) != Ball.BallCollision.NONE) {
           b.takeHit();
-          ball.bounceOff(b);
+          ball.bounceOff(b , ball.checkCollision(b));
           if (b.isDestroyed()) {
             it.remove();
           }
@@ -87,6 +113,8 @@ class GameManager {
   void render() {
     gc.setFill(Color.BLACK);
     gc.fillRect(0, 0, width, height);
+    gc.setFill(Color.GREEN);
+    gc.fillRect(map.x, map.y, map.width, map.height);
     for (Brick b : bricks) {
       b.render(gc);
     }

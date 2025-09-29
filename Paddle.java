@@ -2,10 +2,22 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 class Paddle extends MovableObject {
-  double speed = 6.0;
+  private double speed = 6.0;
+  static double paddleWidth = 100;
+  static double paddleHeight = 16;
 
-  Paddle(double x, double y, double w, double h) {
-    super(x, y, w, h);
+  Paddle(double x, double y) {
+    super(x, y, paddleWidth, paddleHeight);
+  }
+
+  public void setPaddleWidth(double w) {
+    this.width = w;
+  }
+  public void setPaddleHeight(double h) {
+    this.height = h;
+  }
+  public void setSpeed(double s) {
+    this.speed = s;
   }
 
   void moveLeft() {
@@ -23,11 +35,11 @@ class Paddle extends MovableObject {
 
   void update(GameManager gm) {
     move();
-    if (x < 0) {
-      x = 0;
+    if (x < gm.map.x) {
+      x = gm.map.x;
     }
-    if (x + width > gm.width) {
-      x = gm.width - width;
+    if (x + width > gm.map.width + gm.map.x) {
+      x = gm.map.width + gm.map.x - width;
     }
   }
 
