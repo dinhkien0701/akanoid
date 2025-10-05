@@ -115,6 +115,6 @@ public class GameManager {
     paddle.render(gc);
     ball.render(gc);
     gc.setFill(Color.WHITE);
-    gc.fillText("State:    " + gameState.name() + "    Level:   " + this.currentMap, 10, 20);
+    gc.fillText("State:    " + gameState.name() + "    Level:   " + (this.currentMap + 1), 10, 20);
   }
 }

@@ -9,21 +9,11 @@ class Ball extends MovableObject {
     NONE, HORIZONTAL , VERTICAL , CORNER
   };
   static double r = 8.0;
-  private static class ob{
-    double _x;
-    double _y;
-    ob(double x, double y) {
-      _x = x;
-      _y = y;
-    }
-  };
-  private Deque<ob> past = new LinkedList<ob>();
 
   public Ball(double x, double y) {
     super(x, y, r * 2, r * 2);
-    dx = speed/2;
+    dx = speed/3;
     dy = -speed;
-    past.clear();
   }
 
   private double radius() {
@@ -60,20 +50,7 @@ class Ball extends MovableObject {
     if((distX * distX + distY * distY) > (radius() * radius())){
       return BallCollision.NONE;
     } else {
-      distY = Math.abs(distY);
-      distX = Math.abs(distX);
-      if(distX == distY && distX == radius()) {
-        return BallCollision.CORNER;
-      }
-      else {
-        if (distX == radius()) {
-          return BallCollision.VERTICAL;
-        } else if (distY == radius()) {
-          return BallCollision.HORIZONTAL;
-        } else {
-          return BallCollision.HORIZONTAL;
-        }
-      }
+        return BallCollision.HORIZONTAL;
     }
   }
 
@@ -91,29 +68,9 @@ class Ball extends MovableObject {
       y = 0;
       dy = -dy;
     }
-    past.addFirst(new ob(x,y));
-
-    if(past.size() >= 50) {
-      past.removeLast();
-    }
-    if (y > gm.height) {
-      gm.onBallLost();
-    }
   }
 
   void render(GraphicsContext gc) {
-    double i = 0;
-    for (ob ball : past) {
-      gc.setFill(Color.WHITE);
-      gc.fillOval(ball._x, ball._y, this.width - i, this.height - i);
-      i = i + 0.4;
-      if(this.width < 0){
-        this.width = 0;
-      }
-      if(this.height < 0){
-        this.height = 0;
-      }
-    }
     gc.setFill(Color.RED);
     gc.fillOval(this.x, this.y, this.width, this.height);
   }
