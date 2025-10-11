@@ -1,8 +1,18 @@
-class MovableObject extends GameObject {
-  double dx = 0, dy = 0;
+abstract class MovableObject extends GameObject {
+  protected double dx, dy;
 
-  protected MovableObject(double x, double y, double width, double height) {
+  protected MovableObject(double x, double y, double width, double height, double dx, double dy) {
     super(x, y, width, height);
+    this.dx = dx;
+    this.dy = dy;
+  }
+
+  public double getDx(){
+    return this.dx;
+  }
+
+  public double getDy(){
+    return this.dy;
   }
 
   protected void move() {

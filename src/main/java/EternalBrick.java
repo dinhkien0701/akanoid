@@ -7,8 +7,13 @@ class EternalBrick extends Brick {
     super(x , y , width, height , 1000000000);
   }
 
+
+  @Override
   void render(GraphicsContext gc) {
     gc.setFill(Color.NAVY);
-    gc.fillRect(x, y, width, height);
+    gc.fillRect(getX(), getY(), getWidth(), getHeight());
   }
+
+  @Override
+  void update(PlayingProcess gameManager) {}
 }

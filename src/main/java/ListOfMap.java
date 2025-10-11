@@ -1,41 +1,24 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListOfMap {
-  private class Map {
-    private int[][] map = new int[8][8];
-    private boolean MapBeated = false;
 
-    public Map(){}
-
-    public Map(int[][] map) {
-      this.map = map;
-    }
-
-    public boolean getMapBeated() {
-      return MapBeated;
-    }
-
-    public void setMapBeated(boolean MapBeated) {
-      this.MapBeated = MapBeated;
-    }
-
-    public int[][] getMap() {
-      return this.map;
-    }
-  }
-
-  private List<Map> listOfMaps = new ArrayList<>();
-
+  private final List<Map> listOfMaps = new ArrayList<>();
   private int Size = 0;
 
-  public ListOfMap() {}
-  public ListOfMap(String filePath) {
+  public ListOfMap() {
+    String filePath = "src" + File.separator
+        + "main" + File.separator
+        + "resources" + File.separator
+        + "staticMap" + File.separator
+        + "map.txt";
+
     try (BufferedReader br  = new BufferedReader(new FileReader(filePath))) {
-      String line = null;
+      String line;
       int[][] map = new int[8][8];
       int row = 0;
       while ((line = br.readLine()) != null) {

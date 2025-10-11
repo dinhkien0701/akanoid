@@ -1,4 +1,4 @@
-class Brick extends GameObject {
+abstract class Brick extends GameObject {
   private int hitPoints;
 
   Brick(double x, double y, double w, double h, int hp) {

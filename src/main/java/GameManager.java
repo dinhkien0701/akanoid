@@ -1,120 +1,121 @@
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 public class GameManager {
-  int width, height;
-  GraphicsContext gc;
-  Main.GameState gameState = Main.GameState.READY;
 
-  Paddle paddle;
-  Ball ball;
-  List<Brick> bricks = new ArrayList<>();
-  boolean pressedLeft = false, pressedRight = false;
-  Rectangle map;
-  ListOfMap LM = new ListOfMap();
-  int currentMap = 0;
+  public static final int SCREEN_WIDTH = 1200;
+  public static final int SCREEN_HEIGHT = 750;
 
-  public GameManager(int width, int height, Rectangle map, GraphicsContext gc) {
-    this.width = width;
-    this.height = height;
-    this.gc = gc;
-    this.map = map;
-    ListOfMap LM = new ListOfMap("F:\\akanoid\\src\\map.txt");
-    initLevel();
+  private MenuProcess menu;
+  private PlayingProcess playing;
+  private GameOver gameOver;
+
+  private GameState gameState;
+  private final Canvas canvas;
+  private final GraphicsContext gc;
+
+  public enum GameState {
+    INIT,
+    MENU,
+    PLAYING,
+    PAUSE,
+    GAME_OVER,
+    VICTORY,
+    CREDITS
   }
 
-  private void initLevel() {
-    ListOfMap LM = new ListOfMap("F:\\akanoid\\src\\map.txt");
-    paddle = new Paddle(map.width / 2 - 60 + map.x, map.height - 40 + map.y);
-    ball = new Ball(map.width / 2 - 60 + map.x + 50 - 8, map.height - 40 + map.y - 16);
-    bricks.clear();
+  private int width, height;
 
-    double brickW = (map.width - 60) / 8;
-    double brickH = 20;
+  public GameManager() {
+    this.width = SCREEN_WIDTH;
+    this.height = SCREEN_HEIGHT;
 
-    int[][] arr = LM.getMapByCode(currentMap);
-
-    for (int r = 0; r < 8; r++) {
-      for (int c = 0; c < 8; c++) {
-        if(arr[r][c] == 0){
-          continue;
-        }
-        double bx = 30 + c * brickW + map.x;
-        double by = 50 + r * (brickH + 6) + map.y;
-        if(arr[r][c] == 1) {
-          bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
-        } else {
-          bricks.add(new EternalBrick(bx, by, brickW, brickH));
-        }
-      }
-    }
-    gameState = Main.GameState.READY;
+    gameState = GameState.MENU;
+    canvas = new Canvas(this.width, this.height);
+    gc = canvas.getGraphicsContext2D();
+    menu = new MenuProcess(this.width, this.height, this.gc);
   }
 
-  public void startGame() {
-    gameState = Main.GameState.RUNNING;
+  public void process(Stage stage){
+    StackPane root = new StackPane(canvas);
+    Scene scene = new Scene(root);
+
+    stage.setTitle("Akanoid - CaiWin Edition");
+    stage.setScene(scene);
+    stage.show();
+
+    this.startLoop(scene);
   }
 
-  public void reset() {
-    initLevel();
-    currentMap++;
+  public void finishMenu(){
+    gameState = GameState.INIT;
+    Rectangle map = new Rectangle(300,0, 600,700);
+    playing = new PlayingProcess(width, height, map , this.gc);
+    gameState = GameState.PLAYING;
   }
 
-  public void onBallLost() {
-    gameState = Main.GameState.GAMEOVER;
-    currentMap = 0;
-  }
-
-  public void update() {
-    if (pressedLeft) {
-      paddle.moveLeft();
-    } else if (pressedRight) {
-      paddle.moveRight();
-    } else {
-      paddle.stop();
-    }
-    if (gameState == Main.GameState.RUNNING) {
-      paddle.update(this);
-      ball.update(this);
-      if (ball.checkCollision(paddle) != Ball.BallCollision.NONE) {
-        ball.bounceOff(paddle, ball.checkCollision(paddle));
-        ball.y = paddle.y - ball.height - 1;
-      }
-
-      Iterator<Brick> it = bricks.iterator();
-      while (it.hasNext()) {
-        Brick b = it.next();
-        if (ball.checkCollision(b) != Ball.BallCollision.NONE) {
-          b.takeHit();
-          ball.bounceOff(b , ball.checkCollision(b));
-          if (b.isDestroyed()) {
-            it.remove();
-          }
+  public void update(Scene scene){
+    scene.setOnKeyPressed(e -> {
+      switch (e.getCode()) {
+        case ESCAPE:
+          System.exit(0);
           break;
-        }
       }
-      if(bricks.isEmpty()){
-        gameState = Main.GameState.FINISHMAP;
-        reset();
-      }
+    });
+
+    switch (gameState){
+      case MENU:
+        menu.update(scene,this);
+        break;
+      case PLAYING:
+        playing.update(scene);
+        break;
+//      case GAME_OVER:
+//        gameOver.update(scene);
+//        break;
     }
   }
 
-  void render() {
-    gc.setFill(Color.BLACK);
-    gc.fillRect(0, 0, width, height);
-    gc.setFill(Color.GREEN);
-    gc.fillRect(map.x, map.y, map.width, map.height);
-    for (Brick b : bricks) {
-      b.render(gc);
-    }
-    paddle.render(gc);
-    ball.render(gc);
-    gc.setFill(Color.WHITE);
-    gc.fillText("State:    " + gameState.name() + "    Level:   " + this.currentMap, 10, 20);
+  public void render(){
+      switch (gameState){
+        case MENU:
+          menu.render();
+          break;
+        case PLAYING:
+          playing.render();
+          break;
+//        case GAME_OVER:
+//          gameOver.render(gc);
+//          break;
+      }
+  }
+
+
+  private static final double FPS = 70.0;
+  private static final double FRAME_TIME = 1000.0 / FPS;
+  private long lastFrameTime = 0;
+  public void startLoop(Scene scene) {
+    AnimationTimer timer = new AnimationTimer() {
+      @Override
+      public void handle(long now) {
+        long nowMs = now / 1_000_000;
+        if (lastFrameTime == 0) {
+          lastFrameTime = nowMs;
+          return;
+        }
+        long delta = nowMs - lastFrameTime;
+        if (delta >= FRAME_TIME) {
+          update(scene);
+          render();
+          lastFrameTime = nowMs;
+        }
+      }
+    };
+    timer.start();
   }
 }
