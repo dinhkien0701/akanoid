@@ -28,7 +28,7 @@ public class GameManager {
   }
 
   private void initLevel() {
-    ListOfMap LM = new ListOfMap("F:\\akanoid\\src\\map.txt");
+    ListOfMap LM = new ListOfMap("D:\\akanoid\\src\\map.txt");
     paddle = new Paddle(map.width / 2 - 60 + map.x, map.height - 40 + map.y);
     ball = new Ball(map.width / 2 - 60 + map.x + 50 - 8, map.height - 40 + map.y - 16);
     bricks.clear();
