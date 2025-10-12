@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 
 public class GameManager {
 
@@ -11,9 +14,11 @@ public class GameManager {
     READY, RUNNING, FINISHMAP, GAMEOVER
   }
 
+  private static final int INITIAL_LIVES = 3;
   int width, height;
   public GraphicsContext gc;
   GameState gameState = GameState.READY;
+  private int lives;
 
   Paddle paddle;
   // Ball ball;
@@ -32,6 +37,7 @@ public class GameManager {
     this.gc = gc;
     this.map = map;
     ListOfMap LM = new ListOfMap();
+    this.lives = INITIAL_LIVES;
     initLevel();
   }
 
@@ -72,15 +78,29 @@ public class GameManager {
   }
 
   public void reset() {
+    this.lives = INITIAL_LIVES;
+    this.currentMap = 0;
     initLevel();
-    currentMap++;
+  }
+
+  private void resetPaddleAndBall() {
+    gameState = GameState.READY;
+    paddle.setX(map.width / 2 - paddle.getWidth() / 2 + map.x);
+    paddle.setY(map.height - 40 + map.y);
+    balls.clear();
+    Ball newBall = new Ball(0, 0);
+    balls.add(newBall);
   }
 
   public void onBallLost(Ball lostBall) {
     balls.remove(lostBall);
     if (balls.isEmpty()) {
-      gameState = GameState.GAMEOVER;
-      currentMap = 0;
+      this.lives--;
+      if (this.lives > 0) {
+        resetPaddleAndBall();
+      } else {
+        gameState = GameState.GAMEOVER;
+      }
     }
   }
 
@@ -188,21 +208,38 @@ public class GameManager {
   }
 
   void render() {
-    gc.setFill(Color.BLACK);
-    gc.fillRect(0, 0, width, height);
-    gc.setFill(Color.GREEN);
-    gc.fillRect(map.x, map.y, map.width, map.height);
-    for (Brick b : bricks) {
-      b.render(gc);
+    if (gameState == GameState.GAMEOVER) {
+      gc.setFill(Color.BLACK);
+      gc.fillRect(0, 0, width, height);
+      gc.setFont(Font.font("Verdana", FontWeight.BOLD, 50));
+      gc.setFill(Color.RED);
+      gc.setTextAlign(TextAlignment.CENTER);
+      gc.fillText("GAME OVER", width / 2.0, height / 2.0);
+      gc.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+      gc.setFill(Color.WHITE);
+      gc.fillText("Press SPACE to Play Again ", width / 2.0, height / 2.0 + 40);
+      gc.fillText("Press ESC to Exit Game ", width / 2.0, height / 2.0 + 20);
+    } else {
+      gc.setFill(Color.BLACK);
+      gc.fillRect(0, 0, width, height);
+      gc.setFill(Color.GREEN);
+      gc.fillRect(map.x, map.y, map.width, map.height);
+      for (Brick b : bricks) {
+        b.render(gc);
+      }
+      for (PowerUp pu : powerUps) {
+        pu.render(gc);
+      }
+      paddle.render(gc);
+      for (Ball b : balls) {
+        b.render(gc);
+      }
+      gc.setFill(Color.WHITE);
+      String statusText = String.format("State: %s    Level: %d    Lives: %d",
+          gameState.name(),
+          this.currentMap + 1,
+          this.lives);
+      gc.fillText(statusText, 10, 20);
     }
-    for (PowerUp pu : powerUps) {
-      pu.render(gc);
-    }
-    paddle.render(gc);
-    for (Ball b : balls) {
-      b.render(gc);
-    }
-    gc.setFill(Color.WHITE);
-    gc.fillText("State:    " + gameState.name() + "    Level:   " + (this.currentMap + 1), 10, 20);
   }
 }
