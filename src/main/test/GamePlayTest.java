@@ -5,8 +5,8 @@ import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class GamePlayTest {
+/*public class GamePlayTest {
     public static void main(String[] args) {
         Main.main(args);
     }
-}
+}*/
