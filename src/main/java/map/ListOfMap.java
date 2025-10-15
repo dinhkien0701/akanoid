@@ -18,7 +18,6 @@ public class ListOfMap {
   }
 
   private void RandomMap() {
-
       for(int n = 0; n < 20; n++) {
           CreateMap k = new CreateMap(8,8,n+1);
           int[][] map = k.creatMap();

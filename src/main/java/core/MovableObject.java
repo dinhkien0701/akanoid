@@ -9,6 +9,11 @@ public abstract class MovableObject extends GameObject {
     this.dy = dy;
   }
 
+  protected void stop(){
+    dx = 0;
+    dy = 0;
+  }
+
   public double getDx(){
     return this.dx;
   }

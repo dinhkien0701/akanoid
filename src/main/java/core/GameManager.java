@@ -60,6 +60,17 @@ public class GameManager {
     gameState = GameState.PLAYING;
   }
 
+  public void finishPlay() {
+    gameOver = new GameOverProcess(width, height, this.gc);
+    gameState = GameState.GAME_OVER;
+  }
+
+  public void rePlay() {
+    gameState = GameState.INIT;
+    playing.reset();
+    gameState = GameState.PLAYING;
+  }
+
   public void update(Scene scene){
     scene.setOnKeyPressed(e -> {
       switch (e.getCode()) {
@@ -74,11 +85,11 @@ public class GameManager {
         menu.update(scene,this);
         break;
       case PLAYING:
-        playing.update(scene);
+        playing.update(scene,this);
         break;
-//      case GAME_OVER:
-//        gameOver.update(scene);
-//        break;
+      case GAME_OVER:
+        gameOver.update(scene,this);
+        break;
     }
   }
 
@@ -90,9 +101,9 @@ public class GameManager {
       case PLAYING:
         playing.render();
         break;
-//        case GAME_OVER:
-//          gameOver.render(gc);
-//          break;
+      case GAME_OVER:
+        gameOver.render();
+        break;
     }
   }
 

@@ -84,7 +84,6 @@ public class Ball extends MovableObject {
     }
   }
 
-
   private void bounceOffCorner() {
     dx = -dx * 1.05;
     dy = -dy * 1.05;
@@ -174,7 +173,7 @@ public class Ball extends MovableObject {
 
   @Override
   public void render(GraphicsContext gc) {
-    this.drawEffect(gc);
+    //this.drawEffect(gc);
     gc.setFill(Color.RED);
     gc.fillOval(this.getX(), this.getY(), this.getHeight(), this.getWidth());
   }

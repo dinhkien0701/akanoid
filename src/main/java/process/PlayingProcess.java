@@ -35,23 +35,32 @@ public class PlayingProcess {
 
   public Rectangle map;
   ListOfMap LM = new ListOfMap();
-  int currentMap = 0;
+  int currentMap;
 
   public PlayingProcess(int width, int height, Rectangle map, GraphicsContext gc) {
     this.width = width;
     this.height = height;
     this.gc = gc;
     this.map = map;
-    initLevel();
-  }
 
-  private void initLevel() {
-    paddle = new Paddle(map.getX() + map.getWidth() / 2 - 50,
-        map.getY() + map.getHeight() - 40);
+    currentMap = 0;
+    paddle = new Paddle(map.getX() + map.getWidth() / 2 - 50, map.getY() + map.getHeight() - 40);
     pressedLeft = false;
     pressedRight = false;
-    ball = new Ball(map.getWidth() / 2 - 60 + map.getX() + 50 - 8,
-        map.getHeight() - 40 + map.getY() - 16);
+    ball = new Ball(map.getWidth() / 2 - 60 + map.getX() + 50 - 8, map.getHeight() - 40 + map.getY() - 16);
+    initBallAndPaddle();
+    initMap();
+  }
+
+  private void initBallAndPaddle() {
+    paddle.setX(map.getX() + map.getWidth() / 2 - 50);
+    paddle.setY(map.getY() + map.getHeight() - 40);
+    ball.setX(map.getWidth() / 2 - 60 + map.getX() + 50 - 8);
+    ball.setY(map.getHeight() - 40 + map.getY() - 16);
+  }
+
+  private void initMap() {
+
     bricks.clear();
 
     double brickW = (map.getWidth() - 60) / 8;
@@ -77,15 +86,31 @@ public class PlayingProcess {
   }
 
   public void reset() {
-    initLevel();
+    currentMap = 0;
+    initMap();
+    initBallAndPaddle();
+    paddle.reborn();
   }
 
   public void onBallLost() {
-    playingState = PlayingState.GAME_OVER;
-    currentMap = 0;
+    paddle.takeHit();
+    initBallAndPaddle();
+    playingState = PlayingState.READY;
+    System.out.println("arrgggggggggggggggggggggggggggggggggggggggggg");
   }
+
+  public void deadPaddle() {
+    playingState = PlayingState.GAME_OVER;
+  }
+
   public void startGame() {
     playingState = PlayingState.RUNNING;
+  }
+
+  public void nextLevel() {
+    currentMap++;
+    initMap();
+    initBallAndPaddle();
   }
 
   private void initInput(Scene scene) {
@@ -125,7 +150,8 @@ public class PlayingProcess {
     }
   }
 
-  public void update(Scene scene) {
+
+  public void update(Scene scene, GameManager gm) {
     initInput(scene);
     switch (playingState) {
       case READY:
@@ -142,8 +168,11 @@ public class PlayingProcess {
         }
         checkBricksList();
         break;
+      case GAME_OVER:
+        gm.finishPlay();
     }
   }
+
 
   private void checkBricksList() {
     Iterator<Brick> it = bricks.iterator();
@@ -170,8 +199,7 @@ public class PlayingProcess {
     }
     if (countNormalBrick <= 0) {
       playingState = PlayingState.FINISH_MAP;
-      currentMap++;
-      reset();
+      nextLevel();
     }
   }
 
