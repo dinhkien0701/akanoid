@@ -52,6 +52,8 @@ public class MenuProcess {
             KeyCode code = e.getCode();
             if (code == KeyCode.ENTER) {
                 mn.finishMenu();
+            } else if(code == KeyCode.ESCAPE) {
+              System.exit(0);
             }
         });
     }

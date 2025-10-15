@@ -23,6 +23,7 @@ public class ListOfMap {
           CreateMap k = new CreateMap(8,8,n+1);
           int[][] map = k.creatMap();
           listOfMaps.add(new Map(map));
+          Size++;
       }
   }
 

@@ -12,9 +12,6 @@ import process.*;
 
 public class GameManager {
 
-  public static final int SCREEN_WIDTH = 1200;
-  public static final int SCREEN_HEIGHT = 750;
-
   private MenuProcess menu;
   private PlayingProcess playing;
   private GameOverProcess gameOver;
@@ -35,9 +32,9 @@ public class GameManager {
 
   private int width, height;
 
-  public GameManager() {
-    this.width = SCREEN_WIDTH;
-    this.height = SCREEN_HEIGHT;
+  public GameManager(int width, int height) {
+    this.width = width;
+    this.height = height;
 
     gameState = GameState.MENU;
     canvas = new Canvas(this.width, this.height);

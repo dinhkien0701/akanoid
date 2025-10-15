@@ -76,10 +76,8 @@ public class PlayingProcess {
     playingState = PlayingState.READY;
   }
 
-
   public void reset() {
     initLevel();
-    currentMap++;
   }
 
   public void onBallLost() {
@@ -151,17 +149,28 @@ public class PlayingProcess {
     Iterator<Brick> it = bricks.iterator();
     while (it.hasNext()) {
       Brick b = it.next();
-      if (ball.checkCollision(b) != Ball.BallCollision.NONE) {
+      Ball.BallCollision collision = ball.checkCollision(b);
+      if (collision != Ball.BallCollision.NONE) {
         b.takeHit();
-        ball.bounceOff(b, ball.checkCollision(b));
+        ball.bounceOff(b, collision);
         if (b.isDestroyed()) {
           it.remove();
         }
         break;
       }
     }
-    if (bricks.isEmpty()) {
+
+    int countNormalBrick = 0;
+    it = bricks.iterator();
+    while (it.hasNext()) {
+      Brick b = it.next();
+      if (b instanceof NormalBrick) {
+        countNormalBrick++;
+      }
+    }
+    if (countNormalBrick <= 0) {
       playingState = PlayingState.FINISH_MAP;
+      currentMap++;
       reset();
     }
   }
