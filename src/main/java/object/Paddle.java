@@ -20,8 +20,18 @@ public class Paddle extends MovableObject {
     lives = 3;
   }
 
+  @Override
+  public void resetSpeed(){
+    super.setDx(0);
+    super.setDy(0);
+  }
+
   public void takeHit(){
     lives--;
+  }
+
+  public int getLives(){
+    return this.lives;
   }
 
   public void setPaddleWidth(double w) {

@@ -18,51 +18,68 @@ import object.Ball;
 import object.NormalBrick;
 import object.Brick;
 import map.*;
+import powerup.DuplicateBallPowerUp;
+import powerup.PowerUp;
 
 public class PlayingProcess {
 
   enum PlayingState{
-    READY, RUNNING, FINISH_MAP, GAME_OVER
+    READY, RUNNING, FINISH_MAP, GAME_OVER, WINNER
   }
-
-  int width, height;
-  Paddle paddle;
-  Ball ball;
-  List<Brick> bricks = new ArrayList<>();
-  GraphicsContext gc;
-  boolean pressedLeft = false, pressedRight = false;
+  private final int width, height;
+  private GraphicsContext gc;
   private PlayingState playingState;
 
+  public Paddle paddle;
+  public boolean pressedLeft, pressedRight;
+
+  public Ball ball;
+
+
+  private final List<Brick> bricks;
+
+  private List<PowerUp> listOfPowerUp;
+
   public Rectangle map;
-  ListOfMap LM = new ListOfMap();
+  private final ListOfMap LM;
   int currentMap;
+
 
   public PlayingProcess(int width, int height, Rectangle map, GraphicsContext gc) {
     this.width = width;
     this.height = height;
     this.gc = gc;
-    this.map = map;
 
+    this.map = map;
     currentMap = 0;
+    LM = new ListOfMap();
+    bricks = new ArrayList<>();
+
+    listOfPowerUp = new ArrayList<>();
+
     paddle = new Paddle(map.getX() + map.getWidth() / 2 - 50, map.getY() + map.getHeight() - 40);
     pressedLeft = false;
     pressedRight = false;
     ball = new Ball(map.getWidth() / 2 - 60 + map.getX() + 50 - 8, map.getHeight() - 40 + map.getY() - 16);
-    initBallAndPaddle();
+
+    initBall();
+    initPaddle();
     initMap();
   }
 
-  private void initBallAndPaddle() {
-    paddle.setX(map.getX() + map.getWidth() / 2 - 50);
-    paddle.setY(map.getY() + map.getHeight() - 40);
+  private void initBall() {
+    ball.resetSpeed();
     ball.setX(map.getWidth() / 2 - 60 + map.getX() + 50 - 8);
     ball.setY(map.getHeight() - 40 + map.getY() - 16);
   }
 
+  private void initPaddle(){
+    paddle.setX(map.getX() + map.getWidth() / 2 - 50);
+    paddle.setY(map.getY() + map.getHeight() - 40);
+  }
+
   private void initMap() {
-
     bricks.clear();
-
     double brickW = (map.getWidth() - 60) / 8;
     double brickH = 20;
 
@@ -88,15 +105,16 @@ public class PlayingProcess {
   public void reset() {
     currentMap = 0;
     initMap();
-    initBallAndPaddle();
+    initPaddle();
+    initBall();
     paddle.reborn();
   }
 
   public void onBallLost() {
     paddle.takeHit();
-    initBallAndPaddle();
+    initBall();
+    listOfPowerUp.clear();
     playingState = PlayingState.READY;
-    System.out.println("arrgggggggggggggggggggggggggggggggggggggggggg");
   }
 
   public void deadPaddle() {
@@ -110,7 +128,9 @@ public class PlayingProcess {
   public void nextLevel() {
     currentMap++;
     initMap();
-    initBallAndPaddle();
+    initPaddle();
+    initBall();
+    listOfPowerUp.clear();
   }
 
   private void initInput(Scene scene) {
@@ -150,6 +170,55 @@ public class PlayingProcess {
     }
   }
 
+  public void checkBricksList(Ball ball) {
+    Iterator<Brick> it = bricks.iterator();
+    while (it.hasNext()) {
+      Brick b = it.next();
+      Ball.BallCollision collision = ball.checkCollision(b);
+      if (collision != Ball.BallCollision.NONE) {
+        b.takeHit();
+        if(b instanceof NormalBrick){
+          listOfPowerUp.add(new DuplicateBallPowerUp(b.getX(),b.getY()));
+        }
+        ball.bounceOff(b, collision);
+        if (b.isDestroyed()) {
+          it.remove();
+        }
+        break;
+      }
+    }
+    int countNormalBrick = 0;
+    it = bricks.iterator();
+    while (it.hasNext()) {
+      Brick b = it.next();
+      if (b instanceof NormalBrick) {
+        countNormalBrick++;
+      }
+    }
+    if (countNormalBrick <= 0) {
+      playingState = PlayingState.FINISH_MAP;
+      nextLevel();
+    }
+  }
+
+  public void addPowerUp(PowerUp pu){
+    listOfPowerUp.add(pu);
+  }
+
+  public void checkPowerUpList() {
+    if(listOfPowerUp.isEmpty()){
+      return;
+    }
+    Iterator<PowerUp> it = listOfPowerUp.iterator();
+    while(it.hasNext()){
+      PowerUp pu = it.next();
+      pu.update(this);
+      if(pu.isEnd()) {
+        it.remove();
+        break;
+      }
+    }
+  }
 
   public void update(Scene scene, GameManager gm) {
     initInput(scene);
@@ -166,40 +235,11 @@ public class PlayingProcess {
           ball.bounceOff(paddle, ball.checkCollision(paddle));
           ball.setY(paddle.getY() - ball.getHeight() - 1);
         }
-        checkBricksList();
+        checkBricksList(this.ball);
+        checkPowerUpList();
         break;
       case GAME_OVER:
         gm.finishPlay();
-    }
-  }
-
-
-  private void checkBricksList() {
-    Iterator<Brick> it = bricks.iterator();
-    while (it.hasNext()) {
-      Brick b = it.next();
-      Ball.BallCollision collision = ball.checkCollision(b);
-      if (collision != Ball.BallCollision.NONE) {
-        b.takeHit();
-        ball.bounceOff(b, collision);
-        if (b.isDestroyed()) {
-          it.remove();
-        }
-        break;
-      }
-    }
-
-    int countNormalBrick = 0;
-    it = bricks.iterator();
-    while (it.hasNext()) {
-      Brick b = it.next();
-      if (b instanceof NormalBrick) {
-        countNormalBrick++;
-      }
-    }
-    if (countNormalBrick <= 0) {
-      playingState = PlayingState.FINISH_MAP;
-      nextLevel();
     }
   }
 
@@ -211,8 +251,17 @@ public class PlayingProcess {
         + "purple.png";
     Image background = new Image(filePath);
     gc.drawImage(background, 0,0,width,height);
+
+    gc.save();
+    gc.setGlobalAlpha(0.5);
     gc.setFill(Color.BLACK);
     gc.fillRect(map.getX(), map.getY(), map.getWidth(), map.getHeight());
+    gc.restore();
+
+    for(PowerUp p : listOfPowerUp) {
+      p.render(gc);
+    }
+
     for (Brick b : bricks) {
       b.render(gc);
     }
@@ -220,5 +269,6 @@ public class PlayingProcess {
     ball.render(gc);
     gc.setFill(Color.WHITE);
     gc.fillText("State:    " + playingState.name() + "    Level:   " + (this.currentMap + 1), 10, 20);
+    gc.fillText("Lives:    " + paddle.getLives(), 10, 40);
   }
 }

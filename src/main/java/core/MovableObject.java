@@ -9,7 +9,7 @@ public abstract class MovableObject extends GameObject {
     this.dy = dy;
   }
 
-  protected void stop(){
+  public void stop(){
     dx = 0;
     dy = 0;
   }
@@ -21,6 +21,16 @@ public abstract class MovableObject extends GameObject {
   public double getDy(){
     return this.dy;
   }
+
+  public void setDx(double dx) {
+    this.dx = dx;
+  }
+
+  public void setDy(double dy) {
+    this.dy = dy;
+  }
+
+  public abstract void resetSpeed();
 
   protected void move() {
     x += dx;

@@ -20,12 +20,18 @@ public class Ball extends MovableObject {
 
   private final Deque<Position> previousPosition = new LinkedList<>();
 
-  private boolean justBounced = false;
+  //private boolean justBounced = false;
 
   public Ball(double x, double y) {
     super(x, y, BALL_RADIUS*2,BALL_RADIUS*2 , BALL_SPEED/2, -BALL_SPEED);
     previousPosition.clear();
     this.setRadius(BALL_RADIUS);
+  }
+
+  @Override
+  public void resetSpeed(){
+    super.setDx(BALL_SPEED/2);
+    super.setDy(-BALL_SPEED);
   }
 
   public double getRadius() {
@@ -79,8 +85,11 @@ public class Ball extends MovableObject {
     dy *= randomFactor;
 
     if(dx == 0) {
-      dx += 1.0;
-      dy -= 1.0;
+      dx += dy/2;
+      dy -= dy/2;
+    } else if(dy == 0) {
+      dy += 1.5;
+      dx -= 1.5;
     }
   }
 

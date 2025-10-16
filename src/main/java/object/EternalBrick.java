@@ -4,7 +4,6 @@ package object;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import core.*;
 import process.PlayingProcess;
 
 public class EternalBrick extends Brick {

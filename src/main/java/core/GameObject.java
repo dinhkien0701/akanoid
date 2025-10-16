@@ -48,6 +48,6 @@ public abstract class GameObject {
     this.height = height;
   }
 
-  protected abstract void update(PlayingProcess gm);
+  public abstract void update(PlayingProcess gm);
   public abstract void render(javafx.scene.canvas.GraphicsContext gc);
 }

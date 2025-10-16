@@ -3,7 +3,6 @@ package process;
 import core.GameManager;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -21,8 +20,13 @@ public class GameOverProcess {
 
   public void update(Scene scene, GameManager gm) {
     scene.setOnKeyPressed(e -> {
-      if (e.getCode() == KeyCode.SPACE || e.getCode() == KeyCode.ENTER) {
-        gm.rePlay();
+      switch (e.getCode()) {
+        case SPACE:
+          gm.rePlay();
+          break;
+        case ESCAPE:
+          System.exit(0);
+          break;
       }
     });
   }
