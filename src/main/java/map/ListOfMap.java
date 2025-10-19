@@ -12,8 +12,8 @@ public class ListOfMap {
   private int Size = 0;
 
   public ListOfMap() {
-    //this.ReadInFile();
-    this.RandomMap();
+    this.ReadInFile();
+    //this.RandomMap();
   }
 
   private void RandomMap() {

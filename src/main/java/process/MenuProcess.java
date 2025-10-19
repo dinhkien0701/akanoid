@@ -4,6 +4,7 @@ import core.GameManager;
 import java.io.InputStream; // Import thêm InputStream
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
@@ -12,6 +13,7 @@ public class MenuProcess {
     private final int height, width;
     private int frame;
     private final GraphicsContext gc;
+
 
     public MenuProcess(int width, int height, GraphicsContext gc) {
         this.width = width;
