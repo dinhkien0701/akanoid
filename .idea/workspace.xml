@@ -4,27 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a2376258-657c-4f03-b359-f2649cd3c3fc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/google-java-format.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/core/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/core/GameManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/core/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/core/GameObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/core/MovableObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/core/MovableObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/map/CreateMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/map/CreateMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/map/ListOfMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/map/ListOfMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/EternalBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/EternalBrick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/Paddle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/Paddle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/process/GameOverProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/process/GameOverProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/process/MenuProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/process/MenuProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" afterDir="false" />
-    </list>
+    <list default="true" id="d187c723-39e4-4b2e-9886-2b9f92bdb635" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -64,7 +44,6 @@
     "Application.Unnamed.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Kien__Upgrade",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
