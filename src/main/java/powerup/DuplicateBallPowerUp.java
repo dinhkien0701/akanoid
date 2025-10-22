@@ -10,7 +10,7 @@ import java.io.InputStream;
 
 public class DuplicateBallPowerUp extends PowerUp {
 
-  private static final double SIZE = 25;
+  private static final double SIZE = 20;
   private static Image powerUpImage;
   static {
     try {
@@ -66,7 +66,7 @@ public class DuplicateBallPowerUp extends PowerUp {
         isBall2Fall = false;
         isBall1Fall = false;
       }
-      if (this.y > pp.paddle.getY()) {
+      if (this.y > pp.paddle.getY() + pp.paddle.getHeight()) {
         this.stop();
         this.isBall1Fall = true;
         this.isBall2Fall = true;

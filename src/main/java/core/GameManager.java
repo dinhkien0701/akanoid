@@ -14,24 +14,16 @@ import process.*;
 
 public class GameManager {
 
-  private MenuProcess menu;
-  private PlayingProcess playing;
-  private GameOverProcess gameOver;
+  private final MenuProcess menu;
+  private final PlayingProcess playing;
+  private final GameOverProcess gameOver;
 
   private GameState gameState;
   private final Canvas canvas;
   private final GraphicsContext gc;
 
-  public enum GameState {
-    INIT,
-    MENU,
-    PLAYING,
-    PAUSE,
-    GAME_OVER,
-    VICTORY,
-    CREDITS
-  }
-
+  private StackPane root;
+  private Scene scene;
   private int width, height;
 
   public GameManager(int width, int height) {
@@ -51,14 +43,18 @@ public class GameManager {
   }
 
   public void process(Stage stage){
-    StackPane root = new StackPane(canvas);
-    Scene scene = new Scene(root);
+    root = new StackPane(canvas);
+    scene = new Scene(root);
 
     stage.setTitle("Akanoid - CaiWin Edition");
     stage.setScene(scene);
     stage.show();
+    startMenu(stage);
+    this.startLoop(scene, stage);
+  }
 
-    this.startLoop(scene);
+  public void startMenu(Stage stage){
+      menu.setScene(stage);
   }
 
   public void finishMenu(){
@@ -95,10 +91,10 @@ public class GameManager {
     }
   }
 
-  public void render(){
+  public void render(Stage stage){
     switch (gameState){
       case MENU:
-        menu.render();
+        menu.render(stage);
         break;
       case PLAYING:
         playing.render();
@@ -112,7 +108,7 @@ public class GameManager {
   private static final double FPS = 70.0;
   private static final double FRAME_TIME = 1000.0 / FPS;
   private long lastFrameTime = 0;
-  public void startLoop(Scene scene) {
+  public void startLoop(Scene scene, Stage stage) {
     AnimationTimer timer = new AnimationTimer() {
       @Override
       public void handle(long now) {
@@ -124,11 +120,22 @@ public class GameManager {
         long delta = nowMs - lastFrameTime;
         if (delta >= FRAME_TIME) {
           update(scene);
-          render();
+          render(stage);
           lastFrameTime = nowMs;
         }
       }
     };
     timer.start();
   }
+
+    public enum GameState {
+        INIT,
+        MENU,
+        PLAYING,
+        PAUSE,
+        GAME_OVER,
+        VICTORY,
+        CREDITS
+    }
+
 }
