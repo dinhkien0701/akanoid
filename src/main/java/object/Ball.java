@@ -18,12 +18,20 @@ public class Ball extends MovableObject {
   private double speed;
   private double r;
 
-  private Deque<Position> previousPosition = new LinkedList<Position>();
+  private final Deque<Position> previousPosition = new LinkedList<>();
+
+  //private boolean justBounced = false;
 
   public Ball(double x, double y) {
     super(x, y, BALL_RADIUS*2,BALL_RADIUS*2 , BALL_SPEED/2, -BALL_SPEED);
     previousPosition.clear();
     this.setRadius(BALL_RADIUS);
+  }
+
+  @Override
+  public void resetSpeed(){
+    super.setDx(BALL_SPEED/2);
+    super.setDy(-BALL_SPEED);
   }
 
   public double getRadius() {
@@ -37,17 +45,29 @@ public class Ball extends MovableObject {
   }
 
   public void bounceOff(GameObject other, BallCollision collision) {
+//    if(!(other instanceof Paddle)) {
+//      if (justBounced) {
+//        justBounced = false;
+//        return;
+//      }
+//    }
     final double SPEED_UP = 1.05;
-
     if (collision == BallCollision.CORNER) {
       bounceOffCorner();
-    }
-    else if (collision == BallCollision.VERTICAL) {
+    } else if (collision == BallCollision.VERTICAL) {
       bounceOffVertical();
-    }
-    else if (collision == BallCollision.HORIZONTAL) {
+//      if (dx > 0) {
+//        this.setX(other.getX() - this.getWidth() - 0.5);
+//      } else {
+//        this.setX(other.getX() + other.getWidth() + 0.5);
+//      }
+    } else if (collision == BallCollision.HORIZONTAL) {
       bounceOffHorizontal();
-
+//      if (dy > 0) {
+//        this.setY(other.getY() - this.getHeight() - 0.5);
+//      } else {
+//        this.setY(other.getY() + other.getHeight() + 0.5);
+//      }
       if (other instanceof Paddle) {
         dx += ((Paddle) other).getDx() * 0.3;
       }
@@ -63,8 +83,15 @@ public class Ball extends MovableObject {
     double randomFactor = 1.0 + (Math.random() - 0.5) * 0.05;
     dx *= randomFactor;
     dy *= randomFactor;
-  }
 
+    if(dx == 0) {
+      dx += dy/2;
+      dy -= dy/2;
+    } else if(dy == 0) {
+      dy += 1.5;
+      dx -= 1.5;
+    }
+  }
 
   private void bounceOffCorner() {
     dx = -dx * 1.05;
@@ -97,18 +124,21 @@ public class Ball extends MovableObject {
       distY = Math.abs(distY);
       distX = Math.abs(distX);
       final double EPS = 0.01;
-      if (Math.abs(distY - distX) < EPS)
+      if (Math.abs(distY - distX) < EPS) {
         return BallCollision.CORNER;
-      else if (Math.abs(distY - this.r) < EPS)
-        return BallCollision.VERTICAL;
-      else
-        return BallCollision.HORIZONTAL;
+      } else {
+        if (Math.abs(distX - this.r) < EPS) {
+          return BallCollision.VERTICAL;
+        } else {
+          return BallCollision.HORIZONTAL;
+        }
+      }
     }
   }
 
   private void savePosition() {
     previousPosition.addFirst(new Position(this.getX(), this.getY()));
-    if(previousPosition.size() >= 70) {
+    if(previousPosition.size() >= 60) {
       previousPosition.removeLast();
     }
   }
@@ -152,7 +182,7 @@ public class Ball extends MovableObject {
 
   @Override
   public void render(GraphicsContext gc) {
-    this.drawEffect(gc);
+    //this.drawEffect(gc);
     gc.setFill(Color.RED);
     gc.fillOval(this.getX(), this.getY(), this.getHeight(), this.getWidth());
   }

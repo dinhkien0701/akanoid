@@ -33,14 +33,13 @@ public class CreateMap {
                 dfs.createMap(map, x, y, i , n);
             }
         }
-
-        // Duyệt qua tất cả các ô trong bản đồ
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                System.out.print(map[i][j] + " ");
-            }
-            System.out.println();
-        }
+//        // Duyệt qua tất cả các ô trong bản đồ
+//        for (int i = 0; i < rows; i++) {
+//            for (int j = 0; j < cols; j++) {
+//                System.out.print(map[i][j] + " ");
+//            }
+//            System.out.println();
+//        }
         return map;
     }
 }

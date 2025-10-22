@@ -16,6 +16,14 @@ public abstract class GameObject {
     this.frame = 0;
   }
 
+  protected GameObject (double x, double y, double width, double height, int frame) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.frame = frame;
+  }
+
   public double getX() {
     return this.x;
   }
@@ -48,6 +56,6 @@ public abstract class GameObject {
     this.height = height;
   }
 
-  protected abstract void update(PlayingProcess gm);
+  public abstract void update(PlayingProcess gm);
   public abstract void render(javafx.scene.canvas.GraphicsContext gc);
 }

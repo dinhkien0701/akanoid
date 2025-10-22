@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class ListOfMap {
 
@@ -13,16 +12,16 @@ public class ListOfMap {
   private int Size = 0;
 
   public ListOfMap() {
-    //this.ReadInFile();
-    this.RandomMap();
+    this.ReadInFile();
+    //this.RandomMap();
   }
 
   private void RandomMap() {
-
       for(int n = 0; n < 20; n++) {
           CreateMap k = new CreateMap(8,8,n+1);
           int[][] map = k.creatMap();
           listOfMaps.add(new Map(map));
+          Size++;
       }
   }
 
