@@ -43,7 +43,7 @@ public class GameManager {
     gc = canvas.getGraphicsContext2D();
 
     menu = new MenuProcess(this.width, this.height, this.gc);
-    Rectangle map = new Rectangle(300,0, 600,700);
+    Rectangle map = new Rectangle(200,0, 800,700);
     playing = new PlayingProcess(width, height, map , this.gc);
     gameOver = new GameOverProcess(width, height, this.gc);
 

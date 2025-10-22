@@ -5,7 +5,7 @@ import object.Paddle;
 import process.PlayingProcess;
 
 public abstract class PowerUp extends MovableObject {
-  private static final double FALLING_SPEED = 10.0;
+  private static final double FALLING_SPEED = 5.0;
   protected boolean isApply;
 
   protected PowerUp(double x, double y, double width, double height) {

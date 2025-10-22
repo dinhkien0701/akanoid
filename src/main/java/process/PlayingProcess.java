@@ -92,9 +92,9 @@ public class PlayingProcess {
         }
         double bx = 30 + c * brickW + map.getX();
         double by = 50 + r * (brickH + 6) + map.getY();
-        if(arr[r][c] == 1) {
+        if(arr[r][c]%3 == 1) {
           bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
-        } else if(arr[r][c] == 2){
+        } else if(arr[r][c]%3 == 2){
           bricks.add(new EternalBrick(bx, by, brickW - 6, brickH));
         }
       }
