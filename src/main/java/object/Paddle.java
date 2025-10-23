@@ -37,6 +37,7 @@ public class Paddle extends MovableObject {
   public void setPaddleWidth(double w) {
     this.setWidth(w);
   }
+
   public void setPaddleHeight(double h) {
     this.setHeight(h);
   }

@@ -10,7 +10,7 @@ import java.io.InputStream;
 
 public class DuplicateBallPowerUp extends PowerUp {
 
-  private static final double SIZE = 25;
+  private static final double SIZE = 20;
   private static Image powerUpImage;
   static {
     try {
@@ -42,11 +42,11 @@ public class DuplicateBallPowerUp extends PowerUp {
       double cosAngle = Math.cos(rotationAngle);
       double sinAngle = Math.sin(rotationAngle);
       ball1 = new Ball(pp.ball.getX(), pp.ball.getY());
-      ball1.setDx(pp.ball.getDx() * cosAngle - pp.ball.getDy() * sinAngle);
-      ball1.setDy(pp.ball.getDx() * sinAngle + pp.ball.getDy() * cosAngle);
+      ball1.setDx((pp.ball.getDx() * cosAngle - pp.ball.getDy() * sinAngle)/2);
+      ball1.setDy((pp.ball.getDx() * sinAngle + pp.ball.getDy() * cosAngle)/2);
       ball2 = new Ball(pp.ball.getX(), pp.ball.getY());
-      ball2.setDx(pp.ball.getDx() * cosAngle + pp.ball.getDy() * sinAngle);
-      ball2.setDy(-pp.ball.getDx() * sinAngle + pp.ball.getDx() * cosAngle);
+      ball2.setDx((pp.ball.getDx() * cosAngle + pp.ball.getDy() * sinAngle)/2);
+      ball2.setDy((-pp.ball.getDx() * sinAngle + pp.ball.getDx() * cosAngle)/2);
       isBall2Fall = false;
       isBall1Fall = false;
   }
@@ -66,7 +66,7 @@ public class DuplicateBallPowerUp extends PowerUp {
         isBall2Fall = false;
         isBall1Fall = false;
       }
-      if (this.y > pp.paddle.getY()) {
+      if (this.y > pp.paddle.getY() + pp.paddle.getHeight()) {
         this.stop();
         this.isBall1Fall = true;
         this.isBall2Fall = true;
@@ -100,7 +100,6 @@ public class DuplicateBallPowerUp extends PowerUp {
       }
     }
   }
-
 
   @Override
   public void render(GraphicsContext gc) {
