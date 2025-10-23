@@ -42,11 +42,11 @@ public class DuplicateBallPowerUp extends PowerUp {
       double cosAngle = Math.cos(rotationAngle);
       double sinAngle = Math.sin(rotationAngle);
       ball1 = new Ball(pp.ball.getX(), pp.ball.getY());
-      ball1.setDx(pp.ball.getDx() * cosAngle - pp.ball.getDy() * sinAngle);
-      ball1.setDy(pp.ball.getDx() * sinAngle + pp.ball.getDy() * cosAngle);
+      ball1.setDx((pp.ball.getDx() * cosAngle - pp.ball.getDy() * sinAngle)/2);
+      ball1.setDy((pp.ball.getDx() * sinAngle + pp.ball.getDy() * cosAngle)/2);
       ball2 = new Ball(pp.ball.getX(), pp.ball.getY());
-      ball2.setDx(pp.ball.getDx() * cosAngle + pp.ball.getDy() * sinAngle);
-      ball2.setDy(-pp.ball.getDx() * sinAngle + pp.ball.getDx() * cosAngle);
+      ball2.setDx((pp.ball.getDx() * cosAngle + pp.ball.getDy() * sinAngle)/2);
+      ball2.setDy((-pp.ball.getDx() * sinAngle + pp.ball.getDx() * cosAngle)/2);
       isBall2Fall = false;
       isBall1Fall = false;
   }
@@ -100,7 +100,6 @@ public class DuplicateBallPowerUp extends PowerUp {
       }
     }
   }
-
 
   @Override
   public void render(GraphicsContext gc) {

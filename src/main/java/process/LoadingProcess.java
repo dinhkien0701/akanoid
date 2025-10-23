@@ -10,12 +10,13 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 public class LoadingProcess {
-  private int width, height;
+    private final int width;
+    private final int height;
 
-  public LoadingProcess(int width, int height) {
-    this.width = width;
-    this.height = height;
-  }
+    public LoadingProcess(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
 
   public void render(Stage primaryStage, Runnable onFinished) {
     try {

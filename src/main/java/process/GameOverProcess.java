@@ -1,28 +1,31 @@
 package process;
 
 import core.GameManager;
-import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import core.Process;
+import javafx.stage.Stage;
 
-public class GameOverProcess {
-  private final int width, height;
-  private final GraphicsContext gc;
+public class GameOverProcess extends Process {
 
-  public GameOverProcess(int width, int height, GraphicsContext gc) {
-    this.width = width;
-    this.height = height;
-    this.gc = gc;
+
+  public GameOverProcess(int width, int height) {
+      super(width,height);
   }
 
-  public void update(Scene scene, GameManager gm) {
-    scene.setOnKeyPressed(e -> {
+  @Override
+  public void setScene(Stage stage){
+      stage.setScene(this.scene);
+  }
+
+  @Override
+  public void update(Stage stage, GameManager gm) {
+    this.scene.setOnKeyPressed(e -> {
       switch (e.getCode()) {
         case SPACE:
-          gm.rePlay();
+          gm.rePlay(stage);
           break;
         case ESCAPE:
           System.exit(0);
@@ -31,6 +34,7 @@ public class GameOverProcess {
     });
   }
 
+  @Override
   public void render() {
     gc.save();
     gc.setFill(Color.BLACK);

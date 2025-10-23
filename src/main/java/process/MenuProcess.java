@@ -16,18 +16,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import core.Process;
 
-public class MenuProcess {
+public class MenuProcess extends Process {
     private Image startScreen;
-    private final int height, width;
-    private final GraphicsContext gc;
-    private final StackPane menuPane;
-    private final Scene menuScene;
+    private boolean checkEndCRTEffect;
 
-    public MenuProcess(int width, int height, GraphicsContext gc) {
-        this.width = width;
-        this.height = height;
-        this.gc = gc;
+    public MenuProcess(int width, int height) {
+        super(width, height);
         try {
             InputStream imageStream = getClass().getResourceAsStream("/image/startGame.png");
 
@@ -42,40 +38,36 @@ public class MenuProcess {
             e.printStackTrace();
             startScreen = null;
         }
-        menuPane = new StackPane();
-        menuScene = new Scene(menuPane, width, height, Color.BLACK);
+        checkEndCRTEffect = false;
     }
 
     public void setScene(Stage stage) {
-        stage.setScene(menuScene);
+        stage.setScene(this.scene);
     }
 
-    public void update(Scene scene, GameManager mn) {
+
+    public void update(Stage stage, GameManager  gameManager) {
         scene.setOnKeyPressed(e -> {
             KeyCode code = e.getCode();
             if (code == KeyCode.ENTER) {
-                mn.finishMenu();
+                gameManager.finishMenu(stage);
             } else if(code == KeyCode.ESCAPE) {
               System.exit(0);
             }
         });
     }
 
-    public void CRTTvShow(Rectangle flash, StackPane root, Stage stage){
+    public void CRTTvShow(Rectangle flash){
 
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.2), flash);
         fadeIn.setFromValue(0);
         fadeIn.setToValue(1);
 
- 
-        ScaleTransition expandY = new ScaleTransition(Duration.seconds(0.5), flash);
-        expandY.setFromY(1);
-        expandY.setToY(150); // giãn mạnh lên để phủ màn hình
 
-//        // 3️⃣ Làm sáng dần toàn bộ
-//        FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.5), flash);
-//        fadeOut.setFromValue(1);
-//        fadeOut.setToValue(0);
+        ScaleTransition expandY = new ScaleTransition(Duration.seconds(1.0), flash);
+        expandY.setFromY(1);
+        expandY.setToY(150);
+
 
         SequentialTransition tvOn = new SequentialTransition(fadeIn, expandY);
         tvOn.setOnFinished(e -> {
@@ -83,20 +75,20 @@ public class MenuProcess {
             imageView.setImage(startScreen);
             imageView.setFitWidth(width);
             imageView.setFitHeight(height);
-            menuPane.getChildren().add(imageView);
+            this.pane.getChildren().add(imageView);
         });
-
+        checkEndCRTEffect = true;
         tvOn.play();
     }
 
-
-    public void render(Stage stage) {
-
-        Rectangle flash = new Rectangle(width, 5, Color.WHITE);
-        flash.setArcWidth(20);
-        flash.setArcHeight(20);
-        menuPane.getChildren().add(flash);
-
-        CRTTvShow(flash, menuPane, stage);
+    @Override
+    public void render() {
+        if(!checkEndCRTEffect) {
+            Rectangle flash = new Rectangle(width, 5, Color.WHITE);
+            flash.setArcWidth(20);
+            flash.setArcHeight(20);
+            this.pane.getChildren().add(flash);
+            CRTTvShow(flash);
+        }
     }
 }
