@@ -14,6 +14,7 @@ public class Ball extends MovableObject {
 
   private static final double BALL_RADIUS = 10.0;
   private static final double BALL_SPEED = 5.0;
+  private static final double BIG_BALL_RADIUS = 20.0;
 
   private double speed;
   private double r;
@@ -21,6 +22,17 @@ public class Ball extends MovableObject {
   private final Deque<Position> previousPosition = new LinkedList<>();
 
   // private boolean justBounced = false;
+
+  public void upSize() {
+    if (this.r == BALL_RADIUS) {
+      this.setRadius(BIG_BALL_RADIUS);
+    }
+  }
+
+  public void resetSize() {
+    this.setRadius(BALL_RADIUS);
+  }
+
 
   public Ball(double x, double y) {
     super(x, y, BALL_RADIUS * 2, BALL_RADIUS * 2, BALL_SPEED / 2, -BALL_SPEED);

@@ -18,9 +18,8 @@ import object.Ball;
 import object.NormalBrick;
 import object.Brick;
 import map.*;
-import powerup.DuplicateBallPowerUp;
-import powerup.PowerUp;
 import core.Process;
+import powerup.*;
 
 
 public class PlayingProcess extends Process {
@@ -36,9 +35,10 @@ public class PlayingProcess extends Process {
     private final List<Ball> balls;
     private final List<Brick> bricks;
     private final List<PowerUp> listOfPowerUp;
+    private final List<TimedEffect> timedEffects;
 
     private static final double POWERUP_SPAWN_CHANCE = 0.2;
-    private static final int MAX_POWERUPS_PER_LEVEL = 4;
+    private static final int MAX_POWERUPS_PER_LEVEL = 6;
     private int powerUpsSpawnedThisLevel;
     private final Random random = new Random();
 
@@ -57,6 +57,7 @@ public class PlayingProcess extends Process {
         this.balls = new ArrayList<>();
         this.listOfPowerUp = new ArrayList<>();
         this.paddle = new Paddle(0, 0);
+        this.timedEffects = new ArrayList<>();
 
         String filePath = "file:src" + File.separator + "main" + File.separator + "resources"
                 + File.separator + "image" + File.separator + "purple.png";
@@ -152,8 +153,25 @@ public class PlayingProcess extends Process {
     }
 
     private void spawnRandomPowerUp(double x, double y) {
-        listOfPowerUp.add(new DuplicateBallPowerUp(x, y));
+        int powerUpType = random.nextInt(2);
+        // int powerUpType = 1;
+        if (powerUpType == 0) {
+            listOfPowerUp.add(new DuplicateBallPowerUp(x, y));
+        } else {
+            listOfPowerUp.add(new BiggerBallPowerUp(x, y));
+        }
         powerUpsSpawnedThisLevel++;
+    }
+
+    private void updateTimedEffects() {
+        Iterator<TimedEffect> it = timedEffects.iterator();
+        while (it.hasNext()) {
+            TimedEffect effect = it.next();
+            if (effect.isFinished()) {
+                effect.execute();
+                it.remove();
+            }
+        }
     }
 
     private void checkCollisions() {
@@ -188,6 +206,28 @@ public class PlayingProcess extends Process {
                 pu_it.remove();
             }
         }
+    }
+
+    private static class TimedEffect {
+        long endTime;
+        Runnable onEndAction;
+
+        TimedEffect(int durationSeconds, Runnable onEndAction) {
+            this.endTime = System.currentTimeMillis() + durationSeconds * 1000L;
+            this.onEndAction = onEndAction;
+        }
+
+        boolean isFinished() {
+            return System.currentTimeMillis() >= endTime;
+        }
+
+        void execute() {
+            onEndAction.run();
+        }
+    }
+
+    public void addTimedEffect(int durationSeconds, Runnable onEndAction) {
+        timedEffects.add(new TimedEffect(durationSeconds, onEndAction));
     }
 
     private void initInput() {
@@ -260,6 +300,7 @@ public class PlayingProcess extends Process {
             for (PowerUp pu : listOfPowerUp) {
                 pu.update(this);
             }
+            updateTimedEffects();
             checkCollisions();
             if (balls.isEmpty()) {
                 paddle.takeHit();
