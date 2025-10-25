@@ -11,14 +11,14 @@ public class Main extends Application {
   public static final int SCREEN_HEIGHT = 750;
 
   public static void main(String[] args) {
-        launch(args);
-    }
+    launch(args);
+  }
 
   @Override
   public void start(Stage primaryStage) {
     LoadingProcess lp = new LoadingProcess(SCREEN_WIDTH, SCREEN_HEIGHT);
     lp.render(primaryStage, () -> {
-      GameManager gameManager = new GameManager(SCREEN_WIDTH,SCREEN_HEIGHT);
+      GameManager gameManager = new GameManager(SCREEN_WIDTH, SCREEN_HEIGHT);
       gameManager.process(primaryStage);
     });
   }

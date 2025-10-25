@@ -18,5 +18,5 @@ public class NormalBrick extends Brick {
   }
 
   @Override
-  public void update(PlayingProcess gm){}
+  public void update(PlayingProcess gm) {}
 }

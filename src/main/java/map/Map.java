@@ -4,7 +4,7 @@ public class Map {
   private int[][] map;
   private boolean mapBeaten;
 
-  public Map(){
+  public Map() {
     map = new int[8][8];
     mapBeaten = false;
   }

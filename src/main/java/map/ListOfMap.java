@@ -1,11 +1,11 @@
 package map;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class ListOfMap {
 
@@ -13,28 +13,24 @@ public class ListOfMap {
   private int Size = 0;
 
   public ListOfMap() {
-    //this.ReadInFile();
-    this.RandomMap();
+    this.ReadInFile();
+    // this.RandomMap();
   }
 
   private void RandomMap() {
-
-      for(int n = 0; n < 20; n++) {
-          CreateMap k = new CreateMap(8,8,n+1);
-          int[][] map = k.creatMap();
-          listOfMaps.add(new Map(map));
-          Size++;
-      }
+    for (int n = 0; n < 20; n++) {
+      CreateMap k = new CreateMap(8, 8, n + 1);
+      int[][] map = k.creatMap();
+      listOfMaps.add(new Map(map));
+      Size++;
+    }
   }
 
   private void ReadInFile() {
-    String filePath = "src" + File.separator
-        + "main" + File.separator
-        + "resources" + File.separator
-        + "staticMap" + File.separator
-        + "map.txt";
+    String filePath = "src" + File.separator + "main" + File.separator + "resources"
+        + File.separator + "staticMap" + File.separator + "map.txt";
 
-    try (BufferedReader br  = new BufferedReader(new FileReader(filePath))) {
+    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
       String line;
       int[][] map = new int[8][8];
       int row = 0;
@@ -55,13 +51,13 @@ public class ListOfMap {
           row++;
         }
       }
-    } catch ( IOException e){
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
   public int[][] getMapByCode(int Code) {
-    if(Code > Size) {
+    if (Code > Size) {
       return null;
     }
     Code = Math.max(Code - 1, 0);

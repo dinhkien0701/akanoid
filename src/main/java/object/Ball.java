@@ -14,13 +14,24 @@ public class Ball extends MovableObject {
 
   private static final double BALL_RADIUS = 10.0;
   private static final double BALL_SPEED = 5.0;
+
+  private double speed;
   private double r;
+
   private final Deque<Position> previousPosition = new LinkedList<>();
 
+  // private boolean justBounced = false;
+
   public Ball(double x, double y) {
-    super(x, y, BALL_RADIUS * 2, BALL_RADIUS * 2, BALL_SPEED, -BALL_SPEED);
+    super(x, y, BALL_RADIUS * 2, BALL_RADIUS * 2, BALL_SPEED / 2, -BALL_SPEED);
     previousPosition.clear();
     this.setRadius(BALL_RADIUS);
+  }
+
+  @Override
+  public void resetSpeed() {
+    super.setDx(BALL_SPEED / 2);
+    super.setDy(-BALL_SPEED);
   }
 
   public double getRadius() {
@@ -33,26 +44,66 @@ public class Ball extends MovableObject {
     this.setHeight(r * 2);
   }
 
-  public void setDx(double dx) {
-    this.dx = dx;
-  }
-
-  public void setDy(double dy) {
-    this.dy = dy;
-  }
-
   public void bounceOff(GameObject other, BallCollision collision) {
+    // if(!(other instanceof Paddle)) {
+    // if (justBounced) {
+    // justBounced = false;
+    // return;
+    // }
+    // }
+    final double SPEED_UP = 1.05;
     if (collision == BallCollision.CORNER) {
-      dx = -dx;
-      dy = -dy;
+      bounceOffCorner();
     } else if (collision == BallCollision.VERTICAL) {
-      dx = -dx;
+      bounceOffVertical();
+      // if (dx > 0) {
+      // this.setX(other.getX() - this.getWidth() - 0.5);
+      // } else {
+      // this.setX(other.getX() + other.getWidth() + 0.5);
+      // }
     } else if (collision == BallCollision.HORIZONTAL) {
-      dy = -dy;
+      bounceOffHorizontal();
+      // if (dy > 0) {
+      // this.setY(other.getY() - this.getHeight() - 0.5);
+      // } else {
+      // this.setY(other.getY() + other.getHeight() + 0.5);
+      // }
       if (other instanceof Paddle) {
         dx += ((Paddle) other).getDx() * 0.3;
       }
     }
+
+    double maxSpeed = 7.0;
+    double speed = Math.sqrt(dx * dx + dy * dy);
+    if (speed > maxSpeed) {
+      dx = dx / speed * maxSpeed;
+      dy = dy / speed * maxSpeed;
+    }
+
+    double randomFactor = 1.0 + (Math.random() - 0.5) * 0.05;
+    dx *= randomFactor;
+    dy *= randomFactor;
+
+    if (dx == 0) {
+      dx += dy / 2;
+      dy -= dy / 2;
+    } else if (dy == 0) {
+      dy += 1.5;
+      dx -= 1.5;
+    }
+  }
+
+  private void bounceOffCorner() {
+    dx = -dx * 1.05;
+    dy = -dy * 1.05;
+  }
+
+  private void bounceOffVertical() {
+    dx = -dx * 1.05;
+  }
+
+  private void bounceOffHorizontal() {
+    dy = -dy * 1.05;
   }
 
   private double clamp(double v, double a, double b) {
@@ -69,9 +120,10 @@ public class Ball extends MovableObject {
     if (distY * distY + distX * distX > this.r * this.r) {
       return BallCollision.NONE;
     } else {
+      System.out.println(distX + " " + distY);
       distY = Math.abs(distY);
       distX = Math.abs(distX);
-      final double EPS = 0.1;
+      final double EPS = 0.01;
       if (Math.abs(distY - distX) < EPS) {
         return BallCollision.CORNER;
       } else {
@@ -84,46 +136,52 @@ public class Ball extends MovableObject {
     }
   }
 
+  private void savePosition() {
+    previousPosition.addFirst(new Position(this.getX(), this.getY()));
+    if (previousPosition.size() >= 60) {
+      previousPosition.removeLast();
+    }
+  }
+
   @Override
-  public void update(PlayingProcess pp) {
+  public void update(PlayingProcess gm) {
     move();
-    if (this.getX() < pp.map.getX()) {
-      this.setX(pp.map.getX());
+    if (this.getX() < gm.map.getX()) {
+      this.setX(gm.map.getX());
       dx = -dx;
     }
-    if (this.getX() + this.getWidth() > pp.map.getWidth() + pp.map.getX()) {
-      this.setX(pp.map.getWidth() + pp.map.getX() - this.getWidth());
+    if (this.getX() + this.getWidth() > gm.map.getWidth() + gm.map.getX()) {
+      this.setX(gm.map.getWidth() + gm.map.getX() - this.getWidth());
       dx = -dx;
     }
     if (this.getY() < 0) {
       this.setY(0);
       dy = -dy;
     }
-    if (this.getY() > pp.map.getHeight()) {
-      pp.onBallLost(this);
-    }
-    this.savePosition();
-  }
-
-  private void savePosition() {
-    previousPosition.addFirst(new Position(this.getX(), this.getY()));
-    if (previousPosition.size() >= 70) {
-      previousPosition.removeLast();
+    if (this.getY() > gm.map.getHeight()) {
+      gm.onBallLost(this);
     }
   }
 
   private void drawEffect(GraphicsContext gc) {
     double i = 0;
-    for (Position pos : previousPosition) {
-      gc.setFill(Color.WHITE);
-      gc.fillOval(pos.getX(), pos.getY(), this.getWidth() - i, this.getHeight() - i);
+    gc.setFill(Color.WHITE);
+    for (Position ball : previousPosition) {
+      gc.setFill(Color.PINK);
+      gc.fillOval(ball.getX(), ball.getY(), this.getWidth() - i, this.getHeight() - i);
       i = i + 0.4;
+      if (this.getWidth() < 0) {
+        this.setWidth(0);
+      }
+      if (this.getHeight() < 0) {
+        this.setHeight(0);
+      }
     }
   }
 
   @Override
   public void render(GraphicsContext gc) {
-    this.drawEffect(gc);
+    // this.drawEffect(gc);
     gc.setFill(Color.RED);
     gc.fillOval(this.getX(), this.getY(), this.getHeight(), this.getWidth());
   }
