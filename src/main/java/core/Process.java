@@ -12,6 +12,7 @@ public abstract class Process {
     protected StackPane pane;
     protected GraphicsContext gc;
     protected Scene scene;
+    protected boolean isEnd;
 
     public Process(int width, int height) {
         this.width = width;
@@ -20,9 +21,18 @@ public abstract class Process {
         pane = new StackPane(canvas);
         scene = new Scene(pane, width, height, Color.BLACK);
         this.gc = canvas.getGraphicsContext2D();
+        isEnd = false;
     }
 
-    public abstract void setScene(Stage stage);
+    public Scene getScene() {
+        return this.scene;
+    }
+
+    public Scene setScene(Scene scene) {
+        this.scene = scene;
+        return scene;
+    }
+
     public abstract void update(Stage stage, GameManager gameManager);
     public abstract void render();
 }

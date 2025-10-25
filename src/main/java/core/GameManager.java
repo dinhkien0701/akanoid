@@ -50,22 +50,22 @@ public class GameManager {
 
 
     public void startMenu(Stage stage){
-        menu.setScene(stage);
+        stage.setScene(menu.getScene());
         gameState = GameState.MENU;
     }
 
     public void finishMenu(Stage stage){
-        playing.setScene(stage);
+        stage.setScene(playing.getScene());
         gameState = GameState.PLAYING;
     }
 
     public void finishPlay(Stage stage) {
-        gameOver.setScene(stage);
+        stage.setScene(gameOver.getScene());
         gameState = GameState.GAME_OVER;
     }
 
     public void rePlay(Stage stage) {
-        playing.setScene(stage);
+        stage.setScene(playing.getScene());
         gameState = GameState.INIT;
         playing.reset();
         gameState = GameState.PLAYING;

@@ -15,10 +15,6 @@ public class GameOverProcess extends Process {
       super(width,height);
   }
 
-  @Override
-  public void setScene(Stage stage){
-      stage.setScene(this.scene);
-  }
 
   @Override
   public void update(Stage stage, GameManager gm) {

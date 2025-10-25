@@ -41,12 +41,11 @@ public class PlayingProcess extends Process {
 
     public PlayingProcess(int width, int height, Rectangle map) {
         super(width, height);
-
         String filePath = "file:src" + File.separator
                 + "main" + File.separator
                 + "resources" + File.separator
                 + "image" + File.separator
-                + "purple.png";
+                + "bk5.png";
         background = new Image(filePath);
 
         this.map = map;
@@ -66,7 +65,6 @@ public class PlayingProcess extends Process {
         initMap();
     }
 
-
     private void initBall() {
         ball.resetSpeed();
         ball.setX(map.getWidth() / 2 - 60 + map.getX() + 50 - 8);
@@ -76,6 +74,8 @@ public class PlayingProcess extends Process {
     private void initPaddle(){
         paddle.setX(map.getX() + map.getWidth() / 2 - 50);
         paddle.setY(map.getY() + map.getHeight() - 40);
+        pressedLeft = false;
+        pressedRight = false;
     }
 
     private void initMap() {
@@ -220,10 +220,7 @@ public class PlayingProcess extends Process {
         }
     }
 
-    @Override
-    public void setScene(Stage stage) {
-        stage.setScene(this.scene);
-    }
+
 
     @Override
     public void update(Stage stage,GameManager gm) {

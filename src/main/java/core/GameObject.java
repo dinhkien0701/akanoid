@@ -17,10 +17,7 @@ public abstract class GameObject {
   }
 
   protected GameObject (double x, double y, double width, double height, int frame) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+    this(x , y , width , height);
     this.frame = frame;
   }
 

@@ -23,7 +23,7 @@ public class Ball extends MovableObject {
   //private boolean justBounced = false;
 
   public Ball(double x, double y) {
-    super(x, y, BALL_RADIUS*2,BALL_RADIUS*2 , BALL_SPEED/2, -BALL_SPEED);
+    super(x, y, BALL_RADIUS*2,BALL_RADIUS*2, BALL_SPEED/2, -BALL_SPEED);
     previousPosition.clear();
     this.setRadius(BALL_RADIUS);
   }
@@ -45,29 +45,13 @@ public class Ball extends MovableObject {
   }
 
   public void bounceOff(GameObject other, BallCollision collision) {
-//    if(!(other instanceof Paddle)) {
-//      if (justBounced) {
-//        justBounced = false;
-//        return;
-//      }
-//    }
-    final double SPEED_UP = 1.05;
+      final double SPEED_UP = 1.05;
     if (collision == BallCollision.CORNER) {
       bounceOffCorner();
     } else if (collision == BallCollision.VERTICAL) {
       bounceOffVertical();
-//      if (dx > 0) {
-//        this.setX(other.getX() - this.getWidth() - 0.5);
-//      } else {
-//        this.setX(other.getX() + other.getWidth() + 0.5);
-//      }
     } else if (collision == BallCollision.HORIZONTAL) {
       bounceOffHorizontal();
-//      if (dy > 0) {
-//        this.setY(other.getY() - this.getHeight() - 0.5);
-//      } else {
-//        this.setY(other.getY() + other.getHeight() + 0.5);
-//      }
       if (other instanceof Paddle) {
         dx += ((Paddle) other).getDx() * 0.3;
       }
@@ -88,8 +72,8 @@ public class Ball extends MovableObject {
       dx += dy/2;
       dy -= dy/2;
     } else if(dy == 0) {
-      dy += 1.5;
-      dx -= 1.5;
+      dy += dx/3;
+      dx -= dx/3;
     }
   }
 
@@ -106,35 +90,42 @@ public class Ball extends MovableObject {
     dy = -dy * 1.05;
   }
 
-  private double clamp(double v, double a, double b) {
+  private int clamp(int v, int a, int b) {
     return Math.max(a, Math.min(b, v));
   }
 
-  public BallCollision checkCollision(GameObject other) {
-    double cx = this.getX() + this.r;
-    double cy = this.getY() + this.r;
-    double closestX = clamp(cx, other.getX(), other.getX() + other.getWidth());
-    double closestY = clamp(cy, other.getY(), other.getY() + other.getHeight());
-    double distX = cx - closestX;
-    double distY = cy - closestY;
-    if(distY*distY + distX*distX > this.r*this.r) {
-      return BallCollision.NONE;
-    } else {
-      System.out.println(distX + " " + distY);
-      distY = Math.abs(distY);
-      distX = Math.abs(distX);
-      final double EPS = 0.01;
-      if (Math.abs(distY - distX) < EPS) {
-        return BallCollision.CORNER;
-      } else {
-        if (Math.abs(distX - this.r) < EPS) {
-          return BallCollision.VERTICAL;
-        } else {
-          return BallCollision.HORIZONTAL;
+    public BallCollision checkCollision(GameObject other) {
+
+        int cX = (int)(this.x + this.r/2);
+        int cY = (int)(this.y + this.r/2);
+
+        int left = (int) other.getX();
+        int right = (int) (other.getX() + other.getWidth());
+        int top = (int) other.getY();
+        int bottom = (int) (other.getY() + other.getHeight());
+
+        int nearestX = clamp(cX, left, right);
+        int nearestY = clamp(cY, top, bottom);
+
+        int distX = cX - nearestX;
+        int distY = cY - nearestY;
+
+        if (distX * distX + distY * distY <= this.r * this.r) {
+
+            boolean hitLeftOrRight = (nearestX == left || nearestX == right);
+            boolean hitTopOrBottom = (nearestY == top || nearestY == bottom);
+
+            if (hitLeftOrRight && hitTopOrBottom)
+                return BallCollision.CORNER;
+            else if (hitLeftOrRight)
+                return BallCollision.VERTICAL;
+            else if (hitTopOrBottom)
+                return BallCollision.HORIZONTAL;
         }
-      }
+        return BallCollision.NONE;
     }
-  }
+
+
 
   private void savePosition() {
     previousPosition.addFirst(new Position(this.getX(), this.getY()));
