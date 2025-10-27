@@ -20,6 +20,8 @@ import object.Brick;
 import map.*;
 import core.Process;
 import powerup.*;
+import powerup.LongerPaddlePowerUp;
+
 
 
 public class PlayingProcess extends Process {
@@ -37,8 +39,8 @@ public class PlayingProcess extends Process {
     private final List<PowerUp> listOfPowerUp;
     private final List<TimedEffect> timedEffects;
 
-    private static final double POWERUP_SPAWN_CHANCE = 0.2;
-    private static final int MAX_POWERUPS_PER_LEVEL = 6;
+    private static final double POWERUP_SPAWN_CHANCE = 0.3;
+    private static final int MAX_POWERUPS_PER_LEVEL = 10;
     private int powerUpsSpawnedThisLevel;
     private final Random random = new Random();
 
@@ -153,12 +155,14 @@ public class PlayingProcess extends Process {
     }
 
     private void spawnRandomPowerUp(double x, double y) {
-        int powerUpType = random.nextInt(2);
-        // int powerUpType = 1;
+        int powerUpType = random.nextInt(3);
+        // int powerUpType = 2;
         if (powerUpType == 0) {
             listOfPowerUp.add(new DuplicateBallPowerUp(x, y));
-        } else {
+        } else if (powerUpType == 1) {
             listOfPowerUp.add(new BiggerBallPowerUp(x, y));
+        } else if (powerUpType == 2) {
+            listOfPowerUp.add(new LongerPaddlePowerUp(x, y));
         }
         powerUpsSpawnedThisLevel++;
     }

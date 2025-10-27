@@ -11,8 +11,9 @@ public class Paddle extends MovableObject {
   private int lives;
 
   private double speed = 10.0;
-  static double paddleWidth = 100;
-  static double paddleHeight = 16;
+  private static double paddleWidth = 100;
+  private static double extendWidth = 2.5 * paddleWidth;
+  private static double paddleHeight = 16;
 
 
   public Paddle(double x, double y) {
@@ -62,6 +63,22 @@ public class Paddle extends MovableObject {
 
   public void stop() {
     dx = 0;
+  }
+
+  public void extend() {
+    if (this.width == paddleWidth) {
+      double currentCenterX = this.x + this.width / 2;
+      this.width = extendWidth;
+      this.x = currentCenterX - this.width / 2;
+    }
+  }
+
+  public void resetSize() {
+    if (this.width == extendWidth) {
+      double currentCenterX = this.x + this.width / 2;
+      this.width = paddleWidth;
+      this.x = currentCenterX - this.width / 2;
+    }
   }
 
   @Override
