@@ -19,7 +19,7 @@ public class BiggerBallPowerUp extends PowerUp {
             ball.upSize();
         }
 
-        pp.addTimedEffect(DURATION_SECONDS, () -> {
+        pp.addTimedEffect(PlayingProcess.EffectType.BIGGER_BALL, DURATION_SECONDS, () -> {
             for (Ball ball : pp.getBalls()) {
                 ball.resetSize();
             }

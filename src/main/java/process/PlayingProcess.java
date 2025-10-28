@@ -20,7 +20,6 @@ import object.Brick;
 import map.*;
 import core.Process;
 import powerup.*;
-import powerup.LongerPaddlePowerUp;
 
 
 
@@ -28,6 +27,10 @@ public class PlayingProcess extends Process {
 
     enum PlayingState {
         READY, RUNNING, FINISH_MAP, GAME_OVER
+    }
+
+    public enum EffectType {
+        BIGGER_BALL, LONGER_PADDLE
     }
 
     private PlayingState playingState;
@@ -213,10 +216,12 @@ public class PlayingProcess extends Process {
     }
 
     private static class TimedEffect {
+        EffectType type;
         long endTime;
         Runnable onEndAction;
 
-        TimedEffect(int durationSeconds, Runnable onEndAction) {
+        TimedEffect(EffectType type, int durationSeconds, Runnable onEndAction) {
+            this.type = type;
             this.endTime = System.currentTimeMillis() + durationSeconds * 1000L;
             this.onEndAction = onEndAction;
         }
@@ -230,8 +235,9 @@ public class PlayingProcess extends Process {
         }
     }
 
-    public void addTimedEffect(int durationSeconds, Runnable onEndAction) {
-        timedEffects.add(new TimedEffect(durationSeconds, onEndAction));
+    public void addTimedEffect(EffectType type, int durationSeconds, Runnable onEndAction) {
+        timedEffects.removeIf(effect -> effect.type == type);
+        timedEffects.add(new TimedEffect(type, durationSeconds, onEndAction));
     }
 
     private void initInput() {

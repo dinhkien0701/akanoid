@@ -16,7 +16,7 @@ public class LongerPaddlePowerUp extends PowerUp {
     public void applyEffect(PlayingProcess pp) {
         pp.paddle.extend();
 
-        pp.addTimedEffect(DURATION_SECONDS, () -> {
+        pp.addTimedEffect(PlayingProcess.EffectType.LONGER_PADDLE, DURATION_SECONDS, () -> {
             pp.paddle.resetSize();
         });
     }
