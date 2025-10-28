@@ -1,20 +1,17 @@
 package object;
 
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-
 import process.PlayingProcess;
 
-public class EternalBrick extends Brick {
+public class LifeUpBrick extends Brick{
+    public LifeUpBrick(double x, double y, double width, double height) {
+        super(x , y , width, height , 1000000000);
+    }
 
-  public EternalBrick(double x, double y, double width, double height) {
-    super(x , y , width, height , 1000000000);
-  }
 
-
-    private Image brickImage = LoadResource.LoadImage.getImage("/image/immortal.png");
+    private Image brickImage = LoadResource.LoadImage.getImage("/image/lifeup.png");
     @Override
     public void render(GraphicsContext gc) {
         if (brickImage != null) {
@@ -26,6 +23,6 @@ public class EternalBrick extends Brick {
         }
     }
 
-  @Override
-  public void update(PlayingProcess gameManager) {}
+    @Override
+    public void update(PlayingProcess gameManager) {}
 }

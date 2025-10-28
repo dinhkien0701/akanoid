@@ -17,6 +17,7 @@ import object.EternalBrick;
 import object.Ball;
 import object.NormalBrick;
 import object.Brick;
+import object.*;
 import map.*;
 import powerup.DuplicateBallPowerUp;
 import powerup.PowerUp;
@@ -80,22 +81,37 @@ public class PlayingProcess {
 
   private void initMap() {
     bricks.clear();
-    double brickW = (map.getWidth() - 60) / 8;
-    double brickH = 20;
+    double brickW = (map.getWidth() - 60) / 13;
+    double brickH = 33;
 
-    int[][] arr = LM.getMapByCode(currentMap);
+    int[][] arr = LM.getMapByCode(18);
 
     for (int r = 0; r < 8; r++) {
-      for (int c = 0; c < 8; c++) {
+      for (int c = 0; c < 13; c++) {
         if(arr[r][c] == 0){
           continue;
         }
         double bx = 30 + c * brickW + map.getX();
         double by = 50 + r * (brickH + 6) + map.getY();
-        if(arr[r][c]%3 == 1) {
+
+        // có 8 loại gạch hehe
+          // brickW - 6  : mỗi viên cách nhau 6 pixel
+        if(arr[r][c] == 1) {
           bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
-        } else if(arr[r][c]%3 == 2){
+        } else if(arr[r][c] == 2){
           bricks.add(new EternalBrick(bx, by, brickW - 6, brickH));
+        } else if (arr[r][c] == 3){
+            bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+        } else if (arr[r][c] == 4){
+            bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+        } else if (arr[r][c] == 5){
+            bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+        } else if (arr[r][c] == 6){
+            bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+        } else if (arr[r][c] == 7){
+            bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+        } else if (arr[r][c] == 8){
+            bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
         }
       }
     }
