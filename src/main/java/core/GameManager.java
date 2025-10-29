@@ -48,7 +48,6 @@ public class GameManager {
         this.startLoop(stage);
     }
 
-
     public void startMenu(Stage stage){
         stage.setScene(menu.getScene());
         gameState = GameState.MENU;
@@ -81,15 +80,15 @@ public class GameManager {
 
         switch (gameState){
             case MENU:
-                System.out.println("MENU");
+                //System.out.println("MENU");
                 menu.update(stage,this);
                 break;
             case PLAYING:
-                System.out.println("PLAYING");
+                //System.out.println("PLAYING");
                 playing.update(stage,this);
                 break;
             case GAME_OVER:
-                System.out.println("GAME OVER");
+                //System.out.println("GAME OVER");
                 gameOver.update(stage,this);
                 break;
             }
