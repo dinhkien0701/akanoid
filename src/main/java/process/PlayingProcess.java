@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 
 import core.*;
 import object.Paddle;
-import object.EternalBrick;
+import object.ImmortalBrick;
 import object.Ball;
 import object.NormalBrick;
 import object.Brick;
@@ -99,19 +99,19 @@ public class PlayingProcess {
         if(arr[r][c] == 1) {
           bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
         } else if(arr[r][c] == 2){
-          bricks.add(new EternalBrick(bx, by, brickW - 6, brickH));
+          bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
         } else if (arr[r][c] == 3){
             bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
         } else if (arr[r][c] == 4){
-            bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+            bricks.add(new GoldBrick(bx, by, brickW - 6, brickH));
         } else if (arr[r][c] == 5){
-            bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+            bricks.add(new FallBombBrick(bx, by, brickW - 6, brickH));
         } else if (arr[r][c] == 6){
-            bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+            bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH));
         } else if (arr[r][c] == 7){
-            bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+            bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH));
         } else if (arr[r][c] == 8){
-            bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+            bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH));
         }
       }
     }

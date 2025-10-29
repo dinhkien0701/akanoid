@@ -5,108 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d187c723-39e4-4b2e-9886-2b9f92bdb635" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/LoadResource/LoadImage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/map/CreatSpecialBrick.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/object/LifeUpBrick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/object/AreaBlastBrick.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/object/BallUpSkillBrick.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/object/FallBombBrick.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/object/GoldBrick.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/object/LuckyWheelBrick.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/map/CreateMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/map/CreateMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/map/DFS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/map/DFS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/map/ListOfMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/map/ListOfMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/EternalBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/EternalBrick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/NormalBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/NormalBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/EternalBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/ImmortalBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/LifeUpBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/LifeUpBrick.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/.idea/libraries/lib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/Ball.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/Brick.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/Button.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/CreateMap.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/CreateMap.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/DFS.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/DFS.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/EternalBrick.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/GameManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/GameObject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/GameOverProcess.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/ListOfMap.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/Map.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/MenuProcess.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/MovableObject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/NormalBrick.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/Paddle.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/Pair.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/PlayingProcess.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/Position.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/core/GameManager$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/core/GameManager$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/core/GameManager$GameState.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/core/GameManager.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/core/GameObject.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/core/MovableObject.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/image/ballSkin1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/image/purple.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/image/startGame.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/main/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/main/.idea/libraries/lib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/main/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/main/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/main/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/main/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/main/resources/image/ballSkin1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/main/resources/image/purple.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/main/resources/image/startGame.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/main/resources/staticMap/map.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/main/resources/video/intro.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/map.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/map/CreateMap.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/map/DFS.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/map/ListOfMap.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/map/Map.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/map/Pair.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/math/Position.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/object/Ball$BallCollision.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/object/Ball.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/object/Brick.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/object/EternalBrick.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/object/NormalBrick.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/object/Paddle.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/process/GameOverProcess.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/process/MenuProcess.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/process/PlayingProcess$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/process/PlayingProcess$PlayingState.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/process/PlayingProcess.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/resources/image/ballSkin1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/resources/image/purple.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/resources/image/startGame.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/resources/staticMap/map.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/resources/video/intro.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/staticMap/map.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/akanoid/video/intro.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/Ball$BallCollision.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/Ball.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/Brick.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/CreateMap.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/DFS.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/EternalBrick.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/GameManager.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/GameObject.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/ListOfMap$Map.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/ListOfMap.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/Main$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/Main$GameState.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/MovableObject.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/NormalBrick.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/Paddle.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/out/production/main/Pair.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,7 +118,9 @@
       <workItem from="1761583197120" duration="1012000" />
       <workItem from="1761610237881" duration="3248000" />
       <workItem from="1761617773241" duration="478000" />
-      <workItem from="1761664200423" duration="13905000" />
+      <workItem from="1761664200423" duration="14641000" />
+      <workItem from="1761699539033" duration="7000" />
+      <workItem from="1761719123742" duration="2402000" />
     </task>
     <servers />
   </component>
