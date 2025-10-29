@@ -16,6 +16,6 @@ public abstract class Brick extends GameObject {
   }
 
   public boolean isDestroyed() {
-    return hitPoints <= 0;
+    return hitPoints == 0;
   }
 }

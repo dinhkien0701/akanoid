@@ -16,10 +16,10 @@ public class Main extends Application {
 
   @Override
   public void start(Stage primaryStage) {
-    LoadingProcess lp = new LoadingProcess(SCREEN_WIDTH, SCREEN_HEIGHT);
-    lp.render(primaryStage, () -> {
+//    LoadingProcess lp = new LoadingProcess(SCREEN_WIDTH, SCREEN_HEIGHT);
+//    lp.render(primaryStage, () -> {
       GameManager gameManager = new GameManager(SCREEN_WIDTH,SCREEN_HEIGHT);
       gameManager.process(primaryStage);
-    });
+//    });
   }
 }

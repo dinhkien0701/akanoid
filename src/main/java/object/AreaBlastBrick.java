@@ -12,7 +12,7 @@ public class AreaBlastBrick extends Brick {
     }
 
 
-    private Image brickImage = LoadResource.LoadImage.getImage("/image/areBlast.png");
+    private Image brickImage = LoadResource.LoadImage.getImage("/image/areaBlast.png");
     @Override
     public void render(GraphicsContext gc) {
         if (brickImage != null) {
