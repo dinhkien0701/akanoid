@@ -12,11 +12,14 @@ import process.*;
 
 public class GameManager {
 
+    // Các khung hình cần cho game
+
     private final MenuProcess menu;
+    private final PickLevel pickLevel;
     private final PlayingProcess playing;
     private final GameOverProcess gameOver;
 
-    private GameState gameState;
+    private GameState gameState; // GameState là một enum
 
     private Scene scene;
     private final int width;
@@ -31,12 +34,20 @@ public class GameManager {
 
         Rectangle map = new Rectangle(150,0, 900,700);
         playing = new PlayingProcess(width, height, map);
+        pickLevel = new PickLevel(this.width, this.height);
 
         gameOver = new GameOverProcess(width, height);
 
     }
 
     public void process(Stage stage){
+        /**
+         * StackPane là gì?
+         * Nó xếp chồng (stack) tất cả các node con,
+         *(component: Button, ImageView, Text, Canvas, v.v.),
+         * lên trên nhau — giống như xếp nhiều lớp giấy chồng
+         * lên cùng một điểm giữa */
+
         StackPane root = new StackPane();
         root.setPrefWidth(width);
         root.setPrefHeight(height);
@@ -54,6 +65,13 @@ public class GameManager {
     }
 
     public void finishMenu(Stage stage){
+        // Sau khi ấn Start ở Menu -> chuyển sang màn chọn level
+        stage.setScene(pickLevel.getScene());
+        gameState = GameState.PICK_LEVEL;
+    }
+
+    // Từ màn chọn level -> vào chơi (tạm thời luôn vào gameplay mặc định)
+    public void finishPickLevel(Stage stage){
         stage.setScene(playing.getScene());
         gameState = GameState.PLAYING;
     }
@@ -83,6 +101,9 @@ public class GameManager {
                 //System.out.println("MENU");
                 menu.update(stage,this);
                 break;
+            case PICK_LEVEL:
+                pickLevel.update(stage, this);
+                break;
             case PLAYING:
                 //System.out.println("PLAYING");
                 playing.update(stage,this);
@@ -98,6 +119,9 @@ public class GameManager {
         switch (gameState){
             case MENU:
                 menu.render();
+                break;
+            case PICK_LEVEL:
+                pickLevel.render();
                 break;
             case PLAYING:
                 playing.render();
@@ -128,12 +152,14 @@ public class GameManager {
                 }
             }
         };
-        timer.start();
+        timer.start(); // chạy thay đổi khung hình này cho toàn bộ khung hình
     }
 
+    // Đây là kiểu dữ liệu thay cho public static final
     public enum GameState {
         INIT,
         MENU,
+        PICK_LEVEL,
         PLAYING,
         PAUSE,
         GAME_OVER,
