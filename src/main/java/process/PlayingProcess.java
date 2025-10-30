@@ -83,7 +83,7 @@ public class PlayingProcess extends Process {
         double brickW = (map.getWidth() - 60) / 13;
         double brickH = 33;
 
-        int[][] arr = LM.getMapByCode(18);
+        int[][] arr = LM.getMapByCode(currentMap);
 
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 13; c++) {

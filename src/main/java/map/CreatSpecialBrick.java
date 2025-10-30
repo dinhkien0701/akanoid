@@ -6,21 +6,32 @@ import java.io.*;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * CreatSpecialBrick: rải các loại gạch đặc biệt lên bản đồ đã có gạch thường.
+ *
+ * Quy ước ID (tham khảo hiện tại):
+ * 1 = Normal, 2 = Immortal, 3 = LifeUp, 4 = Gold,
+ * 5 = FallBomb, 6 = LuckyWheel, 7 = AreaBlast, 8 = SkillUp
+ *
+ * Cách làm: theo từng level, chọn ngẫu nhiên các vị trí đang là 1 (normal)
+ * để thay bằng id đặc biệt tương ứng, số lượng phụ thuộc level và có trần.
+ */
 public class CreatSpecialBrick  {
-    private List<Map> listOfMaps;
-    private int rows;
-    private int cols;
+    private List<Map> listOfMaps; // danh sách map theo level
+    private int rows;             // số hàng
+    private int cols;             // số cột
 
-    // khơir tạo
+    // Khởi tạo
     public CreatSpecialBrick( List<Map> listOfMaps, int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         this.listOfMaps = listOfMaps;
     }
 
-
-
-
+    /**
+     * Đọc file immortalMap.txt để nạp thêm các bố cục "bất tử" (id=2)
+     * vào danh sách map. Mỗi block trong file phân tách bằng dòng bắt đầu '#'.
+     */
     public void readImmortal() {
 
         try (InputStream is = LoadImage.class.getResourceAsStream("/immortalMap.txt");
@@ -28,8 +39,8 @@ public class CreatSpecialBrick  {
             String line;
             int row = 0;
 
-            //lấy bản đồ
-            int[][] map = new int[8][13]; //listOfMaps.get(level).getMap();
+            // tạo map tạm 8x13 rồi push vào list khi gặp '#'
+            int[][] map = new int[8][13]; // listOfMaps.get(level).getMap();
 
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
@@ -41,7 +52,6 @@ public class CreatSpecialBrick  {
                 } else {
                     for (int i = 0; i < path.length; i++) {
                         map[row][i] = Integer.parseInt(path[i]);
-
                     }
                     row++;
                 }
@@ -50,8 +60,11 @@ public class CreatSpecialBrick  {
             e.printStackTrace();
         }
     }
-    // Hàm kiểm tra viên gạch bốn hướng xung quanh nó bị kẹt không ( gặp tường hoặc gạch bất tử )
-    // Trapped (adj) : bị mắc kẹt
+
+    // Mới viết : hiện tại chưa có ý định dùng
+    // Hàm kiểm tra viên gạch bốn hướng xung quanh nó bị kẹt không (gặp tường hoặc gạch bất tử)
+    // Trapped (adj): bị mắc kẹt
+
     private boolean isBrickTrapped(int[][] map, int r, int c, int rows, int cols) {
 
         int[] dr = {-1, 1, 0, 0}; // delta row (Lên, Xuống)
@@ -60,14 +73,14 @@ public class CreatSpecialBrick  {
         int trappedSides = 0; // Đếm số mặt bị chặn
 
         for (int i = 0; i < 4; i++) {
-            int nr = r + dr[i]; // Hàng xóm
-            int nc = c + dc[i]; // Hàng xóm
+            int nr = r + dr[i]; // Hàng xóm theo hàng
+            int nc = c + dc[i]; // Hàng xóm theo cột
 
-            // 1. Kiểm tra "Tường" (biên bản đồ)
+            // 1. Biên bản đồ (tường)
             if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) {
                 trappedSides++;
             }
-            // 2. Kiểm tra gạch bất tử (2)
+            // 2. Gạch bất tử (2)
             else if (map[nr][nc] == 2) {
                 trappedSides++;
             }
@@ -77,7 +90,12 @@ public class CreatSpecialBrick  {
         return trappedSides == 4;
     }
 
-
+    /**
+     * Đổi một số ô normal (id=1) sang id đặc biệt bất kỳ, chọn ngẫu nhiên vị trí.
+     * @param id       loại gạch đặc biệt muốn gán
+     * @param level    level mục tiêu trong listOfMaps (1-based)
+     * @param so_luong số ô cần chuyển
+     */
     private void creatWithId(int id , int level, int so_luong) {
         Random rand = new Random();
         int x,y;
@@ -86,38 +104,38 @@ public class CreatSpecialBrick  {
         while (so_luong > 0) {
             x  = rand.nextInt(rows);
             y = rand.nextInt(cols);
-            if (map[x][y] == 1) {
+            if (map[x][y] == 1) { // chỉ thay khi đang là normal
                 map[x][y] = id;
                 so_luong--;
             }
         }
     }
 
-
+    /**
+     * Rải toàn bộ loại gạch đặc biệt theo level với số lượng tỉ lệ level.
+     * Mục tiêu: có tăng dần nhưng giữ trần để tránh quá tải màn chơi.
+     */
     public void creatSpecialBrick() {
         for (int level = 1 ; level <= 20 ; level++) {
-            //  Mỗi màn tặng tối đa 3 mạng :  từ level 1 +1 mạng , từ level 5  + 2 mạng , từ level 10 + 3 mạng
+            // Mỗi màn tặng tối đa 3 mạng: level 1 -> +1, level 5 -> +2, level 10 -> +3
             int lifeUp = Math.min(3 , 1 + level / 5);
 
-            // Tương tụ với ô tặng xu
-
+            // Tương tự với ô tặng xu (gold)
             int gold = lifeUp;
 
-            // Bom rơi
-            // cần chỉnh lại
+            // Bom rơi (cần cân bằng thêm): tăng theo nhiều bậc nhỏ, trần 10
             int fallBomb = Math.min(10 , level / 3 + level / 6 + level / 8 + level / 10 + level / 12 + level / 14 );
 
-            // Nổ khu vực
+            // Nổ khu vực: không vượt quá số bom rơi, trần 5
             int areaBlast = Math.min(5 , fallBomb);
 
-            // Phép bổ trợ skill
-            int skillUp = Math.min(3 ,level / 4);
+            // Phép bổ trợ skill: trần 3
+            int skillUp = Math.min(3 , level / 4);
 
-            // Vòng quay may mắn
-
+            // Vòng quay may mắn: trần 3
             int wheel = Math.min(3 , level / 5);
 
-            // Khởi tạo
+            // Áp vào map level tương ứng
             creatWithId(3, level, lifeUp);
             creatWithId(4, level, gold);
             creatWithId(5, level, fallBomb);
