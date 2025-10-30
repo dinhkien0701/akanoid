@@ -134,6 +134,7 @@ public class Ball extends MovableObject {
     }
   }
 
+
   @Override
   public void update(PlayingProcess gm) {
     move();

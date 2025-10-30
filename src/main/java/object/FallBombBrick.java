@@ -25,5 +25,10 @@ public class FallBombBrick extends Brick {
     }
 
     @Override
+    public void takeHit() {
+        hitPoints --;
+    }
+
+    @Override
     public void update(PlayingProcess gameManager) {}
 }

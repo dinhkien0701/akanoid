@@ -6,7 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="d187c723-39e4-4b2e-9886-2b9f92bdb635" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/core/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/core/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/AreaBlastBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/AreaBlastBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/Ball.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/BallUpSkillBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/BallUpSkillBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/Brick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/FallBombBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/FallBombBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/GoldBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/GoldBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/ImmortalBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/ImmortalBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/LifeUpBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/LifeUpBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/LuckyWheelBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/LuckyWheelBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/NormalBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/NormalBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +131,7 @@
       <workItem from="1761736004145" duration="611000" />
       <workItem from="1761815163920" duration="16107000" />
       <workItem from="1761843715409" duration="168000" />
-      <workItem from="1761843943659" duration="3185000" />
+      <workItem from="1761843943659" duration="6225000" />
     </task>
     <servers />
   </component>

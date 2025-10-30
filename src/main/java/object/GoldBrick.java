@@ -24,5 +24,10 @@ public class GoldBrick extends Brick {
     }
 
     @Override
+    public void takeHit() {
+        hitPoints --;
+    }
+
+    @Override
     public void update(PlayingProcess gameManager) {}
 }

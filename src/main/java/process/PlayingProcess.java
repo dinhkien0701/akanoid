@@ -203,15 +203,9 @@ public class PlayingProcess extends Process {
                 break;
             }
         }
-        int countNormalBrick = 0;
-        it = bricks.iterator();
-        while (it.hasNext()) {
-            Brick b = it.next();
-            if (b instanceof NormalBrick) {
-                countNormalBrick++;
-            }
-        }
-        if (countNormalBrick <= 0) {
+        // Nếu đã phá hủy toàn bộ brick , sang level tiếp theo.
+        int countBrick = bricks.size();
+        if (countBrick <= 0) {
             playingState = PlayingState.FINISH_MAP;
             nextLevel();
         }
@@ -239,6 +233,9 @@ public class PlayingProcess extends Process {
 
 
     @Override
+
+    // update và kiểm tra cả va chạm với paddle
+
     public void update(Stage stage,GameManager gm) {
         initInput();
         switch (playingState) {
@@ -250,7 +247,18 @@ public class PlayingProcess extends Process {
             case RUNNING:
                 paddle.update(this);
                 ball.update(this);
+
                 if (ball.checkCollision(paddle) != Ball.BallCollision.NONE) {
+                    // nếu bóng chạm paddle
+                    Iterator <Brick> it = bricks.iterator();
+                    while (it.hasNext()) {
+                        Brick b = it.next();
+
+                        // tăng hitpoint của gạch bất tử
+                        if (b instanceof ImmortalBrick) {
+                            b.upHitPoint();
+                        }
+                    }
                     ball.bounceOff(paddle, ball.checkCollision(paddle));
                     ball.setY(paddle.getY() - ball.getHeight() - 1);
                 }

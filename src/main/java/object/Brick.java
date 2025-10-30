@@ -4,18 +4,20 @@ package object;
 import core.GameObject;
 
 public abstract class Brick extends GameObject {
-  private int hitPoints;
 
+  protected int hitPoints;
   Brick(double x, double y, double w, double h, int hp) {
     super(x, y, w, h);
     this.hitPoints = hp;
   }
 
-  public void takeHit() {
-    hitPoints--;
+  public abstract void takeHit();
+
+  public void upHitPoint() {
+      // Sẽ được override trong ImmortalBrick
   }
 
   public boolean isDestroyed() {
-    return hitPoints == 0;
+    return hitPoints <= 0;
   }
 }

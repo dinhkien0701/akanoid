@@ -25,6 +25,11 @@ public class NormalBrick extends Brick {
       }
   }
 
+    @Override
+    public void takeHit() {
+        hitPoints --;
+    }
+
   @Override
   public void update(PlayingProcess gm){}
 }

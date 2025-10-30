@@ -10,7 +10,14 @@ import process.PlayingProcess;
 public class ImmortalBrick extends Brick {
 
   public ImmortalBrick(double x, double y, double width, double height) {
-    super(x , y , width, height , 1000000000);
+
+      super(x , y , width, height , 8);
+      // Ta xây cơ chế nếu giữa hai lần tâng bóng trúng không cách nhau quá 3 lần tâng thì nó sẽ phá hủy
+      // Giải thích  lần t  và t + k với  0<= k<= 4 đều chạm trúng đều phá hủy
+
+      // Hp tối đa là 8 , mỗi lần chạm trúng trừ 6  - > về âm hay = 0 thì bị phá hủy
+      // 8 - 6 = 2 ; 2 + 4 - 6  = 0
+
   }
 
 
@@ -24,6 +31,17 @@ public class ImmortalBrick extends Brick {
             gc.setFill(Color.RED);
             gc.fillRect(getX(), getY(), getWidth(), getHeight());
         }
+    }
+
+    @Override
+    public void takeHit() {
+        hitPoints -= 6;
+    }
+
+    @Override
+    public void upHitPoint() {
+        // quay trở về tối đa 8 điểm sau mỗi phát nảy
+        hitPoints = Math.min(8,  hitPoints + 1);
     }
 
   @Override
