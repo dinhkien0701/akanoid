@@ -28,9 +28,8 @@ public abstract class Process {
         return this.scene;
     }
 
-    public Scene setScene(Scene scene) {
-        this.scene = scene;
-        return scene;
+    public void setScene(Stage stage) {
+        stage.setScene(this.scene);
     }
 
     public abstract void update(Stage stage, GameManager gameManager);

@@ -48,12 +48,12 @@ public class Paddle extends MovableObject {
 
   public void moveLeft() {
     //System.out.println("Left");
-    dx = -speed;
+    this.setDx(-speed);
   }
 
   public void moveRight() {
     //System.out.println("Right");
-    dx = speed;
+    this.setDx(speed);
   }
 
   public void reborn(){
@@ -61,17 +61,17 @@ public class Paddle extends MovableObject {
   }
 
   public void stop() {
-    dx = 0;
+    this.setDx(0);
   }
 
   @Override
   public void update(PlayingProcess gm) {
     move();
-    if (getX() < gm.map.getX()) {
-      this.setX(gm.map.getX());
+    if (getX() < gm.getMap().getX()) {
+      this.setX(gm.getMap().getX());
     }
-    if (getX() + getWidth() > gm.map.getWidth() + gm.map.getX()) {
-      this.setX(gm.map.getWidth() + gm.map.getX() - this.getWidth());
+    if (getX() + getWidth() > gm.getMap().getWidth() + gm.getMap().getX()) {
+      this.setX(gm.getMap().getWidth() + gm.getMap().getX() - this.getWidth());
     }
     if(lives <= 0){
       gm.deadPaddle();

@@ -121,7 +121,7 @@ public class MenuProcess extends Process {
         StackPane.setAlignment(settingButton, Pos.BOTTOM_RIGHT);
         StackPane.setMargin(settingButton, new Insets(0, 360, 180, 0));
 
-        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/Sprite-0001.png")));
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/OptionButton.png")));
         ImageView imageView = new ImageView(image);
         imageView.setViewport(new Rectangle2D(0, 0, 250, 60));
         settingButton.setGraphic(imageView);
@@ -216,7 +216,7 @@ public class MenuProcess extends Process {
         StackPane.setAlignment(exitButton, Pos.BOTTOM_RIGHT);
         StackPane.setMargin(exitButton, new Insets(0, 360, 100, 0));
 
-        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/Sprite-0001.png")));
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/image/QuitButton.png")));
         ImageView imageView2 = new ImageView(image);
         imageView2.setViewport(new Rectangle2D(0, 0, 250, 60));
         exitButton.setGraphic(imageView2);

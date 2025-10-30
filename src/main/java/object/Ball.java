@@ -96,8 +96,8 @@ public class Ball extends MovableObject {
 
     public BallCollision checkCollision(GameObject other) {
 
-        int cX = (int)(this.x + this.r/2);
-        int cY = (int)(this.y + this.r/2);
+        int cX = (int)(this.getX() + this.r/2);
+        int cY = (int)(this.getY() + this.r/2);
 
         int left = (int) other.getX();
         int right = (int) (other.getX() + other.getWidth());
@@ -125,8 +125,6 @@ public class Ball extends MovableObject {
         return BallCollision.NONE;
     }
 
-
-
   private void savePosition() {
     previousPosition.addFirst(new Position(this.getX(), this.getY()));
     if(previousPosition.size() >= 60) {
@@ -137,20 +135,20 @@ public class Ball extends MovableObject {
   @Override
   public void update(PlayingProcess gm) {
     move();
-    if (this.getX() < gm.map.getX()) {
-      this.setX(gm.map.getX());
+    if (this.getX() < gm.getMap().getX()) {
+      this.setX(gm.getMap().getX());
       bounceOffVertical();
     }
-    if (this.getX() + this.getWidth() > gm.map.getWidth() + gm.map.getX()) {
-      this.setX(gm.map.getWidth() + gm.map.getX() - this.getWidth());
+    if (this.getX() + this.getWidth() > gm.getMap().getWidth() + gm.getMap().getX()) {
+      this.setX(gm.getMap().getWidth() + gm.getMap().getX() - this.getWidth());
       bounceOffVertical();
     }
     if (this.getY() < 0) {
       this.setY(0);
       bounceOffHorizontal();
     }
-    if (this.getY() > gm.map.getHeight()) {
-      gm.onBallLost();
+    if (this.getY() > gm.getMap().getHeight()) {
+      gm.onBallLost(this);
     }
     this.savePosition();
   }

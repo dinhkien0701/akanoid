@@ -1,14 +1,16 @@
 package core;
 
-import java.awt.Image;
+import java.util.Objects;
+
+import javafx.scene.image.Image;
 import process.PlayingProcess;
 
 public abstract class GameObject {
-  protected double x, y, width, height;
+  private double x, y, width, height;
   private Image image;
   private int frame;
 
-  protected GameObject (double x, double y, double width, double height) {
+  public GameObject (double x, double y, double width, double height) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -16,9 +18,17 @@ public abstract class GameObject {
     this.frame = 0;
   }
 
-  protected GameObject (double x, double y, double width, double height, int frame) {
+  public GameObject (double x, double y, double width, double height, int frame) {
     this(x , y , width , height);
     this.frame = frame;
+  }
+
+  public void LoadImage(String path) {
+      image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(path)));
+  }
+
+  public Image getImage() {
+      return this.image;
   }
 
   public double getX() {

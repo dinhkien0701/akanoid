@@ -33,7 +33,7 @@ public abstract class MovableObject extends GameObject {
   public abstract void resetSpeed();
 
   protected void move() {
-    x += dx;
-    y += dy;
+    this.setX(this.getX() + dx);
+    this.setY(this.getY() + dy);
   }
 }

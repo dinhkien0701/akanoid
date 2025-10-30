@@ -11,6 +11,10 @@ import javafx.stage.Stage;
 import process.*;
 
 public class GameManager {
+    public static final int SCREEN_WIDTH = 1200;
+    public static final int SCREEN_HEIGHT = 750;
+
+    private static GameManager instance;
 
     private final MenuProcess menu;
     private final PlayingProcess playing;
@@ -22,21 +26,24 @@ public class GameManager {
     private final int width;
     private final int height;
 
-    public GameManager(int width, int height) {
+    public static GameManager getInstance() {
+        if (instance == null) {
+            instance = new GameManager(SCREEN_WIDTH, SCREEN_HEIGHT);
+        }
+        return instance;
+    }
+
+    private GameManager(int width, int height) {
         gameState = GameState.INIT;
         this.width = width;
         this.height = height;
-
         menu = new MenuProcess(this.width, this.height);
-
-        Rectangle map = new Rectangle(150,0, 900,700);
+        Rectangle map = new Rectangle(150, 0, 900, 700);
         playing = new PlayingProcess(width, height, map);
-
         gameOver = new GameOverProcess(width, height);
-
     }
 
-    public void process(Stage stage){
+    public void process(Stage stage) {
         StackPane root = new StackPane();
         root.setPrefWidth(width);
         root.setPrefHeight(height);
@@ -48,69 +55,71 @@ public class GameManager {
         this.startLoop(stage);
     }
 
-    public void startMenu(Stage stage){
-        stage.setScene(menu.getScene());
+
+    public void startMenu(Stage stage) {
+        menu.setScene(stage);
         gameState = GameState.MENU;
     }
 
-    public void finishMenu(Stage stage){
-        stage.setScene(playing.getScene());
+    public void finishMenu(Stage stage) {
+        playing.setScene(stage);
         gameState = GameState.PLAYING;
     }
 
     public void finishPlay(Stage stage) {
-        stage.setScene(gameOver.getScene());
+        gameOver.setScene(stage);
         gameState = GameState.GAME_OVER;
     }
 
     public void rePlay(Stage stage) {
-        stage.setScene(playing.getScene());
+        playing.setScene(stage);
         gameState = GameState.INIT;
         playing.reset();
         gameState = GameState.PLAYING;
 
     }
 
-    public void update(Stage stage){
+    public void update(Stage stage) {
         scene.setOnKeyPressed(e -> {
             if (Objects.requireNonNull(e.getCode()) == KeyCode.ESCAPE) {
                 System.exit(0);
             }
         });
 
-        switch (gameState){
+        switch (gameState) {
             case MENU:
-                //System.out.println("MENU");
-                menu.update(stage,this);
+                System.out.println("MENU");
+                menu.update(stage, this);
                 break;
             case PLAYING:
-                //System.out.println("PLAYING");
-                playing.update(stage,this);
+                System.out.println("PLAYING");
+                playing.update(stage, this);
                 break;
             case GAME_OVER:
-                //System.out.println("GAME OVER");
-                gameOver.update(stage,this);
+                System.out.println("GAME OVER");
+                gameOver.update(stage, this);
                 break;
-            }
         }
+    }
 
-    public void render(){
-        switch (gameState){
-          case MENU:
-            menu.render();
-            break;
-          case PLAYING:
-            playing.render();
-            break;
-          case GAME_OVER:
-            gameOver.render();
-            break;
+    public void render() {
+        switch (gameState) {
+            case MENU:
+                menu.render();
+                break;
+            case PLAYING:
+                playing.render();
+                break;
+            case GAME_OVER:
+                gameOver.render();
+                break;
         }
     }
 
     private static final double FPS = 70.0;
     private static final double FRAME_TIME = 1000.0 / FPS;
     private long lastFrameTime = 0;
+
     public void startLoop(Stage stage) {
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -132,12 +141,6 @@ public class GameManager {
     }
 
     public enum GameState {
-        INIT,
-        MENU,
-        PLAYING,
-        PAUSE,
-        GAME_OVER,
-        VICTORY,
-        CREDITS
+        INIT, MENU, PLAYING, PAUSE, GAME_OVER, VICTORY, CREDITS
     }
 }
