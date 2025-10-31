@@ -28,7 +28,7 @@ public class PlayingProcess extends Process {
     }
 
     public int points;
-
+    public int frameCount ; // bộ đếm dựa trên fps
     private PlayingState playingState;
 
     public Paddle paddle;
@@ -301,5 +301,13 @@ public class PlayingProcess extends Process {
         gc.setFill(Color.WHITE);
         gc.fillText("Points:    " + points + "    Level:   " + (this.currentMap + 1), 10, 20);
         gc.fillText("Lives:    " + paddle.getLives(), 10, 40);
+
+        frameCount ++; // tăng frame
+
+        if (frameCount == 140) {
+            // reset framecount sau mỗi chu kỳ
+            frameCount = 0;
+            
+        }
     }
 }
