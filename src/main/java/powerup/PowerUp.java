@@ -9,13 +9,17 @@ public abstract class PowerUp extends MovableObject {
   private static final double FALLING_SPEED = 3.0;
   private boolean isFallOut;
   private boolean isEnd;
-  private long Timer;
+  private long timer;
 
   public PowerUp(double x, double y, double width, double height) {
     super(x, y, width, height, 0, FALLING_SPEED);
-    Timer = System.currentTimeMillis();
+    timer = System.currentTimeMillis();
     isFallOut = false;
     isEnd = false;
+  }
+
+  public long getTimer() {
+      return this.timer;
   }
 
   public boolean IsFallOut() {

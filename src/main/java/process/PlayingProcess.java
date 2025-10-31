@@ -29,6 +29,7 @@ public class PlayingProcess extends Process {
     private final List<Brick> bricks;
     private final List<PowerUp> listOfPowerUp;
     private final List<Ball> listOfBall;
+    private final List<Ball> deletedBall;
     private final Rectangle map;
     private final ListOfMap LM;
     private int powerUpsSpawnedThisLevel;
@@ -54,8 +55,10 @@ public class PlayingProcess extends Process {
         paddle = new Paddle(map.getX() + map.getWidth() / 2 - 50, map.getY() + map.getHeight() - 40);
         pressedLeft = false;
         pressedRight = false;
+        deletedBall = new ArrayList<>();
         mainBall = new Ball(map.getWidth() / 2 - 60 + map.getX() + 50 - 8, map.getHeight() - 40 + map.getY() - 16);
         powerUpsSpawnedThisLevel = 0;
+        listOfBall.add(mainBall);
         initBall();
         initPaddle();
         initMap();
@@ -97,7 +100,6 @@ public class PlayingProcess extends Process {
         mainBall.resetSpeed();
         mainBall.setX(map.getWidth() / 2 - 60 + map.getX() + 50 - 8);
         mainBall.setY(map.getHeight() - 40 + map.getY() - 16);
-        listOfBall.add(mainBall);
     }
 
     private void initPaddle(){
@@ -152,20 +154,6 @@ public class PlayingProcess extends Process {
         initPaddle();
         initBall();
         paddle.reborn();
-    }
-
-    public void onBallLost(Ball falledBall) {
-        listOfBall.remove(falledBall);
-        if(falledBall.equals(mainBall)) {
-            if(listOfBall.isEmpty()) {
-                paddle.takeHit();
-                listOfPowerUp.clear();
-                initBall();
-            } else {
-                mainBall = listOfBall.get(0);
-            }
-        }
-        playingState = PlayingState.READY;
     }
 
     public void deadPaddle() {
@@ -245,6 +233,9 @@ public class PlayingProcess extends Process {
                 countNormalBrick++;
             }
         }
+
+
+
         if (countNormalBrick <= 0) {
             playingState = PlayingState.FINISH_MAP;
             nextLevel();
@@ -257,6 +248,28 @@ public class PlayingProcess extends Process {
 
     public void removePowerUp(PowerUp pu){
         listOfPowerUp.remove(pu);
+    }
+
+    public void onBallLost(Ball falledBall) {
+        if(falledBall.equals(mainBall)) {
+            if(listOfBall.size() - 1 <= 0) {
+                paddle.takeHit();
+                initBall();
+                playingState = PlayingState.READY;
+                listOfPowerUp.clear();
+                return;
+            }
+            for(Ball ball : listOfBall) {
+                if(ball.equals(mainBall)) {
+                    continue;
+                }
+                if(!ball.isFallOut(map.getY() + map.getHeight())) {
+                    mainBall = ball;
+                    break;
+                }
+            }
+        }
+        deletedBall.add(falledBall);
     }
 
     public void checkPowerUpList() {
@@ -274,6 +287,27 @@ public class PlayingProcess extends Process {
         }
     }
 
+    public void checkBallList() {
+        if(listOfBall.isEmpty()){
+            return;
+        }
+        for (Ball b : listOfBall) {
+            b.update(this);
+            if (b.checkCollision(paddle) != Ball.BallCollision.NONE) {
+                b.bounceOff(paddle, b.checkCollision(paddle));
+                b.setY(paddle.getY() - b.getHeight() - 1);
+            }
+            checkBricksList(b);
+        }
+        if(!deletedBall.isEmpty()) {
+            for (Ball b : deletedBall) {
+                listOfBall.remove(b);
+            }
+            deletedBall.clear();
+        }
+    }
+
+
     @Override
     public void update(Stage stage,GameManager gm) {
         initInput();
@@ -285,14 +319,7 @@ public class PlayingProcess extends Process {
             break;
         case RUNNING:
             paddle.update(this);
-            for (Ball ball : listOfBall) {
-                ball.update(this);
-                if (ball.checkCollision(paddle) != Ball.BallCollision.NONE) {
-                    ball.bounceOff(paddle, ball.checkCollision(paddle));
-                    ball.setY(paddle.getY() - ball.getHeight() - 1);
-                }
-                checkBricksList(ball);
-            }
+            checkBallList();
             checkPowerUpList();
             break;
         case GAME_OVER:

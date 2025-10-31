@@ -147,10 +147,15 @@ public class Ball extends MovableObject {
       this.setY(0);
       bounceOffHorizontal();
     }
-    if (this.getY() > gm.getMap().getHeight()) {
+    double bottom = gm.getMap().getY() + gm.getMap().getHeight();
+    if (isFallOut(bottom)) {
       gm.onBallLost(this);
     }
     this.savePosition();
+  }
+
+  public boolean isFallOut(double bottom) {
+      return this.getY() > bottom;
   }
 
   private void drawEffect(GraphicsContext gc) {
@@ -172,7 +177,7 @@ public class Ball extends MovableObject {
   @Override
   public void render(GraphicsContext gc) {
     //this.drawEffect(gc);
-    gc.setFill(Color.RED);
+    gc.setFill(Color.PINK);
     gc.fillOval(this.getX(), this.getY(), this.getHeight(), this.getWidth());
   }
 
