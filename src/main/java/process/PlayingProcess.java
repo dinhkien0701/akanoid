@@ -20,6 +20,7 @@ import object.Brick;
 import map.*;
 import core.Process;
 import powerup.*;
+import object.Bullet;
 
 
 
@@ -30,7 +31,7 @@ public class PlayingProcess extends Process {
     }
 
     public enum EffectType {
-        BIGGER_BALL, LONGER_PADDLE
+        BIGGER_BALL, LONGER_PADDLE, SHOT
     }
 
     private PlayingState playingState;
@@ -41,11 +42,14 @@ public class PlayingProcess extends Process {
     private final List<Brick> bricks;
     private final List<PowerUp> listOfPowerUp;
     private final List<TimedEffect> timedEffects;
+    private final List<Bullet> bullets;
 
-    private static final double POWERUP_SPAWN_CHANCE = 0.3;
-    private static final int MAX_POWERUPS_PER_LEVEL = 10;
+    private static final double POWERUP_SPAWN_CHANCE = 1;
+    private static final int MAX_POWERUPS_PER_LEVEL = 100;
     private int powerUpsSpawnedThisLevel;
     private final Random random = new Random();
+    private long lastShotTime = 0;
+    private static final long SHOT_COOLDOWN = 300;
 
     public boolean pressedLeft, pressedRight;
     public Rectangle map;
@@ -63,6 +67,7 @@ public class PlayingProcess extends Process {
         this.listOfPowerUp = new ArrayList<>();
         this.paddle = new Paddle(0, 0);
         this.timedEffects = new ArrayList<>();
+        this.bullets = new ArrayList<>();
 
         String filePath = "file:src" + File.separator + "main" + File.separator + "resources"
                 + File.separator + "image" + File.separator + "purple.png";
@@ -88,6 +93,10 @@ public class PlayingProcess extends Process {
     private void initLevel() {
         this.powerUpsSpawnedThisLevel = 0;
         this.listOfPowerUp.clear();
+        this.bullets.clear();
+        this.timedEffects.clear();
+        paddle.resetSize();
+        paddle.disableShooting();
 
         initPaddle();
         initBall();
@@ -158,14 +167,29 @@ public class PlayingProcess extends Process {
     }
 
     private void spawnRandomPowerUp(double x, double y) {
-        int powerUpType = random.nextInt(3);
-        // int powerUpType = 2;
-        if (powerUpType == 0) {
-            listOfPowerUp.add(new DuplicateBallPowerUp(x, y));
-        } else if (powerUpType == 1) {
-            listOfPowerUp.add(new BiggerBallPowerUp(x, y));
-        } else if (powerUpType == 2) {
-            listOfPowerUp.add(new LongerPaddlePowerUp(x, y));
+        int powerUpType = random.nextInt(7);
+        // int powerUpType = 6;
+        switch (powerUpType) {
+            case 0:
+                listOfPowerUp.add(new DuplicateBallPowerUp(x, y));
+                break;
+            case 1:
+                listOfPowerUp.add(new BiggerBallPowerUp(x, y));
+                break;
+            case 2:
+                listOfPowerUp.add(new LongerPaddlePowerUp(x, y));
+                break;
+            case 3:
+                listOfPowerUp.add(new ShortenPaddlePowerUp(x, y));
+                break;
+            case 4:
+                listOfPowerUp.add(new FallBoomPowerUp(x, y));
+                break;
+            case 5:
+                listOfPowerUp.add(new LifeUpPowerUp(x, y));
+                break;
+            case 6:
+                listOfPowerUp.add(new ShotPowerUp(x, y));
         }
         powerUpsSpawnedThisLevel++;
     }
@@ -213,6 +237,32 @@ public class PlayingProcess extends Process {
                 pu_it.remove();
             }
         }
+
+        Iterator<Bullet> bullet_it = bullets.iterator();
+        while (bullet_it.hasNext()) {
+            Bullet bullet = bullet_it.next();
+            boolean bulletHit = false;
+
+            Iterator<Brick> brick_it = bricks.iterator();
+            while (brick_it.hasNext()) {
+                Brick brick = brick_it.next();
+                if (bullet.getX() < brick.getX() + brick.getWidth()
+                        && bullet.getX() + bullet.getWidth() > brick.getX()
+                        && bullet.getY() < brick.getY() + brick.getHeight()
+                        && bullet.getY() + bullet.getHeight() > brick.getY()) {
+                    brick.takeHit();
+                    if (brick.isDestroyed()) {
+                        brick_it.remove();
+                    }
+
+                    bulletHit = true;
+                    break;
+                }
+            }
+            if (bulletHit || bullet.getY() < 0) {
+                bullet_it.remove();
+            }
+        }
     }
 
     private static class TimedEffect {
@@ -239,6 +289,19 @@ public class PlayingProcess extends Process {
         timedEffects.removeIf(effect -> effect.type == type);
         timedEffects.add(new TimedEffect(type, durationSeconds, onEndAction));
     }
+
+    private void autoShooting() {
+        if (paddle.canShoot()) {
+            long currentTime = System.currentTimeMillis();
+            if ((currentTime - lastShotTime) > SHOT_COOLDOWN) {
+                bullets.add(new Bullet(paddle.getX(), paddle.getY()));
+                bullets.add(new Bullet(paddle.getX() + paddle.getWidth() - Bullet.BULLET_WIDTH,
+                        paddle.getY()));
+                lastShotTime = currentTime;
+            }
+        }
+    }
+
 
     private void initInput() {
         this.scene.setOnKeyPressed(e -> {
@@ -310,6 +373,10 @@ public class PlayingProcess extends Process {
             for (PowerUp pu : listOfPowerUp) {
                 pu.update(this);
             }
+            autoShooting();
+            for (Bullet b : bullets) {
+                b.update(this);
+            }
             updateTimedEffects();
             checkCollisions();
             if (balls.isEmpty()) {
@@ -346,7 +413,9 @@ public class PlayingProcess extends Process {
         for (Ball b : balls) {
             b.render(gc);
         }
-
+        for (Bullet b : bullets) {
+            b.render(gc);
+        }
         gc.setFill(Color.WHITE);
         gc.fillText("State:    " + playingState.name() + "    Level:   " + (this.currentMap + 1),
                 10, 20);

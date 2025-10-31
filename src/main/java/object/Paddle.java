@@ -9,15 +9,22 @@ import process.PlayingProcess;
 public class Paddle extends MovableObject {
   private static final double PADDLE_SPEED = 10.0;
   private int lives;
+  private boolean canShoot = false;
 
   private double speed = 10.0;
-  private static double paddleWidth = 100;
-  private static double extendWidth = 2.5 * paddleWidth;
+  private static double normalWidth = 100;
+  private static double smallWidth = normalWidth * 0.5;
+  private static double extendedWidth = normalWidth * 2.5;
   private static double paddleHeight = 16;
 
+  private enum SizeState {
+    SHORT, NORMAL, EXTENDED
+  }
+
+  private SizeState sizeState;
 
   public Paddle(double x, double y) {
-    super(x, y, paddleWidth, paddleHeight, 0, 0);
+    super(x, y, normalWidth, paddleHeight, 0, 0);
     lives = 3;
   }
 
@@ -59,6 +66,11 @@ public class Paddle extends MovableObject {
 
   public void reborn() {
     this.lives = 3;
+    setSize(SizeState.NORMAL);
+  }
+
+  public void addLife() {
+    this.lives++;
   }
 
   public void stop() {
@@ -66,19 +78,58 @@ public class Paddle extends MovableObject {
   }
 
   public void extend() {
-    if (this.width == paddleWidth) {
-      double currentCenterX = this.x + this.width / 2;
-      this.width = extendWidth;
-      this.x = currentCenterX - this.width / 2;
+    if (sizeState == SizeState.SHORT) {
+      setSize(SizeState.NORMAL);
+    } else if (sizeState == SizeState.NORMAL) {
+      setSize(SizeState.EXTENDED);
+    }
+  }
+
+  public void shrink() {
+    if (sizeState == SizeState.EXTENDED) {
+      setSize(SizeState.NORMAL);
+    } else if (sizeState == SizeState.NORMAL) {
+      setSize(SizeState.SHORT);
     }
   }
 
   public void resetSize() {
-    if (this.width == extendWidth) {
+    if (this.width == extendedWidth) {
       double currentCenterX = this.x + this.width / 2;
-      this.width = paddleWidth;
+      this.width = normalWidth;
       this.x = currentCenterX - this.width / 2;
     }
+  }
+
+  private void setSize(SizeState newState) {
+    double currentCenterX = this.x + this.width / 2;
+    this.sizeState = newState;
+
+    switch (newState) {
+      case SHORT:
+        this.width = smallWidth;
+        break;
+      case NORMAL:
+        this.width = normalWidth;
+        break;
+      case EXTENDED:
+        this.width = extendedWidth;
+        break;
+    }
+
+    this.x = currentCenterX - this.width / 2;
+  }
+
+  public void enableShooting() {
+    this.canShoot = true;
+  }
+
+  public void disableShooting() {
+    this.canShoot = false;
+  }
+
+  public boolean canShoot() {
+    return this.canShoot;
   }
 
   @Override
