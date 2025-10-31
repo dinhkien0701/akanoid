@@ -27,6 +27,8 @@ public class PlayingProcess extends Process {
         READY, RUNNING, FINISH_MAP, GAME_OVER, WINNER
     }
 
+    public int points;
+
     private PlayingState playingState;
 
     public Paddle paddle;
@@ -40,7 +42,11 @@ public class PlayingProcess extends Process {
     Image background;
 
     public PlayingProcess(int width, int height, Rectangle map) {
+
         super(width, height);
+
+        points = 0; // khởi tạo mới
+
         String filePath = "file:src" + File.separator
                 + "main" + File.separator
                 + "resources" + File.separator
@@ -119,7 +125,8 @@ public class PlayingProcess extends Process {
 
 
     public void reset() {
-        currentMap = 0;
+        currentMap = 0; // reset map
+        points = 0; // reset điểm
         initMap();
         initPaddle();
         initBall();
@@ -143,6 +150,7 @@ public class PlayingProcess extends Process {
 
     public void nextLevel() {
         currentMap++;
+        points = 0; // reset điểm sang màn mới
         initMap();
         initPaddle();
         initBall();
@@ -199,6 +207,7 @@ public class PlayingProcess extends Process {
                 ball.bounceOff(b, collision);
                 if (b.isDestroyed()) {
                     it.remove();
+                    points += 5; // cộng 5 điểm mỗi lần phá hủy brick bất kỳ
                 }
                 break;
             }
@@ -250,6 +259,7 @@ public class PlayingProcess extends Process {
 
                 if (ball.checkCollision(paddle) != Ball.BallCollision.NONE) {
                     // nếu bóng chạm paddle
+                    points = Math.max(points - 1, 0); // mỗi lần chạm paddle trừ một điểm , min >= 0
                     Iterator <Brick> it = bricks.iterator();
                     while (it.hasNext()) {
                         Brick b = it.next();
@@ -289,7 +299,7 @@ public class PlayingProcess extends Process {
         paddle.render(gc);
         ball.render(gc);
         gc.setFill(Color.WHITE);
-        gc.fillText("State:    " + playingState.name() + "    Level:   " + (this.currentMap + 1), 10, 20);
+        gc.fillText("Points:    " + points + "    Level:   " + (this.currentMap + 1), 10, 20);
         gc.fillText("Lives:    " + paddle.getLives(), 10, 40);
     }
 }
