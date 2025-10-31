@@ -1,6 +1,7 @@
 package main;
 
-import core.GameManager;
+
+import gamemanager.GameManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import process.LoadingProcess;
@@ -16,10 +17,10 @@ public class Main extends Application {
 
   @Override
   public void start(Stage primaryStage) {
-//    LoadingProcess lp = new LoadingProcess(SCREEN_WIDTH, SCREEN_HEIGHT);
-//    lp.render(primaryStage, () -> {
+    LoadingProcess lp = new LoadingProcess(SCREEN_WIDTH, SCREEN_HEIGHT);
+    lp.render(primaryStage, () -> {
       GameManager gameManager = GameManager.getInstance();
       gameManager.process(primaryStage);
-//    });
+    });
   }
 }

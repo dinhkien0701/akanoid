@@ -1,15 +1,14 @@
 package map;
 
-import LoadResource.LoadImage;
 
 import java.io.*;
 import java.util.List;
 import java.util.Random;
 
 public class CreatSpecialBrick  {
-    private List<Map> listOfMaps;
-    private int rows;
-    private int cols;
+    private final List<Map> listOfMaps;
+    private final int rows;
+    private final int cols;
 
     // khơir tạo
     public CreatSpecialBrick( List<Map> listOfMaps, int rows, int cols) {

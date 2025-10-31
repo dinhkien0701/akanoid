@@ -1,4 +1,4 @@
-package core;
+package gameobject;
 
 public abstract class MovableObject extends GameObject {
   protected double dx, dy;

@@ -1,5 +1,6 @@
-package core;
+package process;
 
+import gamemanager.GameManager;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -33,5 +34,7 @@ public abstract class Process {
     }
 
     public abstract void update(Stage stage, GameManager gameManager);
+
+
     public abstract void render();
 }

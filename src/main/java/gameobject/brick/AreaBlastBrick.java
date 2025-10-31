@@ -1,17 +1,19 @@
-package object;
+package gameobject.brick;
+
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import process.PlayingProcess;
 
-public class LifeUpBrick extends Brick{
-    public LifeUpBrick(double x, double y, double width, double height) {
+public class AreaBlastBrick extends Brick {
+
+    public AreaBlastBrick(double x, double y, double width, double height) {
         super(x , y , width, height , 1);
     }
 
 
-    private Image brickImage = LoadResource.LoadImage.getImage("/image/lifeup.png");
+    private final Image brickImage = LoadImage.getImage("/image/areaBlast.png");
     @Override
     public void render(GraphicsContext gc) {
         if (brickImage != null) {

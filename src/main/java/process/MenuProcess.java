@@ -1,9 +1,10 @@
 package process;
 
-import core.GameManager;
-import java.io.InputStream; // Import thêm InputStream
+
+import java.io.InputStream;
 import java.util.Objects;
 
+import gamemanager.GameManager;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
@@ -19,7 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import core.Process;
+
 
 public class MenuProcess extends Process {
     private Image startScreen;
@@ -51,7 +52,7 @@ public class MenuProcess extends Process {
     }
 
     @Override
-    public void update(Stage stage, GameManager  gameManager) {
+    public void update(Stage stage, GameManager gameManager) {
         scene.setOnKeyPressed(e -> {
             KeyCode code = e.getCode();
             switch (code) {
@@ -263,5 +264,5 @@ public class MenuProcess extends Process {
         STARTBUTTON,
         SETTINGBUTTON,
         EXITBUTTON
-    };
+    }
 }

@@ -1,21 +1,17 @@
-package object;
+package gameobject.brick;
 
-import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import process.PlayingProcess;
-import powerup.*;
 
-public class BallUpSkillBrick extends Brick {
-
-
-    public BallUpSkillBrick(double x, double y, double width, double height) {
+public class GoldBrick extends Brick {
+    public GoldBrick(double x, double y, double width, double height) {
         super(x , y , width, height , 1);
     }
 
 
-    private final Image brickImage = LoadResource.LoadImage.getImage("/image/ballUpSkill.png");
+    private Image brickImage = LoadImage.getImage("/image/gold.png");
     @Override
     public void render(GraphicsContext gc) {
         if (brickImage != null) {
@@ -27,7 +23,6 @@ public class BallUpSkillBrick extends Brick {
         }
     }
 
-
     @Override
-    public void update(PlayingProcess pp) {}
+    public void update(PlayingProcess gameManager) {}
 }

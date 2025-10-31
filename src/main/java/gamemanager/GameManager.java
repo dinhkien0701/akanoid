@@ -1,4 +1,4 @@
-package core;
+package gamemanager;
 
 import java.util.Objects;
 import javafx.scene.Scene;

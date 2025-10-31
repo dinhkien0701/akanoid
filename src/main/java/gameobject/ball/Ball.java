@@ -1,13 +1,15 @@
-package object;
+package gameobject.ball;
 
 import java.util.Deque;
 import java.util.LinkedList;
+
+import gameobject.GameObject;
+import gameobject.MovableObject;
+import gameobject.paddle.Paddle;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import core.MovableObject;
-import math.Position;
-import core.GameObject;
+
 import process.PlayingProcess;
 
 public class Ball extends MovableObject {
@@ -170,7 +172,7 @@ public class Ball extends MovableObject {
     gc.setFill(Color.WHITE);
     for (Position ball : previousPosition) {
       gc.setFill(Color.PINK);
-      gc.fillOval(ball.getX(), ball.getY(), this.getWidth() - i, this.getHeight() - i);
+      gc.fillOval(ball.x(), ball.y(), this.getWidth() - i, this.getHeight() - i);
       i = i + 0.4;
       if(this.getWidth() < 0){
         this.setWidth(0);

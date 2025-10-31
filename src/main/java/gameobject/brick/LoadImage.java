@@ -1,11 +1,10 @@
-package LoadResource;
+package gameobject.brick;
 
 import javafx.scene.image.Image;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import LoadResource.LoadImage;
 
 public class LoadImage {
 
@@ -15,7 +14,7 @@ public class LoadImage {
 
     // Tạo instance để có thể lấy từ mọi nơi qua phuong thức  loadImage
     //private static LoadImage instance; // Instance duy nhất của LoadImage
-    private static Map<String, Image> imageMap  = new HashMap(); // Lưu trữ các ảnh đã tải
+    private static final Map<String, Image> imageMap  = new HashMap<>(); // Lưu trữ các ảnh đã tải
 
     // Private constructor để ngăn việc tạo đối tượng từ bên ngoài
     /*private LoadImage() {

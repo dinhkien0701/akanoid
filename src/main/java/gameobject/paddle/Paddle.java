@@ -1,9 +1,10 @@
-package object;
+package gameobject.paddle;
 
+import gameobject.MovableObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import core.MovableObject;
+
 import process.PlayingProcess;
 
 public class Paddle extends MovableObject {

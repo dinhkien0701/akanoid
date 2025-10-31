@@ -29,25 +29,21 @@ public class ListOfMap {
               int[][] map = listOfMaps.get(level - 1).getMap();
               CreateMap k = new CreateMap(8,13, level);
               k.creatMap(map);
-              Size++;
           } else {
               CreateMap k = new CreateMap(8,13, level);
               int[][] map = k.creatMap(new int[8][13]);
               listOfMaps.add(new Map(map));
-              Size++;
           }
-
+          Size++;
       }
       d.creatSpecialBrick();
 
-      if(true ) {
-          int[][]  map = listOfMaps.get(0).getMap();
-          for (int i = 0; i < 8; i++) {
-              for (int j = 0; j < 13; j++) {
-                  System.out.print(map[i][j] + " ");
-              }
-              System.out.print("\n");
+      int[][] map = listOfMaps.get(0).getMap();
+      for (int i = 0; i < 8; i++) {
+          for (int j = 0; j < 13; j++) {
+              System.out.print(map[i][j] + " ");
           }
+          System.out.print("\n");
       }
   }
 

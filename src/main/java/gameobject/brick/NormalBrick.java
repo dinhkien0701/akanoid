@@ -1,12 +1,10 @@
-package object;
+package gameobject.brick;
 
-import LoadResource.LoadImage;
 import process.PlayingProcess;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import LoadResource.LoadImage;
+
 public class NormalBrick extends Brick {
 
   public NormalBrick(double x, double y, double w, double h) {

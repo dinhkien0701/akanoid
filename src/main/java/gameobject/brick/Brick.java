@@ -1,7 +1,9 @@
-package object;
+package gameobject.brick;
 
 
-import core.GameObject;
+import gameobject.GameObject;
+import javafx.scene.canvas.GraphicsContext;
+import process.PlayingProcess;
 
 public abstract class Brick extends GameObject {
 
@@ -18,4 +20,8 @@ public abstract class Brick extends GameObject {
     public boolean isDestroyed() {
         return hitPoints == 0;
     }
+
+    public abstract void render(GraphicsContext gc);
+
+    public abstract void update(PlayingProcess gameManager);
 }

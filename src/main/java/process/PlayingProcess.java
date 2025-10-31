@@ -1,20 +1,22 @@
 package process;
 
-    import java.io.File;
-    import java.util.ArrayList;
-    import java.util.Iterator;
-    import java.util.List;
-    import javafx.scene.image.Image;
-    import javafx.scene.input.KeyCode;
-    import javafx.scene.shape.Rectangle;
-    import javafx.scene.paint.Color;
 
-    import core.*;
-    import javafx.stage.Stage;
-    import object.*;
-    import map.*;
-    import powerup.*;
-    import core.Process;
+import gamemanager.GameManager;
+import gameobject.ball.Ball;
+import gameobject.brick.*;
+import gameobject.paddle.Paddle;
+import gameobject.powerup.PowerUp;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import map.ListOfMap;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 
 public class PlayingProcess extends Process {
 
@@ -234,8 +236,6 @@ public class PlayingProcess extends Process {
             }
         }
 
-
-
         if (countNormalBrick <= 0) {
             playingState = PlayingState.FINISH_MAP;
             nextLevel();
@@ -244,6 +244,7 @@ public class PlayingProcess extends Process {
 
     public void addPowerUp(PowerUp pu){
         listOfPowerUp.add(pu);
+        powerUpsSpawnedThisLevel++;
     }
 
     public void removePowerUp(PowerUp pu){
@@ -309,7 +310,7 @@ public class PlayingProcess extends Process {
 
 
     @Override
-    public void update(Stage stage,GameManager gm) {
+    public void update(Stage stage, GameManager gm) {
         initInput();
         switch (playingState) {
         case READY:

@@ -1,22 +1,24 @@
-package powerup;
+package gameobject.powerup;
 
-import core.GameObject;
-import core.MovableObject;
-import object.Paddle;
+
+import gameobject.GameObject;
+import gameobject.MovableObject;
+import gameobject.paddle.Paddle;
 import process.PlayingProcess;
 
-import java.util.Objects;
-
 public abstract class PowerUp extends MovableObject {
-  public static final double FALLING_SPEED = 3.0;
-  private POWERUPSTATE powerupstate;
-  private long timer;
+    public static final double FALLING_SPEED = 3.0;
+    public static final double SIZE = 25;
+    public static final long DURATION_SECONDS = 6000;
 
-  public PowerUp(double x, double y, double width, double height) {
-    super(x, y, width, height, 0, FALLING_SPEED);
-    timer = System.currentTimeMillis();
-    powerupstate = POWERUPSTATE.FALLING;
-  }
+    private POWERUPSTATE powerupstate;
+    private long timer;
+
+    public PowerUp(double x, double y, double width, double height) {
+        super(x, y, width, height, 0, FALLING_SPEED);
+        timer = System.currentTimeMillis();
+        powerupstate = POWERUPSTATE.FALLING;
+    }
 
   public long getTimer() {
       return this.timer;

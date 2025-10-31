@@ -1,4 +1,4 @@
-package object;
+package gameobject.brick;
 
 
 import javafx.scene.canvas.GraphicsContext;
@@ -14,7 +14,7 @@ public class ImmortalBrick extends Brick {
   }
 
 
-    private Image brickImage = LoadResource.LoadImage.getImage("/image/immortal.png");
+    private Image brickImage = LoadImage.getImage("/image/immortal.png");
     @Override
     public void render(GraphicsContext gc) {
         if (brickImage != null) {

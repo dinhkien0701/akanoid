@@ -1,18 +1,19 @@
-package object;
+package gameobject.brick;
+
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import process.PlayingProcess;
 
-public class FallBombBrick extends Brick {
+public class BallUpSkillBrick extends Brick {
 
-    public FallBombBrick (double x, double y, double width, double height) {
+    public BallUpSkillBrick(double x, double y, double width, double height) {
         super(x , y , width, height , 1);
     }
 
 
-    private final Image brickImage = LoadResource.LoadImage.getImage("/image/fallBomb.png");
+    private final Image brickImage = LoadImage.getImage("/image/ballUpSkill.png");
     @Override
     public void render(GraphicsContext gc) {
         if (brickImage != null) {
@@ -25,5 +26,5 @@ public class FallBombBrick extends Brick {
     }
 
     @Override
-    public void update(PlayingProcess gameManager) {}
+    public void update(PlayingProcess pp) {}
 }

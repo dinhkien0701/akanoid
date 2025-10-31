@@ -1,11 +1,12 @@
 package process;
 
-import core.GameManager;
+
+import gamemanager.GameManager;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import core.Process;
+
 import javafx.stage.Stage;
 
 public class GameOverProcess extends Process {

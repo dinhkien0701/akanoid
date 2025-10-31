@@ -1,9 +1,9 @@
-package powerup;
+package gameobject.powerup;
 
+import gameobject.ball.Ball;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import object.Ball;
 import process.PlayingProcess;
 import java.io.InputStream;
 import java.util.ArrayList;

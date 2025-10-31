@@ -1,13 +1,11 @@
-package powerup;
+package gameobject.powerup;
 
+import gameobject.ball.Ball;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import object.Ball;
 import process.PlayingProcess;
 
 public class BiggerBallPowerUp extends PowerUp {
-    private static final double SIZE = 25;
-    private static final long DURATION_SECONDS = 6000;
 
     public BiggerBallPowerUp(double x, double y) {
         super(x, y, SIZE, SIZE);
