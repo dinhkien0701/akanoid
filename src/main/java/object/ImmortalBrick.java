@@ -9,9 +9,9 @@ import process.PlayingProcess;
 
 public class ImmortalBrick extends Brick {
 
-  public ImmortalBrick(double x, double y, double width, double height) {
+  public ImmortalBrick(double x, double y, double width, double height, int locateX, int locateY) {
 
-      super(x , y , width, height , 8);
+      super(x , y , width, height , locateX, locateY, 8);
       // Ta xây cơ chế nếu giữa hai lần tâng bóng trúng không cách nhau quá 3 lần tâng thì nó sẽ phá hủy
       // Giải thích  lần t  và t + k với  0<= k<= 4 đều chạm trúng đều phá hủy
 

@@ -7,8 +7,8 @@ import process.PlayingProcess;
 
 public class BallUpSkillBrick extends Brick {
 
-    public BallUpSkillBrick(double x, double y, double width, double height) {
-        super(x , y , width, height , 1);
+    public BallUpSkillBrick(double x, double y, double width, double height, int locateX, int locateY) {
+        super(x , y , width, height , locateX, locateY, 1);
     }
 
 

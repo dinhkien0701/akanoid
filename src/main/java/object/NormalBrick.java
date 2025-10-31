@@ -9,8 +9,9 @@ import javafx.scene.image.ImageView;
 import LoadResource.LoadImage;
 public class NormalBrick extends Brick {
 
-  public NormalBrick(double x, double y, double w, double h) {
-    super(x, y, w, h, 1);
+  public NormalBrick(double x, double y, double w, double h, int locateX, int locateY) {
+
+      super(x, y, w, h, locateX, locateY ,1);
   }
 
     private Image brickImage = LoadImage.getImage("/image/normal.png");

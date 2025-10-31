@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
@@ -37,6 +39,7 @@ public class PlayingProcess extends Process {
 
     public int points;
     public int frameCount ; // bộ đếm dựa trên fps
+    public int minLocateY; // phục vụ xác định vị trí có đủ để sinh map thời gian thực không
     private PlayingState playingState;
     private LevelType levelType = LevelType.CLASSICAL; // tạm thời gắn classical
 
@@ -45,7 +48,12 @@ public class PlayingProcess extends Process {
     public Ball ball;
     private final List<Brick> bricks;
     private final List<PowerUp> listOfPowerUp;
+
+    // Thuộc tính khung hình chứa logic chơi game và kích thước gạch
     public Rectangle map;
+    double brickW ; // độ rộng theo phương ngang của gạch
+    double brickH ; // Độ rộng theo phương dọc của gạch
+
     private final ListOfMap LM;
     int currentMap;
     Image background;
@@ -95,9 +103,11 @@ public class PlayingProcess extends Process {
 
     private void initMap() {
         bricks.clear();
-        double brickW = (map.getWidth() - 60) / 13;
-        double brickH = 33;
 
+        // Đặt kích thước bricks
+
+        brickW = (map.getWidth() - 60) / 13;
+        brickH = 33;
         int[][] arr = LM.getMapByCode(currentMap);
 
         for (int r = 0; r < 8; r++) {
@@ -105,27 +115,33 @@ public class PlayingProcess extends Process {
                 if(arr[r][c] == 0){
                     continue;
                 }
+                // map.getX và map.getY để lấy vị trí cục bộ của màn hình chơi
+
                 double bx = 30 + c * brickW + map.getX();
                 double by = 50 + r * (brickH + 6) + map.getY();
 
                 // có 8 loại gạch hehe
                 // brickW - 6  : mỗi viên cách nhau 6 pixel
+
+                //(bx,by) : vị trí góc trái cùng
+                //(w,h) : kích thước
+                //(r,c) vị trí trong int map[][]
                 if(arr[r][c] == 1) {
-                    bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
+                    bricks.add(new NormalBrick(bx, by, brickW - 6, brickH, r, c));
                 } else if(arr[r][c] == 2){
-                    bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
+                    bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH, r, c));
                 } else if (arr[r][c] == 3){
-                    bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+                    bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH, r, c));
                 } else if (arr[r][c] == 4){
-                    bricks.add(new GoldBrick(bx, by, brickW - 6, brickH));
+                    bricks.add(new GoldBrick(bx, by, brickW - 6, brickH, r, c));
                 } else if (arr[r][c] == 5){
-                    bricks.add(new FallBombBrick(bx, by, brickW - 6, brickH));
+                    bricks.add(new FallBombBrick(bx, by, brickW - 6, brickH, r, c));
                 } else if (arr[r][c] == 6){
-                    bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH));
+                    bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH, r, c));
                 } else if (arr[r][c] == 7){
-                    bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH));
+                    bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH, r, c));
                 } else if (arr[r][c] == 8){
-                    bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH));
+                    bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH, r, c));
                 }
             }
         }
@@ -160,6 +176,7 @@ public class PlayingProcess extends Process {
     public void nextLevel() {
         currentMap++;
         points = 0; // reset điểm sang màn mới
+        frameCount = 1; // reset lại bộ đếm frame
         initMap();
         initPaddle();
         initBall();
@@ -249,6 +266,71 @@ public class PlayingProcess extends Process {
     }
 
 
+    private void randomMap () {
+        // Sử dụng cho chế độ vô hạn
+        if(playingState != PlayingState.RUNNING){
+            // tạm thời xem xét với running
+            return;
+        }
+        if (50 + (brickH + 6) + map.getY() > minLocateY) {
+            // khi này nếu không thể chèn gạch thì cũng dừng lại
+            return;
+        }
+
+        // Hiện tại có thể vẽ
+        Random rand = new Random();
+        // Nó sẽ lấy một map được tạo từ map đã tạo : 13 -> 18;
+        int[][] arr = LM.getMapByCode(rand.nextInt(5) + 12);
+        int i = rand.nextInt(arr.length); // lấy một hàng bất kỳ từ map đã nhận
+
+        double by;
+
+        if (bricks.isEmpty()) {
+            // Nếu khay đã rỗng thì in lên trên cùng
+            by = 50 + map.getY();
+
+        } else {
+            by = minLocateY - (brickH + 6 ); // đảm bảo khoảng cách đẹp nhất
+            while (by - (brickH + 6) >= 50 + map.getY()) {
+                // Giải làm sao để in ra gạch mới trên cùng nhất
+                by -= (brickH + 6);
+            }
+        }
+        // dùng lại code của initMap  ( hàm này cũng được viết trong class này )
+        for (int j = 0; j < arr[i].length; j++) {
+            if(arr[i][j] == 0){
+                continue;
+            }
+            // map.getX và map.getY để lấy vị trí cục bộ của màn hình chơi
+
+            double bx = 30 + j * brickW + map.getX();
+
+
+            // có 8 loại gạch hehe
+            // brickW - 6  : mỗi viên cách nhau 6 pixel
+
+            //(bx,by) : vị trí góc trái cùng
+            //(w,h) : kích thước
+            //(r,c) vị trí trong int map[][]
+            if(arr[i][j] == 1) {
+                bricks.add(new NormalBrick(bx, by, brickW - 6, brickH, i, j));
+            } else if(arr[i][j] == 2){
+                bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH, i, j));
+            } else if (arr[i][j] == 3){
+                bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH, i, j));
+            } else if (arr[i][j] == 4){
+                bricks.add(new GoldBrick(bx, by, brickW - 6, brickH, i, j));
+            } else if (arr[i][j] == 5){
+                bricks.add(new FallBombBrick(bx, by, brickW - 6, brickH, i, j));
+            } else if (arr[i][j] == 6){
+                bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH, i, j));
+            } else if (arr[i][j] == 7){
+                bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH, i, j));
+            } else if (arr[i][j] == 8){
+                bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH, i, j));
+            }
+        }
+    }
 
     @Override
 
@@ -302,13 +384,21 @@ public class PlayingProcess extends Process {
             p.render(gc);
         }
 
-        if (frameCount == 140) {
+        if (frameCount % 140 == 0) {
+            minLocateY = 2000; // đặt măcj định là một số tương đối lớn
             for (Brick b : bricks) {
+
                 b.ha_do_cao(5) ;  // giảm độ cao , mỗi 140 fps hay 2 giây , giảm  k pixel
+
+                // đồng thời lấy vị trí gần mép trên nhất
+                minLocateY = (int) Math.min(minLocateY , b.getY());
+
+                // sau đó render như bình thường
                 b.render(gc);
             }
+            randomMap(); // đồng thời gọi random map
         } else {
-            // còn nếu chưa đủ 0.2 giây chưa hạ độ cao
+            // còn nếu chưa đủ 2 giây chưa hạ độ cao
             for (Brick b : bricks) {
                 b.render(gc);
             }
@@ -319,10 +409,12 @@ public class PlayingProcess extends Process {
         gc.fillText("Points:    " + points + "    Level:   " + (this.currentMap + 1), 10, 20);
         gc.fillText("Lives:    " + paddle.getLives(), 10, 40);
 
-        frameCount ++; // tăng frame
+        if (this.playingState == PlayingState.RUNNING) {
+            frameCount ++; // tăng frame
+        } else frameCount = 1; // nếu không thì không đếm
 
-        if (frameCount == 141) {
-            // reset framecount sau mỗi chu kỳ
+        if (frameCount == 1401) {
+            // reset framecount sau mỗi chu kỳ 20 giây
             frameCount = 1;
 
         }

@@ -6,8 +6,8 @@ import javafx.scene.paint.Color;
 import process.PlayingProcess;
 
 public class GoldBrick extends Brick {
-    public GoldBrick(double x, double y, double width, double height) {
-        super(x , y , width, height , 1);
+    public GoldBrick(double x, double y, double width, double height , int locateX, int locateY) {
+        super(x , y , width, height , locateX, locateY , 1);
     }
 
 
