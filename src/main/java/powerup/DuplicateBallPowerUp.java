@@ -46,12 +46,12 @@ public class DuplicateBallPowerUp extends PowerUp {
       originalBall.setDx(originalBall.getDx() * cosAngle + originalBall.getDy() * sinAngle);
       originalBall.setDy(-originalBall.getDx() * sinAngle + originalBall.getDy() * cosAngle);
     }
-    setIsEnd(true);
+    setIsEnd();
   }
 
   @Override
   public void render(GraphicsContext gc) {
-    if(!isFallOut()) {
+    if(isFalling()) {
         if (powerUpImage != null) {
             gc.drawImage(powerUpImage, getX(), getY(), getWidth(), getHeight());
         } else {

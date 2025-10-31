@@ -97,7 +97,7 @@ public class PlayingProcess extends Process {
     }
 
     private void initBall() {
-        mainBall.resetSpeed();
+        mainBall.reset();
         mainBall.setX(map.getWidth() / 2 - 60 + map.getX() + 50 - 8);
         mainBall.setY(map.getHeight() - 40 + map.getY() - 16);
     }
@@ -280,7 +280,7 @@ public class PlayingProcess extends Process {
         while(it.hasNext()){
             PowerUp pu = it.next();
             pu.update(this);
-            if(pu.isFallOut() && pu.IsEnd()) {
+            if(pu.isFallOut() && pu.isEnd()) {
                 it.remove();
                 break;
             }

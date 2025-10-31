@@ -27,24 +27,7 @@ public class BallUpSkillBrick extends Brick {
         }
     }
 
-    private PowerUp spawnRandomPowerUp(double x, double y) {
-//        Random rand = new Random();
-//        int powerUpType = rand.nextInt(1);
-//        switch (powerUpType) {
-//            case 0:
-                return(new DuplicateBallPowerUp(x, y));
-//            case 1:
-//                return(new BiggerBallPowerUp(x, y));
-//            default:
-//                return(new LongerPaddlePowerUp(x, y));
-//        }
-    }
 
     @Override
-    public void update(PlayingProcess pp) {
-        if(pp.isEnoughPowerUpsSpawnedThisLevel()){
-            return;
-        }
-        pp.addPowerUp(spawnRandomPowerUp(this.getX(), this.getY()));
-    }
+    public void update(PlayingProcess pp) {}
 }

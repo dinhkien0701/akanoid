@@ -16,20 +16,31 @@ public class BiggerBallPowerUp extends PowerUp {
     @Override
     public void applyEffect(PlayingProcess pp) {
         for (Ball ball : pp.getListOfBall()) {
-            ball.setWidth(2*ball.getWidth());
-            ball.setHeight(2*ball.getHeight());
+            ball.setRadius(2*ball.getRadius());
+            System.out.println(ball.getRadius());
         }
-        timer = System.currentTimeMillis();
     }
 
     @Override
     public void update(PlayingProcess pp) {
-        long startTime = System.currentTimeMillis();
+        super.update(pp);
+        if (isApplying()) {
+            long nowTime = System.currentTimeMillis();
+            if (nowTime - this.getTimer() >= DURATION_SECONDS) {
+                for (Ball ball : pp.getListOfBall()) {
+                    double ballRadius = ball.getRadius();
+                    ball.setRadius(ballRadius/2);
+                    System.out.println(-1);
+                    System.out.println(ball.getRadius());
+                }
+                setIsEnd();
+            }
+        }
     }
 
     @Override
     public void render(GraphicsContext gc) {
-        if(!isFallOut()) {
+        if(isFalling()) {
             gc.setFill(Color.DODGERBLUE);
             gc.fillOval(getX(), getY(), getWidth(), getHeight());
             gc.setFill(Color.WHITE);

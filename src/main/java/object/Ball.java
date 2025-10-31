@@ -28,10 +28,17 @@ public class Ball extends MovableObject {
     this.setRadius(BALL_RADIUS);
   }
 
+
+  public void reset() {
+    resetSpeed();
+    setRadius(BALL_RADIUS);
+    previousPosition.clear();
+  }
+
   @Override
-  public void resetSpeed(){
-    super.setDx(BALL_SPEED/2);
-    super.setDy(-BALL_SPEED);
+  public void resetSpeed() {
+      super.setDx(BALL_SPEED/2);
+      super.setDy(-BALL_SPEED);
   }
 
   public double getRadius() {
