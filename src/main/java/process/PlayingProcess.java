@@ -26,10 +26,19 @@ public class PlayingProcess extends Process {
     enum PlayingState{
         READY, RUNNING, FINISH_MAP, GAME_OVER, WINNER
     }
+    
+    enum LevelType{
+        CLASSICAL, ULTIMATE_ONE, ULTIMATE_TWO
+
+        // classical : các màn thuộc chế độ classic
+        // ultimate_one : màn này , các viên gạch sẽ hạ xuống được và random thêm
+        // ultimate_one : màn này , các viên gạch có thể tự do bay so với ultimate_one
+    }
 
     public int points;
     public int frameCount ; // bộ đếm dựa trên fps
     private PlayingState playingState;
+    private LevelType levelType = LevelType.CLASSICAL; // tạm thời gắn classical
 
     public Paddle paddle;
     public boolean pressedLeft, pressedRight;
@@ -293,8 +302,16 @@ public class PlayingProcess extends Process {
             p.render(gc);
         }
 
-        for (Brick b : bricks) {
-            b.render(gc);
+        if (frameCount == 140) {
+            for (Brick b : bricks) {
+                b.ha_do_cao(5) ;  // giảm độ cao , mỗi 140 fps hay 2 giây , giảm  k pixel
+                b.render(gc);
+            }
+        } else {
+            // còn nếu chưa đủ 0.2 giây chưa hạ độ cao
+            for (Brick b : bricks) {
+                b.render(gc);
+            }
         }
         paddle.render(gc);
         ball.render(gc);
@@ -304,10 +321,10 @@ public class PlayingProcess extends Process {
 
         frameCount ++; // tăng frame
 
-        if (frameCount == 140) {
+        if (frameCount == 141) {
             // reset framecount sau mỗi chu kỳ
-            frameCount = 0;
-            
+            frameCount = 1;
+
         }
     }
 }

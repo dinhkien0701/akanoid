@@ -11,6 +11,10 @@ public abstract class Brick extends GameObject {
     this.hitPoints = hp;
   }
 
+  public void ha_do_cao ( int k) {
+      y += k;
+  }
+
   public abstract void takeHit();
 
   public void upHitPoint() {
