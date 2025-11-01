@@ -14,11 +14,12 @@ public class LuckyWheelBrick extends Brick{
         super(x , y , width, height , 1);
     }
 
-    private Image brickImage = LoadImage.getImage("/image/luckywheel.png");
+    private final Image brickImage = LoadImage.getImage("/image/luckywheel.png");
 
     private PowerUp spawnRandomPowerUp(double x, double y) {
         Random rand = new Random();
-        int powerUpType = rand.nextInt(2);
+        //int powerUpType = rand.nextInt(6);
+        int powerUpType = 6;
         switch (powerUpType) {
             case 0:
                 return (new DuplicateBallPowerUp(x, y));
@@ -37,7 +38,6 @@ public class LuckyWheelBrick extends Brick{
             default:
                 return null;
         }
-        //return (new FallBoomPowerUp(x, y));
     }
 
     @Override

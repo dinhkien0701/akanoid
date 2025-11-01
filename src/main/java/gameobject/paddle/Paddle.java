@@ -13,10 +13,10 @@ public class Paddle extends MovableObject {
     private boolean canShoot = false;
 
     private double speed = 10.0;
-    private static final double normalWidth = 100;
+    private static double normalWidth = 100;
     private static double smallWidth = normalWidth * 0.5;
-    private static final double extendedWidth = normalWidth * 2.5;
-    private static final double paddleHeight = 16;
+    private static double extendedWidth = normalWidth * 2.5;
+    private static double paddleHeight = 16;
 
     private enum SizeState {
         SHORT, NORMAL, EXTENDED
@@ -27,6 +27,7 @@ public class Paddle extends MovableObject {
     public Paddle(double x, double y) {
         super(x, y, normalWidth, paddleHeight, 0, 0);
         lives = 3;
+        sizeState = SizeState.NORMAL;
     }
 
     @Override
@@ -88,9 +89,9 @@ public class Paddle extends MovableObject {
 
     public void shrink() {
         if (sizeState == SizeState.EXTENDED) {
-            setSize(SizeState.NORMAL);
+            this.setSize(SizeState.NORMAL);
         } else if (sizeState == SizeState.NORMAL) {
-            setSize(SizeState.SHORT);
+            this.setSize(SizeState.SHORT);
         }
     }
 
@@ -105,19 +106,17 @@ public class Paddle extends MovableObject {
     private void setSize(SizeState newState) {
         double currentCenterX = this.getX() + this.getWidth() / 2;
         this.sizeState = newState;
-
         switch (newState) {
             case SHORT:
-                this.setWidth(smallWidth);
+                this.setPaddleWidth(smallWidth);
                 break;
             case NORMAL:
-                this.setWidth(normalWidth);
+                this.setPaddleWidth(normalWidth);
                 break;
             case EXTENDED:
-                this.setWidth(extendedWidth);
+                this.setPaddleWidth(extendedWidth);
                 break;
         }
-
         this.setX(currentCenterX - this.getWidth() / 2);
     }
 

@@ -1,7 +1,9 @@
 package gameobject.powerup;
 
 
+import gameobject.GameObject;
 import gameobject.MovableObject;
+import gameobject.brick.Brick;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import process.PlayingProcess;
@@ -21,6 +23,16 @@ public class Bullet extends MovableObject {
         move();
     }
 
+    public boolean checkCollision(GameObject brick) {
+        if (!(brick instanceof Brick)) {
+            return false;
+        }
+        return (this.getX() < brick.getX() + brick.getWidth()
+                && this.getX() + this.getWidth() > brick.getX()
+                && this.getY() < brick.getY() + brick.getHeight()
+                && this.getY() + this.getHeight() > brick.getY());
+    }
+
     @Override
     public void render(GraphicsContext gc) {
         gc.setFill(Color.LIGHTYELLOW);
@@ -29,6 +41,10 @@ public class Bullet extends MovableObject {
         gc.strokeRoundRect(this.getX(), this.getY(), this.getWidth(), this.getHeight(), 5, 5);
     }
 
+
     @Override
-    public void resetSpeed() {}
+    public void resetSpeed() {
+        this.setDx(0);
+        this.setDy(-BULLET_SPEED);
+    }
 }

@@ -44,7 +44,7 @@ public abstract class PowerUp extends MovableObject {
       this.powerupstate = POWERUPSTATE.END;
   }
 
-  public void setPowerupstate(POWERUPSTATE powerupstate) {
+  public void setPowerUpState(POWERUPSTATE powerupstate) {
       this.powerupstate = powerupstate;
   }
 

@@ -14,12 +14,14 @@ public class LifeUpPowerUp extends PowerUp {
     @Override
     public void applyEffect(PlayingProcess pp) {
         pp.getPaddle().addLife();
+        setIsEnd();
     }
 
     @Override
     public void update(PlayingProcess pp) {
-        super.update(pp);
-        setIsEnd();
+        if(!isEnd()) {
+            super.update(pp);
+        }
     }
 
     @Override

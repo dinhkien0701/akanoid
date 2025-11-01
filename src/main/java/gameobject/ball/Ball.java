@@ -33,8 +33,12 @@ public class Ball extends MovableObject {
 
   public void reset() {
     resetSpeed();
-    setRadius(BALL_RADIUS);
+    resetSize();
     previousPosition.clear();
+  }
+
+  public void resetSize() {
+      setRadius(BALL_RADIUS);
   }
 
   @Override

@@ -74,6 +74,10 @@ public class PlayingProcess extends Process {
         return this.powerUpsSpawnedThisLevel >= MAX_POWERUPS_PER_LEVEL;
     }
 
+    public List<Brick> getBricks() {
+        return this.bricks;
+    }
+
     public Rectangle getMap() {
         return this.map;
     }
@@ -128,22 +132,29 @@ public class PlayingProcess extends Process {
                 double bx = 30 + c * brickW + map.getX();
                 double by = 50 + r * (brickH + 6) + map.getY();
 
-                if(arr[r][c] == 1) {
-                    bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
-                } else if(arr[r][c] == 2){
+//                if(arr[r][c] == 1) {
+//                    bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
+//                } else if(arr[r][c] == 2){
+//                    bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
+//                } else if (arr[r][c] == 3){
+//                    bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+//                } else if (arr[r][c] == 4){
+//                    bricks.add(new GoldBrick(bx, by, brickW - 6, brickH));
+//                } else if (arr[r][c] == 5){
+//                    bricks.add(new FallBombBrick(bx, by, brickW - 6, brickH));
+//                } else if (arr[r][c] == 6){
+//                    bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH));
+//                } else if (arr[r][c] == 7){
+//                    bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH));
+//                } else if (arr[r][c] == 8){
+//                    bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH));
+//                }
+                if(arr[r][c] == 2){
                     bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 3){
-                    bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 4){
-                    bricks.add(new GoldBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 5){
-                    bricks.add(new FallBombBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 6){
-                    bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 7){
+                } else if(arr[r][c] == 1) {
+                    bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
+                } else {
                     bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 8){
-                    bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH));
                 }
             }
         }
@@ -307,7 +318,6 @@ public class PlayingProcess extends Process {
             deletedBall.clear();
         }
     }
-
 
     @Override
     public void update(Stage stage, GameManager gm) {

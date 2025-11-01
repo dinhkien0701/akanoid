@@ -13,13 +13,15 @@ public class LongerPaddlePowerUp extends PowerUp {
 
     @Override
     public void applyEffect(PlayingProcess pp) {
-        pp.getPaddle().setPaddleWidth(2.25 * pp.getPaddle().getWidth());
+        pp.getPaddle().extend();
+        setIsEnd();
     }
 
     @Override
     public void update(PlayingProcess pp) {
-        super.update(pp);
-        setIsEnd();
+        if(!isEnd()) {
+            super.update(pp);
+        }
     }
 
     @Override
