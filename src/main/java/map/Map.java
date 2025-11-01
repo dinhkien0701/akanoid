@@ -4,8 +4,8 @@ public class Map {
   private int[][] map;
   private boolean mapBeaten;
 
-  public Map() {
-    map = new int[8][8];
+  public Map(){
+    map = new int[8][13];
     mapBeaten = false;
   }
 

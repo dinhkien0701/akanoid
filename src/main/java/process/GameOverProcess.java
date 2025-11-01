@@ -1,24 +1,21 @@
 package process;
 
-import core.GameManager;
+
+import gamemanager.GameManager;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import core.Process;
+
 import javafx.stage.Stage;
 
 public class GameOverProcess extends Process {
 
 
   public GameOverProcess(int width, int height) {
-    super(width, height);
+      super(width,height);
   }
 
-  @Override
-  public void setScene(Stage stage) {
-    stage.setScene(this.scene);
-  }
 
   @Override
   public void update(Stage stage, GameManager gm) {
