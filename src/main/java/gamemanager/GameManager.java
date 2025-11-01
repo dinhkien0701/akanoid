@@ -63,6 +63,7 @@ public class GameManager {
 
     public void finishMenu(Stage stage) {
         playing.setScene(stage);
+        playing.reset();
         gameState = GameState.PLAYING;
     }
 

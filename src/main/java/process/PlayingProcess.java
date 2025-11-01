@@ -132,30 +132,30 @@ public class PlayingProcess extends Process {
                 double bx = 30 + c * brickW + map.getX();
                 double by = 50 + r * (brickH + 6) + map.getY();
 
-//                if(arr[r][c] == 1) {
-//                    bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
-//                } else if(arr[r][c] == 2){
-//                    bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
-//                } else if (arr[r][c] == 3){
-//                    bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
-//                } else if (arr[r][c] == 4){
-//                    bricks.add(new GoldBrick(bx, by, brickW - 6, brickH));
-//                } else if (arr[r][c] == 5){
-//                    bricks.add(new FallBombBrick(bx, by, brickW - 6, brickH));
-//                } else if (arr[r][c] == 6){
-//                    bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH));
-//                } else if (arr[r][c] == 7){
-//                    bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH));
-//                } else if (arr[r][c] == 8){
-//                    bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH));
-//                }
-                if(arr[r][c] == 2){
-                    bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
-                } else if(arr[r][c] == 1) {
+                if(arr[r][c] == 1) {
                     bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
-                } else {
+                } else if(arr[r][c] == 2){
+                    bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 3){
+                    bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 4){
+                    bricks.add(new GoldBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 5){
+                    bricks.add(new FallBombBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 6){
+                    bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 7){
                     bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 8){
+                    bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH));
                 }
+//                if(arr[r][c] == 2){
+//                    bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
+//                } else if(arr[r][c] == 1) {
+//                    bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
+//                } else {
+//                    bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH));
+//                }
             }
         }
         playingState = PlayingState.READY;
@@ -186,12 +186,36 @@ public class PlayingProcess extends Process {
         listOfPowerUp.clear();
     }
 
+    public void pauseGame() {
+        for (PowerUp powerUp : listOfPowerUp) {
+            powerUp.stop();
+        }
+        for (Ball ball : listOfBall) {
+            ball.stop();
+        }
+        playingState = PlayingState.PAUSE;
+    }
+
+    public void resumeGame() {
+        for (PowerUp powerUp : listOfPowerUp) {
+            powerUp.startFromStop();
+        }
+        for (Ball ball : listOfBall) {
+            ball.startFromStop();
+        }
+        playingState = PlayingState.RUNNING;
+    }
+
     private void initInput() {
         this.scene.setOnKeyPressed(e -> {
         KeyCode code = e.getCode();
         switch (code) {
             case ESCAPE:
-                System.exit(0);
+                if(playingState == PlayingState.RUNNING ||  playingState == PlayingState.READY) {
+                    this.pauseGame();
+                } else if(playingState == PlayingState.PAUSE) {
+                    this.resumeGame();
+                }
                 break;
             case SPACE:
                 if ((playingState).equals(PlayingState.READY)) {
@@ -202,9 +226,15 @@ public class PlayingProcess extends Process {
                 break;
             case LEFT:
                 pressedLeft = true;
+                if(playingState == PlayingState.PAUSE) {
+                    pressedLeft = false;
+                }
                 break;
             case RIGHT:
                 pressedRight = true;
+                if(playingState == PlayingState.PAUSE) {
+                    pressedRight = false;
+                }
                 break;
             }
         });
@@ -328,7 +358,7 @@ public class PlayingProcess extends Process {
             mainBall.setY(paddle.getY() - mainBall.getHeight());
             mainBall.setX(paddle.getX() + paddle.getWidth() / 2 - mainBall.getRadius());
             break;
-        case RUNNING:
+        case RUNNING: case PAUSE:
             paddle.update(this);
             checkBallList();
             checkPowerUpList();
@@ -366,7 +396,7 @@ public class PlayingProcess extends Process {
     }
 
     enum PlayingState{
-        READY, RUNNING, FINISH_MAP, GAME_OVER, WINNER
+        READY, RUNNING, FINISH_MAP, GAME_OVER, WINNER, PAUSE
     }
 
 }

@@ -1,6 +1,5 @@
 package UI;
 
-import gamemanager.GameManager;
 import javafx.animation.ScaleTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,14 +9,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.Objects;
 
-public class StartButton extends Button {
+public class QuitButton extends Button {
 
-    public StartButton(String s, Insets inset, int width, int height, String filepath, GameManager gameManager, Stage stage) {
+    public QuitButton(String s, Insets inset, int width, int height, String filepath) {
         super(s);
         super.setPrefSize(width, height);
         super.setStyle(
@@ -46,10 +44,12 @@ public class StartButton extends Button {
             }
         });
 
-        super.setOnMouseClicked(e -> gameManager.finishMenu(stage));
+        super.setOnMouseClicked(e -> {
+            System.exit(0);
+        });
         super.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
-                gameManager.finishMenu(stage);
+                System.exit(0);
             }
         });
     }

@@ -14,6 +14,7 @@ public abstract class Process {
     protected GraphicsContext gc;
     protected Scene scene;
     protected boolean isEnd;
+    private boolean hasButton;
 
     public Process(int width, int height) {
         this.width = width;
@@ -23,6 +24,15 @@ public abstract class Process {
         scene = new Scene(pane, width, height, Color.BLACK);
         this.gc = canvas.getGraphicsContext2D();
         isEnd = false;
+        hasButton = false;
+    }
+
+    public boolean isAddButton() {
+        return this.hasButton;
+    }
+
+    public void addButtonDone() {
+        this.hasButton = true;
     }
 
     public Scene getScene() {
@@ -34,7 +44,6 @@ public abstract class Process {
     }
 
     public abstract void update(Stage stage, GameManager gameManager);
-
 
     public abstract void render();
 }
