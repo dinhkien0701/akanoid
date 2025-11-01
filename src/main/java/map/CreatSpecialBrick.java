@@ -43,7 +43,7 @@ public class CreatSpecialBrick  {
             int[][] map = new int[8][13]; // listOfMaps.get(level).getMap();
 
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+                //System.out.println(line);
                 String[] path = line.split(" ");
                 if (line.charAt(0) == '#') {
                     row = 0;

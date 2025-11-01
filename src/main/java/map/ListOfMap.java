@@ -52,6 +52,7 @@ public class ListOfMap {
               System.out.print("\n");
           }
       }
+      System.out.println("Các hàng được sinh ra :");
   }
 
   private void ReadInFile() {
