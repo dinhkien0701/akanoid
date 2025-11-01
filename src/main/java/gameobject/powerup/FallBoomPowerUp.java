@@ -14,12 +14,14 @@ public class FallBoomPowerUp extends PowerUp {
     @Override
     public void applyEffect(PlayingProcess pp) {
         pp.getPaddle().takeHit();
+        setIsEnd();
     }
 
     @Override
     public void update(PlayingProcess pp) {
-        super.update(pp);
-        setIsEnd();
+        if(!isEnd()) {
+            super.update(pp);
+        }
     }
 
     @Override

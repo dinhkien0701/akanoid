@@ -15,7 +15,6 @@ public class BiggerBallPowerUp extends PowerUp {
     public void applyEffect(PlayingProcess pp) {
         for (Ball ball : pp.getListOfBall()) {
             ball.setRadius(2*ball.getRadius());
-            System.out.println(ball.getRadius());
         }
     }
 

@@ -37,6 +37,7 @@ public class LuckyWheelBrick extends Brick{
             default:
                 return null;
         }
+        //return (new FallBoomPowerUp(x, y));
     }
 
     @Override
