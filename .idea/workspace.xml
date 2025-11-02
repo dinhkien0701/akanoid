@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d187c723-39e4-4b2e-9886-2b9f92bdb635" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/BallUpSkillBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/PushBrick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/NormalBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/NormalBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/core/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/core/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/process/PickLevel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/process/PickLevel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -128,11 +128,41 @@
       <workItem from="1761898249340" duration="15438000" />
       <workItem from="1761955231848" duration="3399000" />
       <workItem from="1761972762312" duration="12000" />
-      <workItem from="1762074553359" duration="14852000" />
+      <workItem from="1762074553359" duration="21841000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/process/PickLevel.java</url>
+          <line>141</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/process/PickLevel.java</url>
+          <line>215</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/process/PlayingProcess.java</url>
+          <line>593</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/core/GameManager.java</url>
+          <line>73</line>
+          <properties class="core.GameManager" method="finishPickLevel">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

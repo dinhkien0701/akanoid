@@ -44,7 +44,7 @@ public class PickLevel extends Process {
         Color color;        // màu
         String label;       // nhãn
         BtnType type;       // loại nút
-        int levelIndex;     // index level nếu là LEVEL
+        int levelIndex;     // index level
         Image image;        // ảnh hiển thị nếu có
         Btn(double cx, double cy, double w, double h, Color color, String label, BtnType type){
             this.cx=cx; this.cy=cy; this.w=w; this.h=h; this.color=color; this.label=label; this.type=type; this.levelIndex=0; this.image=null;
@@ -141,7 +141,7 @@ public class PickLevel extends Process {
             // Level -> vào game
             for (Btn b : levelButtons) {
                 if (containsPoint(b, x, y)) {
-                    if (gmRef != null && stageRef != null) gmRef.finishPickLevel(stageRef);
+                    if (gmRef != null && stageRef != null) gmRef.finishPickLevel(stageRef , b.levelIndex);
                     return;
                 }
             }
@@ -213,7 +213,7 @@ public class PickLevel extends Process {
             for (int i = 0; i < 2; i++) {
                 double cx = startX + i * (LVL_W + gapX);
                 Btn b = new Btn(cx, cy, LVL_W, LVL_H,
-                        Color.color(1, 1, 1, 0.85), "ULTIMATE " + (i + 1), BtnType.LEVEL).withLevel(i + 1);
+                        Color.color(1, 1, 1, 0.85), "ULTIMATE " + (i + 1), BtnType.LEVEL).withLevel(i + 14);
                 levelButtons.add(b);
             }
         }

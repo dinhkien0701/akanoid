@@ -30,18 +30,22 @@ public class PlayingProcess extends Process {
     }
     
     enum LevelType{
-        CLASSICAL, ULTIMATE_ONE, ULTIMATE_TWO
+        CLASSICAL_ONE, CLASSICAL_TWO, CLASSICAL_THREE, CLASSICAL_FOUR,
+        ULTIMATE_ONE, ULTIMATE_TWO
 
-        // classical : các màn thuộc chế độ classic
+        // classical_one : các màn thuộc level 1 - > 3 : dễ
+        // classical_two : các màn thuộc level 4  -> 6 : bình thường
+        // classical_three : các màn thuộc level 7 ->9 : hơi khó
+        // classical_four : các màn thuộc level 10 -> 13 : khó
         // ultimate_one : màn này , các viên gạch sẽ hạ xuống được và random thêm
-        // ultimate_one : màn này , các viên gạch có thể tự do bay so với ultimate_one
+        // ultimate_one : màn này , các viên gạch có thể tự do bay so với ultimate_one và có thể đẩy gạch
     }
 
     public int points;
     public int frameCount ; // bộ đếm dựa trên fps
     public int minLocateY; // phục vụ xác định vị trí có đủ để sinh map thời gian thực không
     private PlayingState playingState;
-    private LevelType levelType = LevelType.CLASSICAL; // tạm thời gắn classical
+    private LevelType levelType = LevelType.CLASSICAL_ONE; // tạm thời gắn classical
 
     public Paddle paddle;
     public boolean pressedLeft, pressedRight;
@@ -55,7 +59,8 @@ public class PlayingProcess extends Process {
     double brickH ; // Độ rộng theo phương dọc của gạch
 
     private final ListOfMap LM;
-    int currentMap;
+    protected int currentMap;
+    protected int randRowCount;
     Image background;
 
     public PlayingProcess(int width, int height, Rectangle map) {
@@ -88,6 +93,30 @@ public class PlayingProcess extends Process {
         initMap();
     }
 
+    public void setCurrentMap( int level) {
+        points = 0; // tính điểm lại cho level mới
+        randRowCount = 0; // số lượng hàng sẽ vẽ thêm
+        currentMap = level; // lưu lại level
+        // cài độ khó ứng với level
+        if (level <= 3){
+            levelType = LevelType.CLASSICAL_ONE;
+        }  else if (level <= 6){
+            levelType = LevelType.CLASSICAL_TWO;
+        }   else if (level <= 9){
+            levelType =  LevelType.CLASSICAL_THREE;
+        } else if (level <= 13){
+            levelType = LevelType.CLASSICAL_FOUR;
+            randRowCount = level - 9;
+            if (level == 13) randRowCount += 5;
+        } else if (level == 14){
+            levelType = LevelType.ULTIMATE_ONE;
+            randRowCount = 1000000;
+        } else {
+            levelType = LevelType.ULTIMATE_TWO;
+            randRowCount = 1000000;
+        }
+    }
+
     private void initBall() {
         ball.resetSpeed();
         ball.setX(map.getWidth() / 2 - 60 + map.getX() + 50 - 8);
@@ -108,7 +137,9 @@ public class PlayingProcess extends Process {
 
         brickW = (map.getWidth() - 60) / 13;
         brickH = 40;
-        int[][] arr = LM.getMapByCode(1);
+        // lấy map ứng với level ( currentMap)
+        int[][] arr = LM.getMapByCode(currentMap);
+        setCurrentMap(currentMap); // cài thông số cho map luôn
 
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 13; c++) {
@@ -140,7 +171,7 @@ public class PlayingProcess extends Process {
                     bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH - 6, r, c));
                 } else if (arr[r][c] == 7){
                     bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH- 6, r, c));
-                } else if (arr[r][c] == 8){
+                } else if (arr[r][c] == 8 && levelType != LevelType.ULTIMATE_TWO){
                     bricks.add(new PushBrick(bx, by, brickW - 6, brickH - 6, r, c));
                 }
             }
@@ -150,7 +181,7 @@ public class PlayingProcess extends Process {
 
 
     public void reset() {
-        currentMap = 0; // reset map
+        currentMap = 1; // reset map
         points = 0; // reset điểm
         initMap();
         initPaddle();
@@ -263,7 +294,9 @@ public class PlayingProcess extends Process {
             }
         }
         // Neu pushBrick bi pha huy
-        if (pushBrick ) {
+        if (pushBrick && (currentMap >= 7 && levelType != LevelType.ULTIMATE_TWO) ) {
+            // chỉ áp dụng từ level 7 -> level 14 ( ultimate 1 )
+            // level 15 không khả dụng
             doPushBrick();
         }
 
@@ -413,9 +446,17 @@ public class PlayingProcess extends Process {
             // tạm thời xem xét với running
             return;
         }
+
         if (50 + brickH + map.getY() > minLocateY) {
             // khi này nếu không thể chèn gạch thì cũng dừng lại
             return;
+        }
+
+        if (currentMap >= 14 ) {
+            randRowCount = 1000000;
+            // làm cho random vô tận với ultimate 1 & 2
+        } else {
+            randRowCount --; // các level từ 9 - > 14 đều có giới hạn random
         }
 
         // Hiện tại có thể vẽ
@@ -468,7 +509,7 @@ public class PlayingProcess extends Process {
                 bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH - 6, i, j));
             } else if (arr[i][j] == 7){
                 bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH - 6, i, j));
-            } else if (arr[i][j] == 8){
+            } else if (arr[i][j] == 8 && levelType != LevelType.ULTIMATE_TWO){
                 bricks.add(new PushBrick(bx, by, brickW - 6, brickH - 6, i, j));
             }
         }
@@ -541,20 +582,27 @@ public class PlayingProcess extends Process {
             minLocateY = 2000; // đặt măcj định là một số tương đối lớn
             for (Brick b : bricks) {
 
-                b.ha_do_cao(5) ;  // giảm độ cao , mỗi 140 fps hay 2 giây , giảm  k pixel
+                // tính năng hạ map từ level 7
+                if (currentMap > 6)b.ha_do_cao(5) ;  // giảm độ cao , mỗi 140 fps hay 2 giây , giảm  k pixel
                 // đồng thời lấy vị trí gần mép trên nhất
                 minLocateY = (int) Math.min(minLocateY , b.getY());
 
                 // sau đó render như bình thường
                 if (b.getY() >= map.getY() + 50 )b.render(gc);
             }
-            randomRow(); // đồng thời gọi random map
 
+            if ( currentMap > 9 && randRowCount > 0) {
+                // khi level từ 10 trở đi render thêm hàng
+                randomRow(); // đồng thời gọi random map
+            }
             // lấy lại độ cao
             for (Brick b : bricks) {
                 minLocateY = (int) Math.min(minLocateY , b.getY());
             }
-            selectMoveBrick();
+            if (currentMap >= 4) {
+                // các viên gạch có thể tự do di chuyển từ level 4
+                selectMoveBrick();
+            }
 
         } else  if (playingState == PlayingState.RUNNING) {
             // còn nếu chưa đủ 2 giây chưa hạ độ cao
@@ -574,7 +622,7 @@ public class PlayingProcess extends Process {
         paddle.render(gc);
         ball.render(gc);
         gc.setFill(Color.WHITE);
-        gc.fillText("Points:    " + points + "    Level:   " + (this.currentMap + 1), 10, 20);
+        gc.fillText("Points:    " + points + "    Level:   " + (this.currentMap ), 10, 20);
         gc.fillText("Lives:    " + paddle.getLives(), 10, 40);
 
     }

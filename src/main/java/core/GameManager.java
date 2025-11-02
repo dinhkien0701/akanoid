@@ -71,7 +71,10 @@ public class GameManager {
     }
 
     // Từ màn chọn level -> vào chơi (tạm thời luôn vào gameplay mặc định)
-    public void finishPickLevel(Stage stage){
+    public void finishPickLevel(Stage stage , int level){
+        // classic level 1 -> 13
+        // ultimate level 14 - 15
+        playing.setCurrentMap(level); // cài level cho màn
         stage.setScene(playing.getScene());
         gameState = GameState.PLAYING;
     }
