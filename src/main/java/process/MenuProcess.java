@@ -2,7 +2,6 @@ package process;
 
 
 import java.io.InputStream;
-import java.util.Objects;
 
 import UI.OptionButton;
 import UI.QuitButton;
@@ -13,12 +12,9 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -115,23 +111,21 @@ public class MenuProcess extends Process {
 
     private void addOptionButton() {
         pane.getChildren().add(
-            new OptionButton("Option", new Insets(0, 360, 180, 0),
-            250,60,
-            "/image/OptionButton.png"));
+            new OptionButton("Option",Pos.BOTTOM_RIGHT, new Insets(0, 360, 180, 0),
+            250,60));
     }
 
     private void addStartButton(Stage stage, GameManager gameManager) {
         pane.getChildren().add(
-            new StartButton("Start", new Insets(0, 360, 260, 0),
-            250,60,
-            "/image/Sprite-0001.png", gameManager,stage));
+            new StartButton("Start",Pos.BOTTOM_RIGHT, new Insets(0, 360, 260, 0),
+            250,60, gameManager,stage));
     }
 
     private void addQuitButton() {
         pane.getChildren().add(
-            new QuitButton("Quit", new Insets(0, 360, 100, 0),
-            250,60,
-            "/image/QuitButton.png"));
+            new QuitButton("Quit",Pos.BOTTOM_RIGHT, new Insets(0, 360, 100, 0),
+            250,60
+            ));
     }
 
 

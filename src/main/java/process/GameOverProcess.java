@@ -6,6 +6,7 @@ import UI.QuitButton;
 import UI.StartButton;
 import gamemanager.GameManager;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -31,32 +32,23 @@ public class GameOverProcess extends Process {
       }
     });
     if(!isAddButton()) {
-        addOptionButton();
         addStartButton(stage, gm);
         addQuitButton();
         addButtonDone();
     }
   }
 
-    private void addOptionButton() {
+   private void addStartButton(Stage stage, GameManager gameManager) {
         pane.getChildren().add(
-            new OptionButton("Option", new Insets(0, 360, 180, 0),
-            250,60,
-            "/image/OptionButton.png"));
-    }
-
-    private void addStartButton(Stage stage, GameManager gameManager) {
-        pane.getChildren().add(
-            new StartButton("Start", new Insets(0, 360, 260, 0),
-            250,60,
-            "/image/Sprite-0001.png", gameManager,stage));
+            new StartButton("Start", Pos.BOTTOM_RIGHT, new Insets(0, 455, 260, 0),
+            250,60, gameManager,stage));
     }
 
     private void addQuitButton() {
         pane.getChildren().add(
-            new QuitButton("Quit", new Insets(0, 360, 100, 0),
-            250,60,
-            "/image/QuitButton.png"));
+            new QuitButton("Quit", Pos.BOTTOM_RIGHT, new Insets(0, 455, 180, 0),
+            250,60
+            ));
     }
 
   @Override
