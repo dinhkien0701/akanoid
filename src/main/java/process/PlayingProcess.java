@@ -108,7 +108,7 @@ public class PlayingProcess extends Process {
 
         brickW = (map.getWidth() - 60) / 13;
         brickH = 40;
-        int[][] arr = LM.getMapByCode(10);
+        int[][] arr = LM.getMapByCode(1);
 
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 13; c++) {
@@ -277,7 +277,7 @@ public class PlayingProcess extends Process {
         while(it.hasNext()){
             Brick b = it.next();
             double bx = b.getX() -  ( map.getX() + 30); // do lui them 30 so bien
-            double by = b.getY() - ( minLocateY + 50 ); // do lui them 50 so bien
+            double by = b.getY() - ( minLocateY );
             // đưa vào mảng
             arrBrick[(int)Math.round(by/brickH)][(int)Math.round(bx/brickW)] = b;
 
@@ -289,6 +289,15 @@ public class PlayingProcess extends Process {
                 // cộng thêm 1 : để tránh chỉ mục 0 ( do mặc định mảng int[] chứa phần tử 0 )
             }
 
+        }
+
+        for (int i = 0 ;i < 8; i++) {
+            for ( int j = 0 ;j < 13; j++) {
+                if(arrBrick[i][j] != null) {
+                    System.out.println(1 + " ");
+                } else System.out.print( 7.7 + " ");
+                System.out.println();
+            }
         }
 
         for (int i = 0; i < 8; i++) {
@@ -310,8 +319,8 @@ public class PlayingProcess extends Process {
                         k_r++;
                     } else break;
                 }
-                b.left = (int)(b.getX() + 30 - k_l * brickW); // biên trái trên màn hình
-                b.right = (int)(b.getX() + 30 + k_r * brickW); // biên phải trên màn hình
+                b.left = (int)(map.getX() + 30 + (hasMoveBrick[i] -1 - k_l) * brickW); // biên trái trên màn hình
+                b.right = (int)(map.getX() + 30 + (hasMoveBrick[i] -1 + k_r) * brickW); // biên phải trên màn hình
                 // chuyển sang hàng tiếp
                 continue;
             }
@@ -362,8 +371,8 @@ public class PlayingProcess extends Process {
                 // thực thi , lấy brick sẽ di chuyển tự do
                 Brick b =  arrBrick[i][pick];
                 b.movedist = 3*(rand.nextInt(3) - 1); // ta mặc định vận tốc là -3/0/3 khi dịch chuyển trái / phải
-                b.left = (int)(b.getX() + 30 - l * brickW); // biên trái trên màn hình
-                b.right = (int)(b.getX() + 30 + r * brickW); // biên phải trên màn hình
+                b.left = (int)(map.getX() + 30 + (pick - l)* brickW); // biên trái trên màn hình
+                b.right = (int)(map.getX() + 30 + (pick + r) * brickW); // biên phải trên màn hình
             }
         }
 
@@ -434,6 +443,8 @@ public class PlayingProcess extends Process {
                 bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH - 6, i, j));
             }
         }
+        // gán độ cao mới cho minLoctateY
+        minLocateY = (int) by;
         System.out.println();
     }
 
@@ -509,6 +520,11 @@ public class PlayingProcess extends Process {
                 b.render(gc);
             }
             randomRow(); // đồng thời gọi random map
+
+            // lấy lại độ cao
+            for (Brick b : bricks) {
+                minLocateY = (int) Math.min(minLocateY , b.getY());
+            }
             selectMoveBrick();
 
 
@@ -519,7 +535,7 @@ public class PlayingProcess extends Process {
                 if ( frameCount % 10 == 0) b.dich_trai_phai();
                 b.render(gc);
             }
-            
+
         } else  {
             // đôi khi game tạm dừng do không còn thuộc RUNNING
             // khi đó chỉ in thôi
