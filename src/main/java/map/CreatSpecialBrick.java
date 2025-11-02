@@ -48,6 +48,13 @@ public class CreatSpecialBrick  {
                 if (line.charAt(0) == '#') {
                     row = 0;
                     listOfMaps.add(new Map(map));
+                    System.out.println(listOfMaps.size());
+                    for (int i = 0; i < 8;i++){
+                        for ( int j =0 ; j <13 ;j++){
+                            System.out.print(map[i][j] + " ");
+                        }
+                        System.out.println();
+                    }
                     map = new int[8][13];
                 } else {
                     for (int i = 0; i < path.length; i++) {
@@ -59,35 +66,6 @@ public class CreatSpecialBrick  {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    // Mới viết : hiện tại chưa có ý định dùng
-    // Hàm kiểm tra viên gạch bốn hướng xung quanh nó bị kẹt không (gặp tường hoặc gạch bất tử)
-    // Trapped (adj): bị mắc kẹt
-
-    private boolean isBrickTrapped(int[][] map, int r, int c, int rows, int cols) {
-
-        int[] dr = {-1, 1, 0, 0}; // delta row (Lên, Xuống)
-        int[] dc = {0, 0, -1, 1}; // delta col (Trái, Phải)
-
-        int trappedSides = 0; // Đếm số mặt bị chặn
-
-        for (int i = 0; i < 4; i++) {
-            int nr = r + dr[i]; // Hàng xóm theo hàng
-            int nc = c + dc[i]; // Hàng xóm theo cột
-
-            // 1. Biên bản đồ (tường)
-            if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) {
-                trappedSides++;
-            }
-            // 2. Gạch bất tử (2)
-            else if (map[nr][nc] == 2) {
-                trappedSides++;
-            }
-        }
-
-        // Nếu cả 4 mặt đều bị chặn, gạch này đã bị "kẹt"
-        return trappedSides == 4;
     }
 
     /**
@@ -129,8 +107,8 @@ public class CreatSpecialBrick  {
             // Nổ khu vực: không vượt quá số bom rơi, trần 5
             int areaBlast = Math.min(5 , fallBomb);
 
-            // Phép bổ trợ skill: trần 3
-            int skillUp = Math.min(3 , level / 4);
+            // Phép đẩy: trần 3
+            int push = Math.min(3 , level / 4);
 
             // Vòng quay may mắn: trần 3
             int wheel = Math.min(3 , level / 5);
@@ -141,7 +119,7 @@ public class CreatSpecialBrick  {
             creatWithId(5, level, fallBomb);
             creatWithId(6, level, wheel);
             creatWithId(7, level, areaBlast);
-            creatWithId(8, level, skillUp);
+            creatWithId(8, level, push);
         }
 
     }

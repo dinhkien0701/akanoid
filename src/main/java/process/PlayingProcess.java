@@ -77,7 +77,6 @@ public class PlayingProcess extends Process {
         background = new Image(filePath);
 
         this.map = map;
-        currentMap = 0;
         LM = new ListOfMap();
 
         bricks = new ArrayList<>();
@@ -90,7 +89,6 @@ public class PlayingProcess extends Process {
 
         initBall();
         initPaddle();
-        initMap();
     }
 
     public void setCurrentMap( int level) {
@@ -115,6 +113,7 @@ public class PlayingProcess extends Process {
             levelType = LevelType.ULTIMATE_TWO;
             randRowCount = 1000000;
         }
+        initMap();
     }
 
     private void initBall() {
@@ -138,9 +137,8 @@ public class PlayingProcess extends Process {
         brickW = (map.getWidth() - 60) / 13;
         brickH = 40;
         // lấy map ứng với level ( currentMap)
-        int[][] arr = LM.getMapByCode(currentMap);
-        setCurrentMap(currentMap); // cài thông số cho map luôn
-
+        System.out.println(this.currentMap);
+        int[][] arr = LM.getMapByCode(this.currentMap);
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 13; c++) {
                 if(arr[r][c] == 0){
@@ -183,7 +181,7 @@ public class PlayingProcess extends Process {
     public void reset() {
         currentMap = 1; // reset map
         points = 0; // reset điểm
-        initMap();
+        setCurrentMap(currentMap);
         initPaddle();
         initBall();
         paddle.reborn();
@@ -208,7 +206,7 @@ public class PlayingProcess extends Process {
         currentMap++;
         points = 0; // reset điểm sang màn mới
         frameCount = 1; // reset lại bộ đếm frame
-        initMap();
+        setCurrentMap(currentMap);
         initPaddle();
         initBall();
         listOfPowerUp.clear();
@@ -622,7 +620,7 @@ public class PlayingProcess extends Process {
         paddle.render(gc);
         ball.render(gc);
         gc.setFill(Color.WHITE);
-        gc.fillText("Points:    " + points + "    Level:   " + (this.currentMap ), 10, 20);
+        gc.fillText("Points:    " + points + "    Level:   " + (currentMap ), 10, 20);
         gc.fillText("Lives:    " + paddle.getLives(), 10, 40);
 
     }
