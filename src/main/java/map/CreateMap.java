@@ -23,28 +23,7 @@ public class CreateMap {
      * Quy đổi level -> số viên gạch thường (id=1) mong muốn.
      * Tăng dần theo các ngưỡng level, có trần 100 viên để giữ cân bằng.
      */
-    private int getCountBrickforLevel() {
-
-        // chỉ tính cho gạch đỏ (normal)
-        int count = 0;
-        if (level >= 1) {
-            count += 2 * level; // mỗi level +2 viên cơ bản
-        }
-        if (level >= 3) {
-            count += level;     // từ level 3: cộng thêm
-        }
-        if (level >= 5) {
-            count += level;     // từ level 5: cộng thêm lần nữa
-        }
-        if (level >= 7) {
-            count += level;     // từ level 7: cộng thêm (tăng nhanh hơn)
-        }
-        if (level >= 10) {
-            count += level;     // từ level 10: cộng thêm
-        }
-
-        return Math.min(count, 100); // trần 100 viên
-    }
+    int[] getCountBrickforLevel = {7, 16, 27, 28, 30, 30, 31, 36, 36, 41, 42, 60, 70, 55, 55,85,90,90,100,104};
 
     /**
      * Điền map bằng gạch thường (id=1) theo quota n, dùng DFS để tạo cụm.
@@ -52,30 +31,32 @@ public class CreateMap {
      * @return map đã được điền thêm
      */
     public int[][] creatMap( int[][] map) {
-        int n = getCountBrickforLevel(); // quota gạch cần thêm
-
-        // m = số ô trống hiện có trong map
+        // m = số ô đã có gạch trong map
         int m = 0;
         for (int i = 0 ; i < rows ; i++) {
             for (int j = 0 ; j < cols ; j++) {
-                if (map[i][j] == 0) {
+                if (map[i][j] != 0) {
                     m++;
                 }
             }
         }
 
-        n = Math.min(n, m); // không vượt quá số ô trống
+        int n = getCountBrickforLevel[level - 1] - m; // không vượt quá số tối đa mỗi level
         // lưới mặc định: w = 13, h = 8
 
         DFS dfs = new DFS(rows, cols);
-        // thử tối đa 50 điểm ngẫu nhiên để gieo cụm
-        for (int i = 1; i < 50; i++) {
+        // thử tối đa 5000 điểm ngẫu nhiên để gieo cụm
+        for (int i = 1; i < 5000; i++) {
             Random rand  = new Random();
             int x = rand.nextInt(rows);
             int y = rand.nextInt(cols);
             if (map[x][y] == 0 && n > 0) {
                 n = dfs.createMap(map, x, y, 1 , n); // id=1 (normal)
                 // nhận lại n sau khi đã trừ số ô đã tô
+            }
+
+            if(n <= 0) {
+                break;
             }
         }
 

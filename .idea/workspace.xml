@@ -7,10 +7,9 @@
     <list default="true" id="d187c723-39e4-4b2e-9886-2b9f92bdb635" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/map/CreatSpecialBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/map/CreatSpecialBrick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/map/ListOfMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/map/ListOfMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/map/CreateMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/map/CreateMap.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/immortalMap.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/immortalMap.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/map.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/map.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +129,7 @@
       <workItem from="1761898249340" duration="15438000" />
       <workItem from="1761955231848" duration="3399000" />
       <workItem from="1761972762312" duration="12000" />
-      <workItem from="1762074553359" duration="28683000" />
+      <workItem from="1762074553359" duration="33559000" />
     </task>
     <servers />
   </component>

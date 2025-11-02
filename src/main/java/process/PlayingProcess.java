@@ -251,7 +251,6 @@ public class PlayingProcess extends Process {
 
     private void doPushBrick() {
         int maxLocateY = 0;
-
          for (Brick b : bricks){
             maxLocateY = Math.max(maxLocateY, (int) b.getY());
         }
@@ -351,14 +350,6 @@ public class PlayingProcess extends Process {
 
         }
 
-        for (int i = 0 ;i < 8; i++) {
-            for ( int j = 0 ;j < 13; j++) {
-                if(arrBrick[i][j] != null) {
-                    System.out.println(1 + " ");
-                } else System.out.print( 7.7 + " ");
-                System.out.println();
-            }
-        }
 
         for (int i = 0; i < 8; i++) {
             if(hasMoveBrick[i] > 0) {
@@ -438,6 +429,8 @@ public class PlayingProcess extends Process {
 
     }
 
+    int help = 0; // biến trợ giúp
+
     private void randomRow () {
         // Sử dụng cho chế độ vô hạn
         if(playingState != PlayingState.RUNNING){
@@ -475,6 +468,16 @@ public class PlayingProcess extends Process {
                 // Giải làm sao để in ra gạch mới trên cùng nhất
                 by -= brickH;
             }
+        }
+        // Để giảm độ khó mỗi một hàng đẩy xuống sẽ đảm bảo có 1 trong hai trợ giúp lifeUp và pushBrick
+        if (help == 0){
+            // thêm máu
+            arr[i][rand.nextInt(13)] = 3;
+            help++;
+        } else {
+            // thêm đẩy lên pushBrick
+            arr[i][rand.nextInt(13)] = 8;
+            help = 1; // reset lại biến
         }
         // dùng lại code của initMap  ( hàm này cũng được viết trong class này )
         for (int j = 0; j < arr[i].length; j++) {

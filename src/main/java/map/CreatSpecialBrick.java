@@ -78,14 +78,15 @@ public class CreatSpecialBrick  {
         Random rand = new Random();
         int x,y;
         int[][] map = listOfMaps.get(level - 1).getMap();
-
-        while (so_luong > 0) {
+        int num = 5000;
+        while (so_luong > 0 && num > 0) {
             x  = rand.nextInt(rows);
             y = rand.nextInt(cols);
             if (map[x][y] == 1) { // chỉ thay khi đang là normal
                 map[x][y] = id;
                 so_luong--;
             }
+            num--; // random tối đa 5000 vòng thôi
         }
     }
 
@@ -95,6 +96,14 @@ public class CreatSpecialBrick  {
      */
     public void creatSpecialBrick() {
         for (int level = 1 ; level <= 20 ; level++) {
+            // Random thêm gạch bất tử từ level 7
+            if (level >= 7) {
+                int immortal = level;
+                if (level >= 10) immortal += 3;
+                if (level >= 13) immortal += 2;
+                creatWithId(2,level,immortal);
+            }
+
             // Mỗi màn tặng tối đa 3 mạng: level 1 -> +1, level 5 -> +2, level 10 -> +3
             int lifeUp = Math.min(3 , 1 + level / 5);
 
@@ -108,7 +117,12 @@ public class CreatSpecialBrick  {
             int areaBlast = Math.min(5 , fallBomb);
 
             // Phép đẩy: trần 3
-            int push = Math.min(3 , level / 4);
+            if (level >= 7) {
+                int push = Math.min(6 , level / 2);
+                if (level >= 10) push += 1;
+                if (level >= 13) push += 1;
+                creatWithId(8, level, push);
+            }
 
             // Vòng quay may mắn: trần 3
             int wheel = Math.min(3 , level / 5);
@@ -119,7 +133,6 @@ public class CreatSpecialBrick  {
             creatWithId(5, level, fallBomb);
             creatWithId(6, level, wheel);
             creatWithId(7, level, areaBlast);
-            creatWithId(8, level, push);
         }
 
     }
