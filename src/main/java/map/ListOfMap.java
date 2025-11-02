@@ -12,16 +12,38 @@ public class ListOfMap {
   private int Size = 0;
 
   public ListOfMap() {
-    this.ReadInFile();
-    //this.RandomMap();
+    //this.ReadInFile();
+    this.RandomMap();
   }
 
   private void RandomMap() {
-      for(int n = 0; n < 20; n++) {
-          CreateMap k = new CreateMap(8,8,n+1);
-          int[][] map = k.creatMap();
-          listOfMaps.add(new Map(map));
+      // Đọc immortal có sẵn
+
+      CreatSpecialBrick d = new CreatSpecialBrick(listOfMaps , 8 , 13);
+      d.readImmortal();
+
+      for(int level  = 1; level <= 20; level++) {
+
+          if ( level <= listOfMaps.size()) {
+              // Nếu đã được tạo map sẵn
+              int[][] map = listOfMaps.get(level - 1).getMap();
+              CreateMap k = new CreateMap(8,13, level);
+              k.creatMap(map);
+          } else {
+              CreateMap k = new CreateMap(8,13, level);
+              int[][] map = k.creatMap(new int[8][13]);
+              listOfMaps.add(new Map(map));
+          }
           Size++;
+      }
+      d.creatSpecialBrick();
+
+      int[][] map = listOfMaps.get(0).getMap();
+      for (int i = 0; i < 8; i++) {
+          for (int j = 0; j < 13; j++) {
+              System.out.print(map[i][j] + " ");
+          }
+          System.out.print("\n");
       }
   }
 

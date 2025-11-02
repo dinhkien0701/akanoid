@@ -1,105 +1,164 @@
 package process;
 
-    import java.io.File;
-    import java.util.ArrayList;
-    import java.util.Iterator;
-    import java.util.List;
-    import javafx.scene.image.Image;
-    import javafx.scene.input.KeyCode;
-    import javafx.scene.shape.Rectangle;
-    import javafx.scene.paint.Color;
 
-    import core.*;
-    import javafx.stage.Stage;
-    import object.Paddle;
-    import object.EternalBrick;
-    import object.Ball;
-    import object.NormalBrick;
-    import object.Brick;
-    import map.*;
-    import powerup.DuplicateBallPowerUp;
-    import powerup.PowerUp;
-    import core.Process;
+import gamemanager.GameManager;
+import gameobject.ball.Ball;
+import gameobject.brick.*;
+import gameobject.paddle.Paddle;
+import gameobject.powerup.PowerUp;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import map.ListOfMap;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 
 public class PlayingProcess extends Process {
 
-    enum PlayingState{
-    READY, RUNNING, FINISH_MAP, GAME_OVER, WINNER
-    }
+    private static final int MAX_POWERUPS_PER_LEVEL = 10;
 
     private PlayingState playingState;
+    private final Paddle paddle;
+    private boolean pressedLeft, pressedRight;
 
-    public Paddle paddle;
-    public boolean pressedLeft, pressedRight;
-    public Ball ball;
+    private Ball mainBall;
+
     private final List<Brick> bricks;
     private final List<PowerUp> listOfPowerUp;
-    public Rectangle map;
+    private final List<Ball> listOfBall;
+    private final List<Ball> deletedBall;
+    private final Rectangle map;
     private final ListOfMap LM;
+    private int powerUpsSpawnedThisLevel;
     int currentMap;
     Image background;
 
     public PlayingProcess(int width, int height, Rectangle map) {
         super(width, height);
-
         String filePath = "file:src" + File.separator
                 + "main" + File.separator
                 + "resources" + File.separator
                 + "image" + File.separator
-                + "purple.png";
+                + "bk5.png";
         background = new Image(filePath);
 
         this.map = map;
-        currentMap = 0;
+        currentMap = 18;
         LM = new ListOfMap();
 
         bricks = new ArrayList<>();
         listOfPowerUp = new ArrayList<>();
-
+        listOfBall = new ArrayList<>();
         paddle = new Paddle(map.getX() + map.getWidth() / 2 - 50, map.getY() + map.getHeight() - 40);
         pressedLeft = false;
         pressedRight = false;
-        ball = new Ball(map.getWidth() / 2 - 60 + map.getX() + 50 - 8, map.getHeight() - 40 + map.getY() - 16);
-
+        deletedBall = new ArrayList<>();
+        mainBall = new Ball(map.getWidth() / 2 - 60 + map.getX() + 50 - 8, map.getHeight() - 40 + map.getY() - 16);
+        powerUpsSpawnedThisLevel = 0;
+        listOfBall.add(mainBall);
         initBall();
         initPaddle();
         initMap();
     }
 
+    public int getPowerUpsSpawnedThisLevel() {
+        return this.powerUpsSpawnedThisLevel;
+    }
+
+    public boolean isEnoughPowerUpsSpawnedThisLevel() {
+        return this.powerUpsSpawnedThisLevel >= MAX_POWERUPS_PER_LEVEL;
+    }
+
+    public List<Brick> getBricks() {
+        return this.bricks;
+    }
+
+    public Rectangle getMap() {
+        return this.map;
+    }
+
+    public ListOfMap getLM() {
+        return this.LM;
+    }
+
+    public List<PowerUp> getListOfPowerUp() {
+        return this.listOfPowerUp;
+    }
+
+    public List<Ball> getListOfBall() {
+        return this.listOfBall;
+    }
+
+    public Paddle getPaddle() {
+        return this.paddle;
+    }
+
+    public Ball getMainBall() {
+        return this.mainBall;
+    }
 
     private void initBall() {
-        ball.resetSpeed();
-        ball.setX(map.getWidth() / 2 - 60 + map.getX() + 50 - 8);
-        ball.setY(map.getHeight() - 40 + map.getY() - 16);
+        mainBall.reset();
+        mainBall.setX(map.getWidth() / 2 - 60 + map.getX() + 50 - 8);
+        mainBall.setY(map.getHeight() - 40 + map.getY() - 16);
     }
 
     private void initPaddle(){
         paddle.setX(map.getX() + map.getWidth() / 2 - 50);
         paddle.setY(map.getY() + map.getHeight() - 40);
+        pressedLeft = false;
+        pressedRight = false;
     }
 
     private void initMap() {
-    bricks.clear();
-    double brickW = (map.getWidth() - 60) / 8;
-    double brickH = 20;
+        bricks.clear();
 
-    int[][] arr = LM.getMapByCode(currentMap);
 
-    for (int r = 0; r < 8; r++) {
-        for (int c = 0; c < 8; c++) {
-            if(arr[r][c] == 0){
-              continue;
-            }
-            double bx = 30 + c * brickW + map.getX();
-            double by = 50 + r * (brickH + 6) + map.getY();
-            if(arr[r][c]%3 == 1) {
-              bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
-            } else if(arr[r][c]%3 == 2){
-              bricks.add(new EternalBrick(bx, by, brickW - 6, brickH));
-            }
+        double brickW = (map.getWidth() - 60) / 13;
+        double brickH = 33;
+
+        int[][] arr = LM.getMapByCode(currentMap);
+
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 13; c++) {
+                if(arr[r][c] == 0){
+                    continue;
+                }
+                double bx = 30 + c * brickW + map.getX();
+                double by = 50 + r * (brickH + 6) + map.getY();
+
+                if(arr[r][c] == 1) {
+                    bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
+                } else if(arr[r][c] == 2){
+                    bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 3){
+                    bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 4){
+                    bricks.add(new GoldBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 5){
+                    bricks.add(new FallBombBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 6){
+                    bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 7){
+                    bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH));
+                } else if (arr[r][c] == 8){
+                    bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH));
+                }
+//                if(arr[r][c] == 2){
+//                    bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
+//                } else if(arr[r][c] == 1) {
+//                    bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
+//                } else {
+//                    bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH));
+//                }
             }
         }
-    playingState = PlayingState.READY;
+        playingState = PlayingState.READY;
     }
 
     public void reset() {
@@ -110,27 +169,41 @@ public class PlayingProcess extends Process {
         paddle.reborn();
     }
 
-    public void onBallLost() {
-        paddle.takeHit();
-        initBall();
-        listOfPowerUp.clear();
-        playingState = PlayingState.READY;
-    }
-
     public void deadPaddle() {
-    playingState = PlayingState.GAME_OVER;
+        playingState = PlayingState.GAME_OVER;
     }
 
     public void startGame() {
-    playingState = PlayingState.RUNNING;
+        playingState = PlayingState.RUNNING;
     }
 
     public void nextLevel() {
         currentMap++;
+        powerUpsSpawnedThisLevel = 0;
         initMap();
         initPaddle();
         initBall();
         listOfPowerUp.clear();
+    }
+
+    public void pauseGame() {
+        for (PowerUp powerUp : listOfPowerUp) {
+            powerUp.stop();
+        }
+        for (Ball ball : listOfBall) {
+            ball.stop();
+        }
+        playingState = PlayingState.PAUSE;
+    }
+
+    public void resumeGame() {
+        for (PowerUp powerUp : listOfPowerUp) {
+            powerUp.startFromStop();
+        }
+        for (Ball ball : listOfBall) {
+            ball.startFromStop();
+        }
+        playingState = PlayingState.RUNNING;
     }
 
     private void initInput() {
@@ -138,7 +211,11 @@ public class PlayingProcess extends Process {
         KeyCode code = e.getCode();
         switch (code) {
             case ESCAPE:
-                System.exit(0);
+                if(playingState == PlayingState.RUNNING ||  playingState == PlayingState.READY) {
+                    this.pauseGame();
+                } else if(playingState == PlayingState.PAUSE) {
+                    this.resumeGame();
+                }
                 break;
             case SPACE:
                 if ((playingState).equals(PlayingState.READY)) {
@@ -149,9 +226,15 @@ public class PlayingProcess extends Process {
                 break;
             case LEFT:
                 pressedLeft = true;
+                if(playingState == PlayingState.PAUSE) {
+                    pressedLeft = false;
+                }
                 break;
             case RIGHT:
                 pressedRight = true;
+                if(playingState == PlayingState.PAUSE) {
+                    pressedRight = false;
+                }
                 break;
             }
         });
@@ -177,12 +260,10 @@ public class PlayingProcess extends Process {
             Ball.BallCollision collision = ball.checkCollision(b);
             if (collision != Ball.BallCollision.NONE) {
                 b.takeHit();
-                if(b instanceof NormalBrick){
-                  listOfPowerUp.add(new DuplicateBallPowerUp(b.getX(),b.getY()));
-                }
                 ball.bounceOff(b, collision);
                 if (b.isDestroyed()) {
-                  it.remove();
+                    b.update(this);
+                    it.remove();
                 }
                 break;
             }
@@ -195,6 +276,7 @@ public class PlayingProcess extends Process {
                 countNormalBrick++;
             }
         }
+
         if (countNormalBrick <= 0) {
             playingState = PlayingState.FINISH_MAP;
             nextLevel();
@@ -202,7 +284,34 @@ public class PlayingProcess extends Process {
     }
 
     public void addPowerUp(PowerUp pu){
-    listOfPowerUp.add(pu);
+        listOfPowerUp.add(pu);
+        powerUpsSpawnedThisLevel++;
+    }
+
+    public void removePowerUp(PowerUp pu){
+        listOfPowerUp.remove(pu);
+    }
+
+    public void onBallLost(Ball falledBall) {
+        if(falledBall.equals(mainBall)) {
+            if(listOfBall.size() - 1 <= 0) {
+                paddle.takeHit();
+                initBall();
+                playingState = PlayingState.READY;
+                listOfPowerUp.clear();
+                return;
+            }
+            for(Ball ball : listOfBall) {
+                if(ball.equals(mainBall)) {
+                    continue;
+                }
+                if(!ball.isFallOut(map.getY() + map.getHeight())) {
+                    mainBall = ball;
+                    break;
+                }
+            }
+        }
+        deletedBall.add(falledBall);
     }
 
     public void checkPowerUpList() {
@@ -213,39 +322,50 @@ public class PlayingProcess extends Process {
         while(it.hasNext()){
             PowerUp pu = it.next();
             pu.update(this);
-            if(pu.isEnd()) {
+            if(pu.isFallOut() && pu.isEnd()) {
                 it.remove();
-            break;
+                break;
             }
         }
     }
 
-    @Override
-    public void setScene(Stage stage) {
-        stage.setScene(this.scene);
+    public void checkBallList() {
+        if(listOfBall.isEmpty()){
+            return;
+        }
+        for (Ball b : listOfBall) {
+            b.update(this);
+            if (b.checkCollision(paddle) != Ball.BallCollision.NONE) {
+                b.bounceOff(paddle, b.checkCollision(paddle));
+                b.setY(paddle.getY() - b.getHeight() - 1);
+            }
+            checkBricksList(b);
+        }
+        if(!deletedBall.isEmpty()) {
+            for (Ball b : deletedBall) {
+                listOfBall.remove(b);
+            }
+            deletedBall.clear();
+        }
     }
 
     @Override
-    public void update(Stage stage,GameManager gm) {
+    public void update(Stage stage, GameManager gm) {
         initInput();
         switch (playingState) {
         case READY:
             paddle.update(this);
-            ball.setY(paddle.getY() - ball.getHeight());
-            ball.setX(paddle.getX() + paddle.getWidth() / 2 - ball.getRadius());
+            mainBall.setY(paddle.getY() - mainBall.getHeight());
+            mainBall.setX(paddle.getX() + paddle.getWidth() / 2 - mainBall.getRadius());
             break;
-        case RUNNING:
+        case RUNNING: case PAUSE:
             paddle.update(this);
-            ball.update(this);
-            if (ball.checkCollision(paddle) != Ball.BallCollision.NONE) {
-              ball.bounceOff(paddle, ball.checkCollision(paddle));
-              ball.setY(paddle.getY() - ball.getHeight() - 1);
-            }
-            checkBricksList(this.ball);
+            checkBallList();
             checkPowerUpList();
             break;
         case GAME_OVER:
             gm.finishPlay(stage);
+            break;
         }
     }
 
@@ -266,9 +386,17 @@ public class PlayingProcess extends Process {
             b.render(gc);
         }
         paddle.render(gc);
-        ball.render(gc);
+        //mainBall.render(gc);
+        for (Ball ball : listOfBall) {
+            ball.render(gc);
+        }
         gc.setFill(Color.WHITE);
-        gc.fillText("State:    " + playingState.name() + "    Level:   " + (this.currentMap + 1), 10, 20);
-        gc.fillText("Lives:    " + paddle.getLives(), 10, 40);
+        gc.fillText("Level:   " + (this.currentMap + 1), 10, 20);
+        gc.fillText("Lives:   " + paddle.getLives(), 10, 40);
     }
+
+    enum PlayingState{
+        READY, RUNNING, FINISH_MAP, GAME_OVER, WINNER, PAUSE
+    }
+
 }

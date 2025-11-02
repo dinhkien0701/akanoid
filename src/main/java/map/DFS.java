@@ -27,7 +27,7 @@ public class DFS {
     return x >= 0 && x < rows && y >= 0 && y < cols;
   }
 
-  public void createMap(int map[][], int x, int y, int id , int n_max) {
+  public int createMap(int[][] map, int x, int y, int id , int n_max) {
     // Bắt đầu tạo bản đồ từ (x, y)
     int[] dx = {0, 0, 1, -1};
     int[] dy = {1, -1, 0, 0};
@@ -85,5 +85,8 @@ public class DFS {
         }
       }
     }
+
+    return n_max ; // trả lại giá trị , do biến nguyên thủy chỉ truyền tham trị ( bản sao ) thôi
   }
+
 }
