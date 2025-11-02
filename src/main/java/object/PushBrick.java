@@ -5,14 +5,14 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import process.PlayingProcess;
 
-public class BallUpSkillBrick extends Brick {
+public class PushBrick extends Brick {
 
-    public BallUpSkillBrick(double x, double y, double width, double height, int locateX, int locateY) {
+    public PushBrick(double x, double y, double width, double height, int locateX, int locateY) {
         super(x , y , width, height , locateX, locateY, 1);
     }
 
 
-    private Image brickImage = LoadResource.LoadImage.getImage("/image/ballUpSkill.png");
+    private Image brickImage = LoadResource.LoadImage.getImage("/image/pushBrick.png");
     @Override
     public void render(GraphicsContext gc) {
         if (brickImage != null) {

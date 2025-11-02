@@ -141,7 +141,7 @@ public class PlayingProcess extends Process {
                 } else if (arr[r][c] == 7){
                     bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH- 6, r, c));
                 } else if (arr[r][c] == 8){
-                    bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH - 6, r, c));
+                    bricks.add(new PushBrick(bx, by, brickW - 6, brickH - 6, r, c));
                 }
             }
         }
@@ -220,11 +220,32 @@ public class PlayingProcess extends Process {
         }
     }
 
+    private void doPushBrick() {
+        int maxLocateY = 0;
+
+         for (Brick b : bricks){
+            maxLocateY = Math.max(maxLocateY, (int) b.getY());
+        }
+
+        if(maxLocateY < map.getY() + 50 + brickH) {
+            return; // không thể đẩy hết gạch ra khỏi màn chơi
+        }
+
+        // thực hiện đẩy nếu thỏa
+        for (Brick b : bricks){
+            b.setY(b.getY() - brickH);
+        }
+    }
+
     public void checkBricksList(Ball ball) {
+        boolean pushBrick = false; // kiểm tra xem có đẩy brick lên không
         Iterator<Brick> it = bricks.iterator();
         while (it.hasNext()) {
             Brick b = it.next();
             Ball.BallCollision collision = ball.checkCollision(b);
+            if (b.getY() < map.getY() + 50) {
+                continue; // bóng không thể chạm brick không trong màn chơi
+            }
             if (collision != Ball.BallCollision.NONE) {
                 b.takeHit();
                 if(b instanceof NormalBrick){
@@ -232,12 +253,20 @@ public class PlayingProcess extends Process {
                 }
                 ball.bounceOff(b, collision);
                 if (b.isDestroyed()) {
+                    if (b instanceof PushBrick) {
+                        pushBrick = true;
+                    }
                     it.remove();
                     points += 5; // cộng 5 điểm mỗi lần phá hủy brick bất kỳ
                 }
                 break;
             }
         }
+        // Neu pushBrick bi pha huy
+        if (pushBrick ) {
+            doPushBrick();
+        }
+
         // Nếu đã phá hủy toàn bộ brick , sang level tiếp theo.
         int countBrick = bricks.size();
         if (countBrick <= 0) {
@@ -440,7 +469,7 @@ public class PlayingProcess extends Process {
             } else if (arr[i][j] == 7){
                 bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH - 6, i, j));
             } else if (arr[i][j] == 8){
-                bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH - 6, i, j));
+                bricks.add(new PushBrick(bx, by, brickW - 6, brickH - 6, i, j));
             }
         }
         // gán độ cao mới cho minLoctateY
@@ -517,7 +546,7 @@ public class PlayingProcess extends Process {
                 minLocateY = (int) Math.min(minLocateY , b.getY());
 
                 // sau đó render như bình thường
-                b.render(gc);
+                if (b.getY() >= map.getY() + 50 )b.render(gc);
             }
             randomRow(); // đồng thời gọi random map
 
@@ -527,20 +556,19 @@ public class PlayingProcess extends Process {
             }
             selectMoveBrick();
 
-
         } else  if (playingState == PlayingState.RUNNING) {
             // còn nếu chưa đủ 2 giây chưa hạ độ cao
             for (Brick b : bricks) {
                 // Dù chưa hạ độ cao nhưng vẫn xử lý dịch trái hay phải mỗi 10 fps
                 if ( frameCount % 10 == 0) b.dich_trai_phai();
-                b.render(gc);
+                if (b.getY() >= map.getY() + 50 )b.render(gc);
             }
 
         } else  {
             // đôi khi game tạm dừng do không còn thuộc RUNNING
             // khi đó chỉ in thôi
             for (Brick b : bricks) {
-                b.render(gc);
+                if (b.getY() >= map.getY() + 50 )b.render(gc);
             }
         }
         paddle.render(gc);

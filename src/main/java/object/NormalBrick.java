@@ -14,7 +14,7 @@ public class NormalBrick extends Brick {
       super(x, y, w, h, locateX, locateY ,1);
   }
 
-    private Image brickImage = LoadImage.getImage("/image/pushBrick.png");
+    private Image brickImage = LoadImage.getImage("/image/normal.png");
   @Override
   public void render(GraphicsContext gc) {
       if (brickImage != null) {
