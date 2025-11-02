@@ -375,7 +375,7 @@ public class PlayingProcess extends Process {
             // tạm thời xem xét với running
             return;
         }
-        if (50 + (brickH + 6) + map.getY() > minLocateY) {
+        if (50 + brickH + map.getY() > minLocateY) {
             // khi này nếu không thể chèn gạch thì cũng dừng lại
             return;
         }
@@ -383,7 +383,7 @@ public class PlayingProcess extends Process {
         // Hiện tại có thể vẽ
         Random rand = new Random();
         // Nó sẽ lấy một map được tạo từ map đã tạo : 13 -> 18;
-        int[][] arr = LM.getMapByCode(rand.nextInt(5) + 12);
+        int[][] arr = LM.getMapByCode(rand.nextInt(5) + 7);
         int i = rand.nextInt(arr.length); // lấy một hàng bất kỳ từ map đã nhận
 
         double by;
@@ -485,6 +485,14 @@ public class PlayingProcess extends Process {
         gc.fillRect(map.getX(), map.getY(), map.getWidth(), map.getHeight());
         gc.restore();
 
+        if(playingState == PlayingState.RUNNING) {
+            frameCount ++; // tăng frame
+            if (frameCount == 1401) {
+                // reset framecount sau mỗi chu kỳ 20 giây
+                frameCount = 1;
+
+            }
+        }
         for(PowerUp p : listOfPowerUp) {
             p.render(gc);
         }
@@ -502,12 +510,8 @@ public class PlayingProcess extends Process {
             }
             randomRow(); // đồng thời gọi random map
             selectMoveBrick();
-            frameCount ++; // tăng frame
-            if (frameCount == 1401) {
-                // reset framecount sau mỗi chu kỳ 20 giây
-                frameCount = 1;
 
-            }
+
         } else  if (playingState == PlayingState.RUNNING) {
             // còn nếu chưa đủ 2 giây chưa hạ độ cao
             for (Brick b : bricks) {
@@ -515,12 +519,7 @@ public class PlayingProcess extends Process {
                 if ( frameCount % 10 == 0) b.dich_trai_phai();
                 b.render(gc);
             }
-            frameCount ++; // tăng frame
-            if (frameCount == 1401) {
-                // reset framecount sau mỗi chu kỳ 20 giây
-                frameCount = 1;
-
-            }
+            
         } else  {
             // đôi khi game tạm dừng do không còn thuộc RUNNING
             // khi đó chỉ in thôi
