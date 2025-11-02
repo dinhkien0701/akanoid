@@ -17,7 +17,7 @@ public class Paddle extends MovableObject {
 
   public Paddle(double x, double y) {
     super(x, y, paddleWidth, paddleHeight, 0, 0);
-    lives = 3;
+    lives = 100;
   }
 
   @Override

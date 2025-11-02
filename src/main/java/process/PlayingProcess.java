@@ -108,7 +108,7 @@ public class PlayingProcess extends Process {
 
         brickW = (map.getWidth() - 60) / 13;
         brickH = 40;
-        int[][] arr = LM.getMapByCode(currentMap);
+        int[][] arr = LM.getMapByCode(10);
 
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 13; c++) {
@@ -276,8 +276,8 @@ public class PlayingProcess extends Process {
         Iterator <Brick> it = bricks.iterator();
         while(it.hasNext()){
             Brick b = it.next();
-            double bx = b.getX() - map.getX();
-            double by = b.getY() - minLocateY;
+            double bx = b.getX() -  ( map.getX() + 30); // do lui them 30 so bien
+            double by = b.getY() - ( minLocateY + 50 ); // do lui them 50 so bien
             // đưa vào mảng
             arrBrick[(int)Math.round(by/brickH)][(int)Math.round(bx/brickW)] = b;
 
@@ -305,13 +305,13 @@ public class PlayingProcess extends Process {
 
                 }
                 // đếm bên phải
-                for( int k = hasMoveBrick[i] + 2; k < 13; k++) {
+                for( int k = hasMoveBrick[i] ; k < 13; k++) {
                     if (arrBrick[i][k] == null) {
                         k_r++;
                     } else break;
                 }
-                b.left = (int)(b.getX() - k_l * brickW); // biên trái trên màn hình
-                b.right = (int)(b.getX() + k_r * brickW); // biên phải trên màn hình
+                b.left = (int)(b.getX() + 30 - k_l * brickW); // biên trái trên màn hình
+                b.right = (int)(b.getX() + 30 + k_r * brickW); // biên phải trên màn hình
                 // chuyển sang hàng tiếp
                 continue;
             }
@@ -362,8 +362,8 @@ public class PlayingProcess extends Process {
                 // thực thi , lấy brick sẽ di chuyển tự do
                 Brick b =  arrBrick[i][pick];
                 b.movedist = 3*(rand.nextInt(3) - 1); // ta mặc định vận tốc là -3/0/3 khi dịch chuyển trái / phải
-                b.left = (int)(b.getX() - l * brickW); // biên trái trên màn hình
-                b.right = (int)(b.getX() + r * brickW); // biên phải trên màn hình
+                b.left = (int)(b.getX() + 30 - l * brickW); // biên trái trên màn hình
+                b.right = (int)(b.getX() + 30 + r * brickW); // biên phải trên màn hình
             }
         }
 

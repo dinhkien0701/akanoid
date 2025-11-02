@@ -22,6 +22,8 @@ public abstract class Brick extends GameObject {
     this.locateX = locateX;
     this.locateY = locateY;
     this.movedist = 0;
+    right = (int) x;
+    left  = (int) x;
 
   }
 
@@ -30,7 +32,9 @@ public abstract class Brick extends GameObject {
   }
 
   public void dich_trai_phai() {
-      if (movedist == 0 || left == right) return;
+      if (movedist == 0 || left == right) {
+          return;
+      }
 
       if( x + movedist > right || x + movedist < left) {
           movedist = - movedist;
