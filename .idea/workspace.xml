@@ -7,7 +7,6 @@
     <list default="true" id="d187c723-39e4-4b2e-9886-2b9f92bdb635" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/immortalMap.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/immortalMap.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,6 +131,8 @@
       <workItem from="1762138181909" duration="1285000" />
       <workItem from="1762139802075" duration="3290000" />
       <workItem from="1762143209647" duration="5353000" />
+      <workItem from="1762152244479" duration="624000" />
+      <workItem from="1762176649839" duration="707000" />
     </task>
     <servers />
   </component>
@@ -154,7 +155,7 @@
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/core/GameManager.java</url>
           <line>73</line>
-          <properties class="core.GameManager" method="finishPickLevel">
+          <properties class="core.GameManager">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>

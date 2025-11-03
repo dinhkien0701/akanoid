@@ -275,7 +275,8 @@ public class PlayingProcess extends Process {
         frameBlast = 1;
         List<Pair<Double,Double>> np = new ArrayList<>();
         // Lấy minLocateY
-        double dist = brickH * brickH + brickW * brickW ;
+        double dist = brickH * brickH + brickW * brickW + 6 ;
+        // Cộng thêm 6 : ta sẽ cho khoảng nổ rộng hơn một chút để tránh lỗi xấp xỉ
         Iterator<Pair<Double,Double>> it = pairList.iterator();
         while (it.hasNext()) {
             Pair<Double,Double> p = it.next();
@@ -291,7 +292,7 @@ public class PlayingProcess extends Process {
                 double k_dist = (x - b.getX()) * (x - b.getX()) + (y - b.getY()) * ( y- b.getY());
                 if (k_dist <= dist) {
                     b.takeHit();
-                    if (b.isDestroyed()) {
+                    if (b.isDestroyed() && b instanceof PushBrick) {
                         np.add(new Pair<Double,Double>(b.getX(),b.getY()));
                     }
                 }
