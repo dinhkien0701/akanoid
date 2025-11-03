@@ -26,5 +26,7 @@ public class BallUpSkillBrick extends Brick {
     }
 
     @Override
-    public void update(PlayingProcess pp) {}
+    public void update(PlayingProcess pp) {
+
+    }
 }

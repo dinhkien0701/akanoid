@@ -18,8 +18,8 @@ public class LuckyWheelBrick extends Brick{
 
     private PowerUp spawnRandomPowerUp(double x, double y) {
         Random rand = new Random();
-        //int powerUpType = rand.nextInt(6);
-        int powerUpType = 6;
+        int powerUpType = rand.nextInt(6);
+        //int powerUpType = 6;
         switch (powerUpType) {
             case 0:
                 return (new DuplicateBallPowerUp(x, y));
@@ -29,11 +29,7 @@ public class LuckyWheelBrick extends Brick{
                 return(new LongerPaddlePowerUp(x, y));
             case 3:
                 return(new ShortenPaddlePowerUp(x, y));
-            case 4:
-                return(new FallBoomPowerUp(x, y));
             case 5:
-                return(new LifeUpPowerUp(x, y));
-            case 6:
                 return(new ShotPowerUp(x, y));
             default:
                 return null;

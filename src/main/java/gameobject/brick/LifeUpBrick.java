@@ -1,5 +1,6 @@
 package gameobject.brick;
 
+import gameobject.powerup.LifeUpPowerUp;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -24,5 +25,7 @@ public class LifeUpBrick extends Brick{
     }
 
     @Override
-    public void update(PlayingProcess gameManager) {}
+    public void update(PlayingProcess gameManager) {
+        gameManager.addPowerUp(new LifeUpPowerUp(this.getX(),this.getY()));
+    }
 }

@@ -1,5 +1,6 @@
 package gameobject.brick;
 
+import gameobject.powerup.FallBoomPowerUp;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -11,8 +12,7 @@ public class FallBombBrick extends Brick {
         super(x , y , width, height , 1);
     }
 
-
-    private final Image brickImage = LoadImage.getImage("/image/fallBomb.png");
+    private static final Image brickImage = LoadImage.getImage("/image/fallBomb.png");
     @Override
     public void render(GraphicsContext gc) {
         if (brickImage != null) {
@@ -25,5 +25,7 @@ public class FallBombBrick extends Brick {
     }
 
     @Override
-    public void update(PlayingProcess gameManager) {}
+    public void update(PlayingProcess gameManager) {
+        gameManager.addPowerUp(new FallBoomPowerUp(this.getX(),this.getY()));
+    }
 }

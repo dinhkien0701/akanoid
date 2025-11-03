@@ -193,6 +193,8 @@ public class PlayingProcess extends Process {
         for (Ball ball : listOfBall) {
             ball.stop();
         }
+        pressedRight = false;
+        pressedLeft = false;
         playingState = PlayingState.PAUSE;
     }
 
@@ -364,7 +366,7 @@ public class PlayingProcess extends Process {
             checkPowerUpList();
             break;
         case GAME_OVER:
-            gm.finishPlay(stage);
+            gm.LeadToGameOver(stage);
             break;
         }
     }

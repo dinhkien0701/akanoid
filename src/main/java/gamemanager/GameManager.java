@@ -51,33 +51,26 @@ public class GameManager {
         stage.setTitle("Akanoid - CaiWin Edition");
         stage.setScene(scene);
         stage.show();
-        startMenu(stage);
+        LeadToMenu(stage);
         this.startLoop(stage);
     }
 
 
-    public void startMenu(Stage stage) {
+    public void LeadToMenu(Stage stage) {
         menu.setScene(stage);
         gameState = GameState.MENU;
     }
 
-    public void finishMenu(Stage stage) {
-        playing.setScene(stage);
-        playing.reset();
-        gameState = GameState.PLAYING;
-    }
-
-    public void finishPlay(Stage stage) {
-        gameOver.setScene(stage);
-        gameState = GameState.GAME_OVER;
-    }
-
-    public void rePlay(Stage stage) {
+    public void LeadToPlaying(Stage stage) {
         playing.setScene(stage);
         gameState = GameState.INIT;
         playing.reset();
         gameState = GameState.PLAYING;
+    }
 
+    public void LeadToGameOver(Stage stage) {
+        gameOver.setScene(stage);
+        gameState = GameState.GAME_OVER;
     }
 
     public void update(Stage stage) {
