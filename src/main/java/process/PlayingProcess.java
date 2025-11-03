@@ -23,6 +23,17 @@ import powerup.DuplicateBallPowerUp;
 import powerup.PowerUp;
 import core.Process;
 
+class Pair<U, V> {
+    // Cặp giá trị bất biến (first, second)
+    public final U first;
+    public final V second;
+
+    public Pair(U first, V second) {
+        this.first = first;
+        this.second = second;
+    }
+}
+
 public class PlayingProcess extends Process {
 
     enum PlayingState{
@@ -62,6 +73,8 @@ public class PlayingProcess extends Process {
     protected int currentMap;
     protected int randRowCount;
     Image background;
+
+    public List<Pair<Double,Double>> pairList = new  ArrayList<>();
 
     public PlayingProcess(int width, int height, Rectangle map) {
 
@@ -182,6 +195,7 @@ public class PlayingProcess extends Process {
         currentMap = 1; // reset map
         points = 0; // reset điểm
         setCurrentMap(currentMap);
+        pairList = new  ArrayList<>();
         initPaddle();
         initBall();
         paddle.reborn();
@@ -206,7 +220,9 @@ public class PlayingProcess extends Process {
         currentMap++;
         points = 0; // reset điểm sang màn mới
         frameCount = 1; // reset lại bộ đếm frame
+        frameBlast = 1;
         setCurrentMap(currentMap);
+        pairList  = new  ArrayList<>();
         initPaddle();
         initBall();
         listOfPowerUp.clear();
@@ -249,6 +265,45 @@ public class PlayingProcess extends Process {
         }
     }
 
+    int frameBlast = 1;
+    private void areaBlast() {
+        // Nếu không có gạch thì không thể chọn nổ xung quanh được
+        if (bricks.isEmpty() || frameBlast < 8) {
+            return;
+        }
+
+        frameBlast = 1;
+        List<Pair<Double,Double>> np = new ArrayList<>();
+        // Lấy minLocateY
+        double dist = brickH * brickH + brickW * brickW ;
+        Iterator<Pair<Double,Double>> it = pairList.iterator();
+        while (it.hasNext()) {
+            Pair<Double,Double> p = it.next();
+            double x = p.first;
+            double y = p.second;
+
+            for (Brick b : bricks) {
+
+                if (b.isDestroyed()) {
+                    continue;
+                }
+
+                double k_dist = (x - b.getX()) * (x - b.getX()) + (y - b.getY()) * ( y- b.getY());
+                if (k_dist <= dist) {
+                    b.takeHit();
+                    if (b.isDestroyed()) {
+                        np.add(new Pair<Double,Double>(b.getX(),b.getY()));
+                    }
+                }
+            }
+            it.remove();
+        }
+        for (Pair<Double,Double> p : np ) {
+            pairList.add(p);
+        }
+
+    }
+
     private void doPushBrick() {
         int maxLocateY = 0;
          for (Brick b : bricks){
@@ -271,10 +326,20 @@ public class PlayingProcess extends Process {
         while (it.hasNext()) {
             Brick b = it.next();
             Ball.BallCollision collision = ball.checkCollision(b);
-            if (b.getY() < map.getY() + 50) {
+            if (b.isDestroyed()) {
+                if (b instanceof PushBrick) {
+                    pushBrick = true;
+                }
+                if (b instanceof AreaBlastBrick) {
+                    pairList.add(new Pair<Double,Double>(b.getX(),b.getY()));
+                }
+                it.remove();
+                points += 5;
+            }
+            else if (b.getY() < map.getY() + 50) {
                 continue; // bóng không thể chạm brick không trong màn chơi
             }
-            if (collision != Ball.BallCollision.NONE) {
+            else if (collision != Ball.BallCollision.NONE) {
                 b.takeHit();
                 if(b instanceof NormalBrick){
                     listOfPowerUp.add(new DuplicateBallPowerUp(b.getX(),b.getY()));
@@ -283,6 +348,9 @@ public class PlayingProcess extends Process {
                 if (b.isDestroyed()) {
                     if (b instanceof PushBrick) {
                         pushBrick = true;
+                    }
+                    if (b instanceof AreaBlastBrick) {
+                        pairList.add(new Pair<Double,Double>(b.getX(),b.getY()));
                     }
                     it.remove();
                     points += 5; // cộng 5 điểm mỗi lần phá hủy brick bất kỳ
@@ -295,6 +363,10 @@ public class PlayingProcess extends Process {
             // chỉ áp dụng từ level 7 -> level 14 ( ultimate 1 )
             // level 15 không khả dụng
             doPushBrick();
+        }
+
+        if (playingState == PlayingState.RUNNING){
+            areaBlast();
         }
 
         // Nếu đã phá hủy toàn bộ brick , sang level tiếp theo.
@@ -569,6 +641,7 @@ public class PlayingProcess extends Process {
 
         if(playingState == PlayingState.RUNNING) {
             frameCount ++; // tăng frame
+            frameBlast ++;
             if (frameCount == 1401) {
                 // reset framecount sau mỗi chu kỳ 20 giây
                 frameCount = 1;
