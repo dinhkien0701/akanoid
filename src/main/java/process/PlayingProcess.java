@@ -1,6 +1,5 @@
 package process;
 
-
 import gamemanager.GameManager;
 import gameobject.ball.Ball;
 import gameobject.brick.*;
@@ -16,7 +15,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 
 public class PlayingProcess extends Process {
 
