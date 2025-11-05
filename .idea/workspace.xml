@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d187c723-39e4-4b2e-9886-2b9f92bdb635" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/src/main/java/object/SpecialBrickEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/object/SpecialBrickEffect.java" afterDir="false" />
-    </list>
+    <list default="true" id="d187c723-39e4-4b2e-9886-2b9f92bdb635" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -145,7 +143,7 @@
       <workItem from="1762307586318" duration="592000" />
       <workItem from="1762308489464" duration="1046000" />
       <workItem from="1762311232128" duration="1718000" />
-      <workItem from="1762313099204" duration="424000" />
+      <workItem from="1762313099204" duration="613000" />
     </task>
     <servers />
   </component>
