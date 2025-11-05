@@ -22,10 +22,10 @@ public class Ball extends MovableObject {
 
   private final Deque<Position> previousPosition = new LinkedList<>();
 
-  //private boolean justBounced = false;
+  // private boolean justBounced = false;
 
   public Ball(double x, double y) {
-    super(x, y, BALL_RADIUS*2,BALL_RADIUS*2, BALL_SPEED/2, -BALL_SPEED);
+    super(x, y, BALL_RADIUS * 2, BALL_RADIUS * 2, BALL_SPEED / 2, -BALL_SPEED);
     previousPosition.clear();
     this.setRadius(BALL_RADIUS);
   }
@@ -38,13 +38,13 @@ public class Ball extends MovableObject {
   }
 
   public void resetSize() {
-      setRadius(BALL_RADIUS);
+    setRadius(BALL_RADIUS);
   }
 
   @Override
   public void resetSpeed() {
-      super.setDx(BALL_SPEED/2);
-      super.setDy(-BALL_SPEED);
+    super.setDx(BALL_SPEED / 2);
+    super.setDy(-BALL_SPEED);
   }
 
   public double getRadius() {
@@ -53,40 +53,52 @@ public class Ball extends MovableObject {
 
   public void setRadius(double r) {
     this.r = r;
-    this.setWidth(r*2);
-    this.setHeight(r*2);
+    this.setWidth(r * 2);
+    this.setHeight(r * 2);
   }
 
   public void bounceOff(GameObject other, BallCollision collision) {
-      final double SPEED_UP = 1.05;
     if (collision == BallCollision.CORNER) {
       bounceOffCorner();
     } else if (collision == BallCollision.VERTICAL) {
       bounceOffVertical();
     } else if (collision == BallCollision.HORIZONTAL) {
-      bounceOffHorizontal();
-      if (other instanceof Paddle) {
-        dx += ((Paddle) other).getDx() * 0.3;
-      }
-    }
 
+      if (other instanceof Paddle) {
+        Paddle paddle = (Paddle) other;
+
+        double ballCenterX = this.getX() + this.r;
+        double paddleCenterX = paddle.getX() + paddle.getWidth() / 2;
+        double normalizedHitX = (ballCenterX - paddleCenterX) / (paddle.getWidth() / 2);
+        normalizedHitX = Math.max(-1.0, Math.min(1.0, normalizedHitX));
+        double maxBounceAngle = Math.toRadians(75);
+        double bounceAngle = normalizedHitX * maxBounceAngle;
+        double currentSpeed = Math.sqrt(dx * dx + dy * dy);
+        double newSpeed = currentSpeed * 1.05;
+        dx = newSpeed * Math.sin(bounceAngle);
+        dy = -newSpeed * Math.cos(bounceAngle);
+        dx += paddle.getDx() * 0.3;
+      } else {
+        bounceOffHorizontal();
+      }
+
+    }
     double maxSpeed = 7.0;
     double speed = Math.sqrt(dx * dx + dy * dy);
     if (speed > maxSpeed) {
       dx = dx / speed * maxSpeed;
       dy = dy / speed * maxSpeed;
     }
-
     double randomFactor = 1.0 + (Math.random() - 0.5) * 0.05;
     dx *= randomFactor;
     dy *= randomFactor;
 
-    if(dx == 0) {
-      dx += dy/2;
-      dy -= dy/2;
-    } else if(dy == 0) {
-      dy += dx/3;
-      dx -= dx/3;
+    if (dx == 0) {
+      dx += dy / 2;
+      dy -= dy / 2;
+    } else if (dy == 0) {
+      dy += dx / 3;
+      dx -= dx / 3;
     }
   }
 
@@ -103,44 +115,40 @@ public class Ball extends MovableObject {
     dy = -dy * 1.05;
   }
 
-  private int clamp(int v, int a, int b) {
-    return Math.max(a, Math.min(b, v));
-  }
+  public BallCollision checkCollision(GameObject other) {
 
-    public BallCollision checkCollision(GameObject other) {
+    double cX = this.getX() + this.r;
+    double cY = this.getY() + this.r;
 
-        int cX = (int)(this.getX() + this.r/2);
-        int cY = (int)(this.getY() + this.r/2);
+    double left = other.getX();
+    double right = other.getX() + other.getWidth();
+    double top = other.getY();
+    double bottom = other.getY() + other.getHeight();
 
-        int left = (int) other.getX();
-        int right = (int) (other.getX() + other.getWidth());
-        int top = (int) other.getY();
-        int bottom = (int) (other.getY() + other.getHeight());
+    double nearestX = Math.max(left, Math.min(cX, right));
+    double nearestY = Math.max(top, Math.min(cY, bottom));
 
-        int nearestX = clamp(cX, left, right);
-        int nearestY = clamp(cY, top, bottom);
+    double distX = cX - nearestX;
+    double distY = cY - nearestY;
 
-        int distX = cX - nearestX;
-        int distY = cY - nearestY;
+    if (distX * distX + distY * distY <= this.r * this.r) {
 
-        if (distX * distX + distY * distY <= this.r * this.r) {
+      boolean hitLeftOrRight = (nearestX == left || nearestX == right);
+      boolean hitTopOrBottom = (nearestY == top || nearestY == bottom);
 
-            boolean hitLeftOrRight = (nearestX == left || nearestX == right);
-            boolean hitTopOrBottom = (nearestY == top || nearestY == bottom);
-
-            if (hitLeftOrRight && hitTopOrBottom)
-                return BallCollision.CORNER;
-            else if (hitLeftOrRight)
-                return BallCollision.VERTICAL;
-            else if (hitTopOrBottom)
-                return BallCollision.HORIZONTAL;
-        }
-        return BallCollision.NONE;
+      if (hitLeftOrRight && hitTopOrBottom)
+        return BallCollision.CORNER;
+      else if (hitLeftOrRight)
+        return BallCollision.VERTICAL;
+      else if (hitTopOrBottom)
+        return BallCollision.HORIZONTAL;
     }
+    return BallCollision.NONE;
+  }
 
   private void savePosition() {
     previousPosition.addFirst(new Position(this.getX(), this.getY()));
-    if(previousPosition.size() >= 60) {
+    if (previousPosition.size() >= 60) {
       previousPosition.removeLast();
     }
   }
@@ -168,7 +176,7 @@ public class Ball extends MovableObject {
   }
 
   public boolean isFallOut(double bottom) {
-      return this.getY() > bottom;
+    return this.getY() > bottom;
   }
 
   private void drawEffect(GraphicsContext gc) {
@@ -178,10 +186,10 @@ public class Ball extends MovableObject {
       gc.setFill(Color.PINK);
       gc.fillOval(ball.x(), ball.y(), this.getWidth() - i, this.getHeight() - i);
       i = i + 0.4;
-      if(this.getWidth() < 0){
+      if (this.getWidth() < 0) {
         this.setWidth(0);
       }
-      if(this.getHeight() < 0){
+      if (this.getHeight() < 0) {
         this.setHeight(0);
       }
     }
@@ -189,12 +197,12 @@ public class Ball extends MovableObject {
 
   @Override
   public void render(GraphicsContext gc) {
-    //this.drawEffect(gc);
+    // this.drawEffect(gc);
     gc.setFill(Color.PINK);
     gc.fillOval(this.getX(), this.getY(), this.getHeight(), this.getWidth());
   }
 
-  public enum BallCollision{
-    NONE, HORIZONTAL , VERTICAL , CORNER
+  public enum BallCollision {
+    NONE, HORIZONTAL, VERTICAL, CORNER
   };
 }
