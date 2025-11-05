@@ -2,26 +2,54 @@ package gameobject.brick;
 
 
 import gameobject.GameObject;
-import javafx.scene.canvas.GraphicsContext;
-import process.PlayingProcess;
 
 public abstract class Brick extends GameObject {
 
-    private int hitPoints;
-        Brick(double x, double y, double w, double h, int hp) {
-        super(x, y, w, h);
-        this.hitPoints = hp;
-    }
+  protected int hitPoints;
 
-    public void takeHit() {
-        hitPoints--;
-    }
+  // thêm hai thuộc tính lưu vị trí trong mảng
+  public int locateX;
+  public int locateY;
 
-    public boolean isDestroyed() {
-        return hitPoints == 0;
-    }
+  // thêm hai thuộc tính để xác định khoảng có thể di chuyển trong khoảng [l,r]
+    public int left;
+    public int right;
+    public int movedist; // khoảng cách mỗi lần dịch trái phải
 
-    public abstract void render(GraphicsContext gc);
+  Brick(double x, double y, double w, double h, int locateX, int locateY, int hp) {
+    super(x, y, w, h);
+    this.hitPoints = hp;
+    this.locateX = locateX;
+    this.locateY = locateY;
+    this.movedist = 0;
+    right = (int) x;
+    left  = (int) x;
 
-    public abstract void update(PlayingProcess gameManager);
+  }
+
+  public void ha_do_cao ( int k) {
+      setY(getY() + k);
+  }
+
+  public void dich_trai_phai() {
+      if (movedist == 0 || left == right) {
+          return;
+      }
+
+      if(getX() + movedist > right || getX() + movedist < left) {
+          movedist = - movedist;
+      }
+      setX(getX() +  movedist);
+  }
+
+
+  public abstract void takeHit();
+
+  public void upHitPoint() {
+      // Sẽ được override trong ImmortalBrick
+  }
+
+  public boolean isDestroyed() {
+    return hitPoints <= 0;
+  }
 }

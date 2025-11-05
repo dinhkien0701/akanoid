@@ -1,14 +1,18 @@
 package gameobject.powerup;
 
+import gameobject.ball.Ball;
+import gameobject.brick.LoadImage;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import process.PlayingProcess;
 
 public class LifeUpPowerUp extends PowerUp {
-    private static final double SIZE = 25;
+    private final Image powerUpImage;
 
     public LifeUpPowerUp(double x, double y) {
         super(x, y, SIZE, SIZE);
+        this.powerUpImage = LoadImage.getImage("/image/LifeUpPowerUp.png");
     }
 
     @Override
@@ -19,7 +23,7 @@ public class LifeUpPowerUp extends PowerUp {
 
     @Override
     public void update(PlayingProcess pp) {
-        if(!isEnd()) {
+        if (!isEnd()) {
             super.update(pp);
         }
     }
@@ -27,10 +31,9 @@ public class LifeUpPowerUp extends PowerUp {
     @Override
     public void render(GraphicsContext gc) {
         if (isFalling()) {
-            gc.setFill(Color.LIGHTPINK);
-            gc.fillOval(getX(), getY(), getWidth(), getHeight());
-            gc.setFill(Color.RED);
-            gc.fillText("+1", getX() + 6, getY() + 17);
+            if (powerUpImage != null) {
+                gc.drawImage(powerUpImage, getX(), getY(), getWidth(), getHeight());
+            }
         }
     }
 }

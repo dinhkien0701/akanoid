@@ -1,10 +1,13 @@
 package gamemanager;
 
 import java.util.Objects;
+
+import UI.GlobalSound;
 import javafx.scene.Scene;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -19,12 +22,15 @@ public class GameManager {
     private final MenuProcess menu;
     private final PlayingProcess playing;
     private final GameOverProcess gameOver;
+    private final PickLevelProcess pickLevel;
+    private final OptionProcess option;
 
     private GameState gameState;
 
     private Scene scene;
     private final int width;
     private final int height;
+    private final TutorialProcess tutorial;
 
     public static GameManager getInstance() {
         if (instance == null) {
@@ -41,6 +47,19 @@ public class GameManager {
         Rectangle map = new Rectangle(150, 0, 900, 700);
         playing = new PlayingProcess(width, height, map);
         gameOver = new GameOverProcess(width, height);
+        pickLevel = new PickLevelProcess(width, height);
+        option = new OptionProcess(width, height);
+        tutorial = new TutorialProcess(width, height);
+        try {
+            AudioClip clip = new AudioClip(
+                    Objects.requireNonNull(getClass().getResource("/sound/mapsound1.mp3")).toExternalForm()
+            );
+            clip.setCycleCount(AudioClip.INDEFINITE); // lặp lại vô hạn
+            GlobalSound.play(clip); // sẽ tự phát nếu bật âm thanh
+        } catch (Exception e) {
+            System.out.println("Không tìm thấy mapsound1.mp3");
+        }
+
     }
 
     public void process(Stage stage) {
@@ -51,65 +70,95 @@ public class GameManager {
         stage.setTitle("Akanoid - CaiWin Edition");
         stage.setScene(scene);
         stage.show();
-        startMenu(stage);
+        LeadToMenu(stage);
         this.startLoop(stage);
     }
 
-
-    public void startMenu(Stage stage) {
+    public void LeadToMenu(Stage stage) {
         menu.setScene(stage);
+        menu.reset(stage, this);
         gameState = GameState.MENU;
     }
 
-    public void finishMenu(Stage stage) {
-        playing.setScene(stage);
+    public void LeadToTutorial(Stage stage) {
+        tutorial.setScene(stage);
+        gameState = GameState.TUTORIAL;
+    }
+
+    public void LeadToPickLevel(Stage stage) {
+        pickLevel.setScene(stage);
+        gameState = GameState.PICK_LEVEL;
+    }
+
+    public void LeadToPlaying(Stage stage, int level) {
+        // classic level 1 -> 13
+        // ultimate level 14 - 15
+        playing.setCurrentMap(level); // cài level cho màn
         playing.reset();
+        stage.setScene(playing.getScene());
         gameState = GameState.PLAYING;
     }
 
-    public void finishPlay(Stage stage) {
+    public void LeadToOption(Stage stage) {
+        gameState = GameState.INIT;
+        option.setScene(stage);
+        gameState = GameState.SETTING;
+    }
+
+    public void LeadToGameOver(Stage stage) {
         gameOver.setScene(stage);
         gameState = GameState.GAME_OVER;
     }
 
-    public void rePlay(Stage stage) {
-        playing.setScene(stage);
-        gameState = GameState.INIT;
-        playing.reset();
-        gameState = GameState.PLAYING;
-
-    }
-
-    public void update(Stage stage) {
+    public void update(Stage stage){
         scene.setOnKeyPressed(e -> {
             if (Objects.requireNonNull(e.getCode()) == KeyCode.ESCAPE) {
                 System.exit(0);
             }
         });
 
-        switch (gameState) {
+        switch (gameState){
             case MENU:
                 //System.out.println("MENU");
-                menu.update(stage, this);
+                menu.update(stage,this);
+                break;
+            case PICK_LEVEL:
+                //System.out.println("PICK_LEVEL");
+                pickLevel.update(stage, this);
                 break;
             case PLAYING:
                 //System.out.println("PLAYING");
-                playing.update(stage, this);
+                playing.update(stage,this);
+                break;
+            case TUTORIAL:
+                tutorial.update(stage, this);
+                break;
+            case SETTING:
+                option.update(stage,this);
                 break;
             case GAME_OVER:
                 //System.out.println("GAME OVER");
-                gameOver.update(stage, this);
+                gameOver.update(stage,this);
                 break;
         }
     }
 
-    public void render() {
-        switch (gameState) {
+    public void render(){
+        switch (gameState){
             case MENU:
                 menu.render();
                 break;
+            case PICK_LEVEL:
+                pickLevel.render();
+                break;
             case PLAYING:
                 playing.render();
+                break;
+            case SETTING:
+                option.render();
+                break;
+            case TUTORIAL:
+                tutorial.render();
                 break;
             case GAME_OVER:
                 gameOver.render();
@@ -142,6 +191,6 @@ public class GameManager {
     }
 
     public enum GameState {
-        INIT, MENU, PLAYING, PAUSE, GAME_OVER, VICTORY, CREDITS
+        INIT, MENU, PICK_LEVEL, PLAYING, SETTING, GAME_OVER, VICTORY,TUTORIAL
     }
 }

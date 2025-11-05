@@ -7,12 +7,15 @@ import UI.StartButton;
 import gamemanager.GameManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class GameOverProcess extends Process {
     private int score = 0;
@@ -25,11 +28,9 @@ public class GameOverProcess extends Process {
   @Override
   public void update(Stage stage, GameManager gm) {
     this.scene.setOnKeyPressed(e -> {
-      switch (e.getCode()) {
-        case ESCAPE:
-          System.exit(0);
-          break;
-      }
+        if (Objects.requireNonNull(e.getCode()) == KeyCode.ESCAPE) {
+            System.exit(0);
+        }
     });
     if(!isAddButton()) {
         addStartButton(stage, gm);

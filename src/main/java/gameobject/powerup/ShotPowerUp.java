@@ -1,8 +1,10 @@
 package gameobject.powerup;
 
-import gameobject.brick.Brick;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+import gameobject.brick.Brick;
+import gameobject.brick.LoadImage;
 import process.PlayingProcess;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.List;
 
 public class ShotPowerUp extends PowerUp {
     private static final long SHOT_COOLDOWN = 300;
-
+    private final Image powerUpImage;
     private final List<Bullet> bullets;
     private long currentTime;
     private long lastShotTime;
@@ -21,6 +23,7 @@ public class ShotPowerUp extends PowerUp {
         bullets = new ArrayList<>();
         lastShotTime = System.currentTimeMillis();
         currentTime = System.currentTimeMillis();
+        this.powerUpImage = LoadImage.getImage("/image/ShotPowerUp.png");
     }
 
     @Override
@@ -39,9 +42,10 @@ public class ShotPowerUp extends PowerUp {
                 setIsEnd();
             } else {
                 currentTime = System.currentTimeMillis();
-                if(currentTime - lastShotTime > SHOT_COOLDOWN) {
+                if (currentTime - lastShotTime > SHOT_COOLDOWN) {
                     bullets.add(new Bullet(pp.getPaddle().getX(), pp.getPaddle().getY()));
-                    bullets.add(new Bullet(pp.getPaddle().getX() + pp.getPaddle().getWidth() - Bullet.BULLET_WIDTH,
+                    bullets.add(new Bullet(
+                            pp.getPaddle().getX() + pp.getPaddle().getWidth() - Bullet.BULLET_WIDTH,
                             pp.getPaddle().getY()));
                     lastShotTime = System.currentTimeMillis();
                 }
@@ -75,13 +79,12 @@ public class ShotPowerUp extends PowerUp {
 
     @Override
     public void render(GraphicsContext gc) {
-        if(isFalling()) {
-            gc.setFill(Color.CRIMSON);
-            gc.fillRect(getX() + SIZE / 3, getY(), getWidth() / 3, getHeight());
-            gc.setFill(Color.YELLOW);
-            gc.fillOval(getX() + SIZE / 4, getY(), getWidth() / 2, getHeight() / 3);
+        if (isFalling()) {
+            if (powerUpImage != null) {
+                gc.drawImage(powerUpImage, getX(), getY(), getWidth(), getHeight());
+            }
         } else {
-            for(Bullet bullet : bullets) {
+            for (Bullet bullet : bullets) {
                 bullet.render(gc);
             }
         }

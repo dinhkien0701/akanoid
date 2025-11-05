@@ -1,6 +1,5 @@
 package gameobject.brick;
 
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -8,12 +7,12 @@ import process.PlayingProcess;
 
 public class AreaBlastBrick extends Brick {
 
-    public AreaBlastBrick(double x, double y, double width, double height) {
-        super(x , y , width, height , 1);
+    public AreaBlastBrick(double x, double y, double width, double height, int locateX, int locateY) {
+        super(x , y , width, height ,locateX, locateY, 1);
     }
 
 
-    private final Image brickImage = LoadImage.getImage("/image/areaBlast.png");
+    private Image brickImage = LoadImage.getImage("/image/areaBlast.png");
     @Override
     public void render(GraphicsContext gc) {
         if (brickImage != null) {
@@ -26,5 +25,11 @@ public class AreaBlastBrick extends Brick {
     }
 
     @Override
-    public void update(PlayingProcess gameManager) {}
+    public void takeHit() {
+        hitPoints --;
+    }
+
+    @Override
+    public void update(PlayingProcess gameManager) {
+    }
 }

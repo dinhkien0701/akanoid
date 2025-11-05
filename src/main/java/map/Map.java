@@ -5,7 +5,7 @@ public class Map {
   private boolean mapBeaten;
 
   public Map(){
-    map = new int[8][13];
+    map = new int[8][8];
     mapBeaten = false;
   }
 
