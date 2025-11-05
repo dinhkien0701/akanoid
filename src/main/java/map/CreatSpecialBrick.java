@@ -16,7 +16,7 @@ import java.util.Random;
  * để thay bằng id đặc biệt tương ứng, số lượng phụ thuộc level và có trần.
  */
 public class CreatSpecialBrick  {
-    private final List<Map> listOfMaps; // danh sách map theo level
+    private List<Map> listOfMaps; // danh sách map theo level
     private int rows;             // số hàng
     private int cols;             // số cột
 
@@ -32,22 +32,21 @@ public class CreatSpecialBrick  {
      * vào danh sách map. Mỗi block trong file phân tách bằng dòng bắt đầu '#'.
      */
     public void readImmortal() {
-        int level = 0;
+
         try (InputStream is = LoadImage.class.getResourceAsStream("/immortalMap.txt");
              BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
             String line;
             int row = 0;
 
             // tạo map tạm 8x13 rồi push vào list khi gặp '#'
-            int[][] map = new int[Map.MAP_ROWS][Map.MAP_COLUMNS]; // listOfMaps.get(level).getMap();
+            int[][] map = new int[8][13]; // listOfMaps.get(level).getMap();
 
             while ((line = br.readLine()) != null) {
                 //System.out.println(line);
                 String[] path = line.split(" ");
                 if (line.charAt(0) == '#') {
-                    level++;
                     row = 0;
-                    listOfMaps.add(new Map(map,level));
+                    listOfMaps.add(new Map(map));
                     System.out.println(listOfMaps.size());
                     for (int i = 0; i < 8;i++){
                         for ( int j =0 ; j <13 ;j++){

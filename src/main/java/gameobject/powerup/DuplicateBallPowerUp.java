@@ -1,6 +1,7 @@
 package gameobject.powerup;
 
 import gameobject.ball.Ball;
+import gameobject.brick.LoadImage;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -11,25 +12,11 @@ import java.util.List;
 
 public class DuplicateBallPowerUp extends PowerUp {
 
-  private static final double SIZE = 25;
-  private static Image powerUpImage;
-
-  static {
-    try {
-      InputStream imageStream =
-          DuplicateBallPowerUp.class.getResourceAsStream("/images/powerup_2x.png");
-      if (imageStream == null) {
-        throw new IllegalArgumentException("Không tìm thấy file ảnh: /images/powerup_2x.png");
-      }
-      powerUpImage = new Image(imageStream);
-    } catch (Exception e) {
-      System.err.println("Lỗi tải ảnh cho power-up nhân đôi bóng.");
-      powerUpImage = null;
-    }
-  }
+  private final Image powerUpImage;
 
   public DuplicateBallPowerUp(double x, double y) {
     super(x, y, SIZE, SIZE);
+    this.powerUpImage = LoadImage.getImage("/image/DuplicateBallPowerUp.png");
   }
 
   @Override
@@ -51,13 +38,10 @@ public class DuplicateBallPowerUp extends PowerUp {
 
   @Override
   public void render(GraphicsContext gc) {
-    if(isFalling()) {
-        if (powerUpImage != null) {
-            gc.drawImage(powerUpImage, getX(), getY(), getWidth(), getHeight());
-        } else {
-            gc.setFill(Color.GREENYELLOW);
-            gc.fillOval(getX(), getY(), getWidth(), getHeight());
-        }
+    if (isFalling()) {
+      if (powerUpImage != null) {
+        gc.drawImage(powerUpImage, getX(), getY(), getWidth(), getHeight());
+      }
     }
   }
 }

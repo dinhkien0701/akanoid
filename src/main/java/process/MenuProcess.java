@@ -15,6 +15,7 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -46,6 +47,14 @@ public class MenuProcess extends Process {
         }
         checkEndCRTEffect = false;
         buttonStage = 0;
+
+    }
+
+    public void reset(Stage stage, GameManager gameManager) {
+        StackPane.clearConstraints(pane);
+        buttonStage = 0;
+        checkEndCRTEffect = false;
+        check = true;
     }
 
     @Override
@@ -68,16 +77,15 @@ public class MenuProcess extends Process {
             }
         });
         if (checkEndCRTEffect && !check) {
-            addMenuBackground(stage, gameManager);
+            addMenuBackground();
             addStartButton(stage, gameManager);
-            addOptionButton();
+            addOptionButton(stage, gameManager);
             addQuitButton();
             buttonStage = 0;
             check = true;
         }
 
     }
-
 
     private void CRTTvShow(){
         Rectangle flash = new Rectangle(width, 5, Color.WHITE);
@@ -101,7 +109,7 @@ public class MenuProcess extends Process {
         tvOn.play();
     }
 
-    private void addMenuBackground(Stage stage, GameManager gameManager) {
+    private void addMenuBackground() {
         ImageView imageView = new ImageView();
         imageView.setImage(startScreen);
         imageView.setFitWidth(width);
@@ -109,10 +117,10 @@ public class MenuProcess extends Process {
         this.pane.getChildren().add(imageView);
     }
 
-    private void addOptionButton() {
+    private void addOptionButton(Stage stage,GameManager gameManager) {
         pane.getChildren().add(
             new OptionButton("Option",Pos.BOTTOM_RIGHT, new Insets(0, 360, 180, 0),
-            250,60));
+            250,60,gameManager, stage));
     }
 
     private void addStartButton(Stage stage, GameManager gameManager) {

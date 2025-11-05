@@ -2,13 +2,17 @@ package gameobject.powerup;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+import gameobject.brick.LoadImage;
 import process.PlayingProcess;
 
 public class LongerPaddlePowerUp extends PowerUp {
 
+    private final Image powerUpImage;
 
     public LongerPaddlePowerUp(double x, double y) {
         super(x, y, SIZE, SIZE);
+        this.powerUpImage = LoadImage.getImage("/image/LongerPaddlePowerUp.png");
     }
 
     @Override
@@ -19,18 +23,17 @@ public class LongerPaddlePowerUp extends PowerUp {
 
     @Override
     public void update(PlayingProcess pp) {
-        if(!isEnd()) {
+        if (!isEnd()) {
             super.update(pp);
         }
     }
 
     @Override
     public void render(GraphicsContext gc) {
-        if(isFalling()) {
-            gc.setFill(Color.ORANGE);
-            gc.fillRect(getX(), getY() + SIZE / 3, getWidth(), getHeight() / 2);
-            gc.setFill(Color.BLACK);
-            gc.fillText("<-->", getX() + 3, getY() + 17);
+        if (isFalling()) {
+            if (powerUpImage != null) {
+                gc.drawImage(powerUpImage, getX(), getY(), getWidth(), getHeight());
+            }
         }
     }
 }

@@ -134,7 +134,9 @@ public class PickLevelProcess extends Process {
 
             // Back
             if (containsPoint(backButton, x, y)) {
-                if (gmRef != null && stageRef != null) gmRef.LeadToMenu(stageRef);
+                if (gmRef != null && stageRef != null) {
+                    gmRef.LeadToMenu(stageRef);
+                }
                 return;
             }
 

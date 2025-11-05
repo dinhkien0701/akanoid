@@ -1,10 +1,13 @@
 package gamemanager;
 
 import java.util.Objects;
+
+import UI.GlobalSound;
 import javafx.scene.Scene;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -20,12 +23,14 @@ public class GameManager {
     private final PlayingProcess playing;
     private final GameOverProcess gameOver;
     private final PickLevelProcess pickLevel;
+    private final OptionProcess option;
 
     private GameState gameState;
 
     private Scene scene;
     private final int width;
     private final int height;
+    private final TutorialProcess tutorial;
 
     public static GameManager getInstance() {
         if (instance == null) {
@@ -43,6 +48,18 @@ public class GameManager {
         playing = new PlayingProcess(width, height, map);
         gameOver = new GameOverProcess(width, height);
         pickLevel = new PickLevelProcess(width, height);
+        option = new OptionProcess(width, height);
+        tutorial = new TutorialProcess(width, height);
+        try {
+            AudioClip clip = new AudioClip(
+                    Objects.requireNonNull(getClass().getResource("/sound/mapsound1.mp3")).toExternalForm()
+            );
+            clip.setCycleCount(AudioClip.INDEFINITE); // lặp lại vô hạn
+            GlobalSound.play(clip); // sẽ tự phát nếu bật âm thanh
+        } catch (Exception e) {
+            System.out.println("Không tìm thấy mapsound1.mp3");
+        }
+
     }
 
     public void process(Stage stage) {
@@ -59,7 +76,13 @@ public class GameManager {
 
     public void LeadToMenu(Stage stage) {
         menu.setScene(stage);
+        menu.reset(stage, this);
         gameState = GameState.MENU;
+    }
+
+    public void LeadToTutorial(Stage stage) {
+        tutorial.setScene(stage);
+        gameState = GameState.TUTORIAL;
     }
 
     public void LeadToPickLevel(Stage stage) {
@@ -67,13 +90,19 @@ public class GameManager {
         gameState = GameState.PICK_LEVEL;
     }
 
-    public void LeadToPlaying(Stage stage, int levelIndex) {
+    public void LeadToPlaying(Stage stage, int level) {
         // classic level 1 -> 13
         // ultimate level 14 - 15
-        gameState = GameState.INIT;
-        playing.setCurrentLevel(levelIndex); // cài level cho màn
-        playing.setScene(stage);
+        playing.setCurrentMap(level); // cài level cho màn
+        playing.reset();
+        stage.setScene(playing.getScene());
         gameState = GameState.PLAYING;
+    }
+
+    public void LeadToOption(Stage stage) {
+        gameState = GameState.INIT;
+        option.setScene(stage);
+        gameState = GameState.SETTING;
     }
 
     public void LeadToGameOver(Stage stage) {
@@ -101,6 +130,12 @@ public class GameManager {
                 //System.out.println("PLAYING");
                 playing.update(stage,this);
                 break;
+            case TUTORIAL:
+                tutorial.update(stage, this);
+                break;
+            case SETTING:
+                option.update(stage,this);
+                break;
             case GAME_OVER:
                 //System.out.println("GAME OVER");
                 gameOver.update(stage,this);
@@ -118,6 +153,12 @@ public class GameManager {
                 break;
             case PLAYING:
                 playing.render();
+                break;
+            case SETTING:
+                option.render();
+                break;
+            case TUTORIAL:
+                tutorial.render();
                 break;
             case GAME_OVER:
                 gameOver.render();
@@ -150,6 +191,6 @@ public class GameManager {
     }
 
     public enum GameState {
-        INIT, MENU, PICK_LEVEL, PLAYING, SETTING, GAME_OVER, VICTORY
+        INIT, MENU, PICK_LEVEL, PLAYING, SETTING, GAME_OVER, VICTORY,TUTORIAL
     }
 }

@@ -9,16 +9,6 @@ import java.util.*;
  * hoặc hết quota (n_max) cho phép. Cách này tạo ra các "đám" gạch tự nhiên.
  */
 
-class Pair<U, V> {
-  // Cặp giá trị bất biến (first, second)
-  public final U first;
-  public final V second;
-
-  public Pair(U first, V second) {
-    this.first = first;
-    this.second = second;
-  }
-}
 
 public class DFS {
   // Kích thước lưới bản đồ

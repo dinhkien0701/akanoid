@@ -3,10 +3,8 @@ package gameobject.brick;
 
 import gameobject.GameObject;
 
-
 public abstract class Brick extends GameObject {
-    public static final double BRICK_WIDTH = 64;
-    public static final double BRICK_HEIGHT = 40;
+
   protected int hitPoints;
 
   // thêm hai thuộc tính lưu vị trí trong mảng
@@ -18,8 +16,8 @@ public abstract class Brick extends GameObject {
     public int right;
     public int movedist; // khoảng cách mỗi lần dịch trái phải
 
-  Brick(double x, double y, int locateX, int locateY, int hp) {
-    super(x, y, BRICK_WIDTH - 6, BRICK_HEIGHT - 6);
+  Brick(double x, double y, double w, double h, int locateX, int locateY, int hp) {
+    super(x, y, w, h);
     this.hitPoints = hp;
     this.locateX = locateX;
     this.locateY = locateY;
@@ -38,11 +36,12 @@ public abstract class Brick extends GameObject {
           return;
       }
 
-      if( getX() + movedist > right || getX() + movedist < left) {
+      if(getX() + movedist > right || getX() + movedist < left) {
           movedist = - movedist;
       }
-      setX(getX() + movedist);
+      setX(getX() +  movedist);
   }
+
 
   public abstract void takeHit();
 

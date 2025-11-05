@@ -1,17 +1,17 @@
 package gameobject.paddle;
 
 import gameobject.MovableObject;
+import gameobject.brick.LoadImage;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-
-
 import process.PlayingProcess;
 
 public class Paddle extends MovableObject {
     private static final double PADDLE_SPEED = 10.0;
     private int lives;
     private boolean canShoot = false;
-
+    private final Image paddleImage;
     private double speed = 10.0;
     private static double normalWidth = 100;
     private static double smallWidth = normalWidth * 0.5;
@@ -26,8 +26,9 @@ public class Paddle extends MovableObject {
 
     public Paddle(double x, double y) {
         super(x, y, normalWidth, paddleHeight, 0, 0);
-        lives = 3;
+        lives = 1;
         sizeState = SizeState.NORMAL;
+        this.paddleImage = LoadImage.getImage("/image/paddleImage.png");
     }
 
     @Override
@@ -148,7 +149,8 @@ public class Paddle extends MovableObject {
 
     @Override
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.YELLOW);
-        gc.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        if (paddleImage != null) {
+            gc.drawImage(paddleImage, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        }
     }
 }
