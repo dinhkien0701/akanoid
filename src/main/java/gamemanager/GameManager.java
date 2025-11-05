@@ -19,6 +19,7 @@ public class GameManager {
     private final MenuProcess menu;
     private final PlayingProcess playing;
     private final GameOverProcess gameOver;
+    private final PickLevelProcess pickLevel;
 
     private GameState gameState;
 
@@ -41,6 +42,7 @@ public class GameManager {
         Rectangle map = new Rectangle(150, 0, 900, 700);
         playing = new PlayingProcess(width, height, map);
         gameOver = new GameOverProcess(width, height);
+        pickLevel = new PickLevelProcess(width, height);
     }
 
     public void process(Stage stage) {
@@ -55,16 +57,22 @@ public class GameManager {
         this.startLoop(stage);
     }
 
-
     public void LeadToMenu(Stage stage) {
         menu.setScene(stage);
         gameState = GameState.MENU;
     }
 
-    public void LeadToPlaying(Stage stage) {
-        playing.setScene(stage);
+    public void LeadToPickLevel(Stage stage) {
+        pickLevel.setScene(stage);
+        gameState = GameState.PICK_LEVEL;
+    }
+
+    public void LeadToPlaying(Stage stage, int levelIndex) {
+        // classic level 1 -> 13
+        // ultimate level 14 - 15
         gameState = GameState.INIT;
-        playing.reset();
+        playing.setCurrentLevel(levelIndex); // cài level cho màn
+        playing.setScene(stage);
         gameState = GameState.PLAYING;
     }
 
@@ -73,33 +81,40 @@ public class GameManager {
         gameState = GameState.GAME_OVER;
     }
 
-    public void update(Stage stage) {
+    public void update(Stage stage){
         scene.setOnKeyPressed(e -> {
             if (Objects.requireNonNull(e.getCode()) == KeyCode.ESCAPE) {
                 System.exit(0);
             }
         });
 
-        switch (gameState) {
+        switch (gameState){
             case MENU:
                 //System.out.println("MENU");
-                menu.update(stage, this);
+                menu.update(stage,this);
+                break;
+            case PICK_LEVEL:
+                //System.out.println("PICK_LEVEL");
+                pickLevel.update(stage, this);
                 break;
             case PLAYING:
                 //System.out.println("PLAYING");
-                playing.update(stage, this);
+                playing.update(stage,this);
                 break;
             case GAME_OVER:
                 //System.out.println("GAME OVER");
-                gameOver.update(stage, this);
+                gameOver.update(stage,this);
                 break;
         }
     }
 
-    public void render() {
-        switch (gameState) {
+    public void render(){
+        switch (gameState){
             case MENU:
                 menu.render();
+                break;
+            case PICK_LEVEL:
+                pickLevel.render();
                 break;
             case PLAYING:
                 playing.render();
@@ -135,6 +150,6 @@ public class GameManager {
     }
 
     public enum GameState {
-        INIT, MENU, PLAYING, PAUSE, GAME_OVER, VICTORY, CREDITS
+        INIT, MENU, PICK_LEVEL, PLAYING, SETTING, GAME_OVER, VICTORY
     }
 }

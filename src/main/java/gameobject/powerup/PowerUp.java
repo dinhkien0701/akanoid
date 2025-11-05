@@ -10,6 +10,7 @@ public abstract class PowerUp extends MovableObject {
     public static final double FALLING_SPEED = 3.0;
     public static final double SIZE = 25;
     public static final long DURATION_SECONDS = 6000;
+    public static final long MAX_POWER_UP_PER_LEVEL = 10;
 
     private POWERUPSTATE powerupstate;
     private long timer;
@@ -61,6 +62,7 @@ public abstract class PowerUp extends MovableObject {
     super.setDx(0);
     super.setDy(FALLING_SPEED);
   }
+
 
   @Override
   public void update(PlayingProcess pp) {

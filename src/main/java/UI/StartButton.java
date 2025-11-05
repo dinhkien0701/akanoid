@@ -37,10 +37,10 @@ public class StartButton extends UIButton {
             }
         });
 
-        super.setOnMouseClicked(e -> gameManager.LeadToPlaying(stage));
+        super.setOnMouseClicked(e -> gameManager.LeadToPickLevel(stage));
         super.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
-                gameManager.LeadToPlaying(stage);
+                gameManager.LeadToPickLevel(stage);
             }
         });
     }

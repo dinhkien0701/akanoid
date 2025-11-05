@@ -8,11 +8,12 @@ import process.PlayingProcess;
 
 public class FallBombBrick extends Brick {
 
-    public FallBombBrick (double x, double y, double width, double height) {
-        super(x , y , width, height , 1);
+    public FallBombBrick (double x, double y, int locateX, int locateY) {
+        super(x , y , locateX,locateY, 1);
     }
 
-    private static final Image brickImage = LoadImage.getImage("/image/fallBomb.png");
+
+    private final Image brickImage = LoadImage.getImage("/image/fallBomb.png");
     @Override
     public void render(GraphicsContext gc) {
         if (brickImage != null) {
@@ -25,7 +26,14 @@ public class FallBombBrick extends Brick {
     }
 
     @Override
-    public void update(PlayingProcess gameManager) {
-        gameManager.addPowerUp(new FallBoomPowerUp(this.getX(),this.getY()));
+    public void takeHit() {
+        hitPoints --;
+    }
+
+    @Override
+    public void update(PlayingProcess pp) {
+        if (isDestroyed()){
+            pp.addPowerUp(new FallBoomPowerUp(this.getX(),this.getY()));
+        }
     }
 }

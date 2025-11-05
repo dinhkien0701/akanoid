@@ -1,10 +1,11 @@
 package process;
 
-
 import gamemanager.GameManager;
 import gameobject.ball.Ball;
 import gameobject.brick.*;
 import gameobject.paddle.Paddle;
+import gameobject.powerup.FallBoomPowerUp;
+import gameobject.powerup.LifeUpPowerUp;
 import gameobject.powerup.PowerUp;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -12,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import map.ListOfMap;
+import map.Map;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,22 +23,21 @@ import java.util.List;
 
 public class PlayingProcess extends Process {
 
-    private static final int MAX_POWERUPS_PER_LEVEL = 10;
-
     private PlayingState playingState;
     private final Paddle paddle;
     private boolean pressedLeft, pressedRight;
 
     private Ball mainBall;
 
-    private final List<Brick> bricks;
+
     private final List<PowerUp> listOfPowerUp;
     private final List<Ball> listOfBall;
     private final List<Ball> deletedBall;
     private final Rectangle map;
     private final ListOfMap LM;
     private int powerUpsSpawnedThisLevel;
-    int currentMap;
+    private Map mainMap;
+    int currentLevel;
     Image background;
 
     public PlayingProcess(int width, int height, Rectangle map) {
@@ -48,12 +50,12 @@ public class PlayingProcess extends Process {
         background = new Image(filePath);
 
         this.map = map;
-        currentMap = 18;
+        currentLevel = 1;
         LM = new ListOfMap();
 
-        bricks = new ArrayList<>();
         listOfPowerUp = new ArrayList<>();
         listOfBall = new ArrayList<>();
+
         paddle = new Paddle(map.getX() + map.getWidth() / 2 - 50, map.getY() + map.getHeight() - 40);
         pressedLeft = false;
         pressedRight = false;
@@ -63,19 +65,11 @@ public class PlayingProcess extends Process {
         listOfBall.add(mainBall);
         initBall();
         initPaddle();
-        initMap();
+        playingState = PlayingState.READY;
     }
 
-    public int getPowerUpsSpawnedThisLevel() {
-        return this.powerUpsSpawnedThisLevel;
-    }
-
-    public boolean isEnoughPowerUpsSpawnedThisLevel() {
-        return this.powerUpsSpawnedThisLevel >= MAX_POWERUPS_PER_LEVEL;
-    }
-
-    public List<Brick> getBricks() {
-        return this.bricks;
+    public boolean isEnoughPowerUpsSpawnedThisLevel(){
+        return this.powerUpsSpawnedThisLevel >= PowerUp.MAX_POWER_UP_PER_LEVEL;
     }
 
     public Rectangle getMap() {
@@ -86,8 +80,8 @@ public class PlayingProcess extends Process {
         return this.LM;
     }
 
-    public List<PowerUp> getListOfPowerUp() {
-        return this.listOfPowerUp;
+    public List<Brick> getBricks() {
+        return mainMap.getBricks();
     }
 
     public List<Ball> getListOfBall() {
@@ -98,9 +92,10 @@ public class PlayingProcess extends Process {
         return this.paddle;
     }
 
-    public Ball getMainBall() {
-        return this.mainBall;
+    public PlayingState getPlayingState() {
+        return this.playingState;
     }
+
 
     private void initBall() {
         mainBall.reset();
@@ -115,58 +110,9 @@ public class PlayingProcess extends Process {
         pressedRight = false;
     }
 
-    private void initMap() {
-        bricks.clear();
-
-
-        double brickW = (map.getWidth() - 60) / 13;
-        double brickH = 33;
-
-        int[][] arr = LM.getMapByCode(currentMap);
-
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 13; c++) {
-                if(arr[r][c] == 0){
-                    continue;
-                }
-                double bx = 30 + c * brickW + map.getX();
-                double by = 50 + r * (brickH + 6) + map.getY();
-
-                if(arr[r][c] == 1) {
-                    bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
-                } else if(arr[r][c] == 2){
-                    bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 3){
-                    bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 4){
-                    bricks.add(new GoldBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 5){
-                    bricks.add(new FallBombBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 6){
-                    bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 7){
-                    bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH));
-                } else if (arr[r][c] == 8){
-                    bricks.add(new BallUpSkillBrick(bx, by, brickW - 6, brickH));
-                }
-//                if(arr[r][c] == 2){
-//                    bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH));
-//                } else if(arr[r][c] == 1) {
-//                    bricks.add(new NormalBrick(bx, by, brickW - 6, brickH));
-//                } else {
-//                    bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH));
-//                }
-            }
-        }
-        playingState = PlayingState.READY;
-    }
-
-    public void reset() {
-        currentMap = 0;
-        initMap();
-        initPaddle();
-        initBall();
-        paddle.reborn();
+    public void setCurrentLevel(int level) {
+        currentLevel = level;
+        mainMap = LM.getMapByCode(level - 1);
     }
 
     public void deadPaddle() {
@@ -177,10 +123,14 @@ public class PlayingProcess extends Process {
         playingState = PlayingState.RUNNING;
     }
 
+    public void addPoints(int points) {
+        mainMap.addPoints(points);
+    }
+
     public void nextLevel() {
-        currentMap++;
+        currentLevel++;
         powerUpsSpawnedThisLevel = 0;
-        initMap();
+        mainMap = LM.getMapByCode(currentLevel - 1);
         initPaddle();
         initBall();
         listOfPowerUp.clear();
@@ -221,22 +171,14 @@ public class PlayingProcess extends Process {
                 break;
             case SPACE:
                 if ((playingState).equals(PlayingState.READY)) {
-                this.startGame();
-                } else if ((playingState).equals(PlayingState.GAME_OVER)) {
-                this.reset();
+                    this.startGame();
                 }
                 break;
             case LEFT:
-                pressedLeft = true;
-                if(playingState == PlayingState.PAUSE) {
-                    pressedLeft = false;
-                }
+                pressedLeft = playingState != PlayingState.PAUSE;
                 break;
             case RIGHT:
-                pressedRight = true;
-                if(playingState == PlayingState.PAUSE) {
-                    pressedRight = false;
-                }
+                pressedRight = playingState != PlayingState.PAUSE;
                 break;
             }
         });
@@ -255,43 +197,11 @@ public class PlayingProcess extends Process {
         }
     }
 
-    public void checkBricksList(Ball ball) {
-        Iterator<Brick> it = bricks.iterator();
-        while (it.hasNext()) {
-            Brick b = it.next();
-            Ball.BallCollision collision = ball.checkCollision(b);
-            if (collision != Ball.BallCollision.NONE) {
-                b.takeHit();
-                ball.bounceOff(b, collision);
-                if (b.isDestroyed()) {
-                    b.update(this);
-                    it.remove();
-                }
-                break;
-            }
-        }
-        int countNormalBrick = 0;
-        it = bricks.iterator();
-        while (it.hasNext()) {
-            Brick b = it.next();
-            if (b instanceof NormalBrick) {
-                countNormalBrick++;
-            }
-        }
-
-        if (countNormalBrick <= 0) {
-            playingState = PlayingState.FINISH_MAP;
-            nextLevel();
-        }
-    }
-
     public void addPowerUp(PowerUp pu){
         listOfPowerUp.add(pu);
-        powerUpsSpawnedThisLevel++;
-    }
-
-    public void removePowerUp(PowerUp pu){
-        listOfPowerUp.remove(pu);
+        if(!(pu instanceof LifeUpPowerUp) && !(pu instanceof FallBoomPowerUp)) {
+            powerUpsSpawnedThisLevel++;
+        }
     }
 
     public void onBallLost(Ball falledBall) {
@@ -341,7 +251,7 @@ public class PlayingProcess extends Process {
                 b.bounceOff(paddle, b.checkCollision(paddle));
                 b.setY(paddle.getY() - b.getHeight() - 1);
             }
-            checkBricksList(b);
+            mainMap.checkBricksList(this,b);
         }
         if(!deletedBall.isEmpty()) {
             for (Ball b : deletedBall) {
@@ -362,8 +272,12 @@ public class PlayingProcess extends Process {
             break;
         case RUNNING: case PAUSE:
             paddle.update(this);
+            mainMap.update(this);
             checkBallList();
             checkPowerUpList();
+            if(mainMap.isWin()){
+                playingState = PlayingState.GAME_OVER;
+            }
             break;
         case GAME_OVER:
             gm.LeadToGameOver(stage);
@@ -380,24 +294,24 @@ public class PlayingProcess extends Process {
         gc.fillRect(map.getX(), map.getY(), map.getWidth(), map.getHeight());
         gc.restore();
 
+        mainMap.render(gc);
         for(PowerUp p : listOfPowerUp) {
             p.render(gc);
         }
 
-        for (Brick b : bricks) {
-            b.render(gc);
-        }
         paddle.render(gc);
         //mainBall.render(gc);
         for (Ball ball : listOfBall) {
             ball.render(gc);
         }
+
         gc.setFill(Color.WHITE);
-        gc.fillText("Level:   " + (this.currentMap + 1), 10, 20);
+        gc.fillText("Level:   " + (this.currentLevel + 1), 10, 20);
         gc.fillText("Lives:   " + paddle.getLives(), 10, 40);
+        gc.fillText("Score:   " + mainMap.getPoints(), 10, 60);
     }
 
-    enum PlayingState{
+    public enum PlayingState{
         READY, RUNNING, FINISH_MAP, GAME_OVER, WINNER, PAUSE
     }
 

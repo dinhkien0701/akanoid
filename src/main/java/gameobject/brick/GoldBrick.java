@@ -1,13 +1,14 @@
 package gameobject.brick;
 
+import gameobject.powerup.GoldPowerUp;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import process.PlayingProcess;
 
 public class GoldBrick extends Brick {
-    public GoldBrick(double x, double y, double width, double height) {
-        super(x , y , width, height , 1);
+    public GoldBrick(double x, double y, int locateX, int locateY) {
+        super(x , y , locateX, locateY , 1);
     }
 
 
@@ -24,5 +25,14 @@ public class GoldBrick extends Brick {
     }
 
     @Override
-    public void update(PlayingProcess gameManager) {}
+    public void takeHit() {
+        hitPoints --;
+    }
+
+    @Override
+    public void update(PlayingProcess pp) {
+        if(isDestroyed()) {
+            pp.addPowerUp(new GoldPowerUp(this.getX(), this.getY()));
+        }
+    }
 }
