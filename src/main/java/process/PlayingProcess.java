@@ -19,20 +19,12 @@ import object.Ball;
 import object.NormalBrick;
 import object.Brick;
 import map.*;
+import object.SpecialBrickEffect;
 import powerup.DuplicateBallPowerUp;
 import powerup.PowerUp;
 import core.Process;
 
-class Pair<U, V> {
-    // Cặp giá trị bất biến (first, second)
-    public final U first;
-    public final V second;
-
-    public Pair(U first, V second) {
-        this.first = first;
-        this.second = second;
-    }
-}
+ 
 
 public class PlayingProcess extends Process {
 
@@ -266,60 +258,8 @@ public class PlayingProcess extends Process {
     }
 
     int frameBlast = 1;
-    private void areaBlast() {
-        // Nếu không có gạch thì không thể chọn nổ xung quanh được
-        if (bricks.isEmpty() || frameBlast < 8) {
-            return;
-        }
 
-        frameBlast = 1;
-        List<Pair<Double,Double>> np = new ArrayList<>();
-        // Lấy minLocateY
-        double dist = brickH * brickH + brickW * brickW + 6 ;
-        // Cộng thêm 6 : ta sẽ cho khoảng nổ rộng hơn một chút để tránh lỗi xấp xỉ
-        Iterator<Pair<Double,Double>> it = pairList.iterator();
-        while (it.hasNext()) {
-            Pair<Double,Double> p = it.next();
-            double x = p.first;
-            double y = p.second;
-
-            for (Brick b : bricks) {
-
-                if (b.isDestroyed()) {
-                    continue;
-                }
-
-                double k_dist = (x - b.getX()) * (x - b.getX()) + (y - b.getY()) * ( y- b.getY());
-                if (k_dist <= dist) {
-                    b.takeHit();
-                    if (b.isDestroyed() && b instanceof PushBrick) {
-                        np.add(new Pair<Double,Double>(b.getX(),b.getY()));
-                    }
-                }
-            }
-            it.remove();
-        }
-        for (Pair<Double,Double> p : np ) {
-            pairList.add(p);
-        }
-
-    }
-
-    private void doPushBrick() {
-        int maxLocateY = 0;
-         for (Brick b : bricks){
-            maxLocateY = Math.max(maxLocateY, (int) b.getY());
-        }
-
-        if(maxLocateY < map.getY() + 50 + brickH) {
-            return; // không thể đẩy hết gạch ra khỏi màn chơi
-        }
-
-        // thực hiện đẩy nếu thỏa
-        for (Brick b : bricks){
-            b.setY(b.getY() - brickH);
-        }
-    }
+    
 
     public void checkBricksList(Ball ball) {
         boolean pushBrick = false; // kiểm tra xem có đẩy brick lên không
@@ -363,11 +303,11 @@ public class PlayingProcess extends Process {
         if (pushBrick && (currentMap >= 7 && levelType != LevelType.ULTIMATE_TWO) ) {
             // chỉ áp dụng từ level 7 -> level 14 ( ultimate 1 )
             // level 15 không khả dụng
-            doPushBrick();
+            SpecialBrickEffect.doPushBrick(bricks, map, brickH);
         }
 
         if (playingState == PlayingState.RUNNING){
-            areaBlast();
+            frameBlast = SpecialBrickEffect.areaBlast(bricks, pairList, brickW, brickH, frameBlast);
         }
 
         // Nếu đã phá hủy toàn bộ brick , sang level tiếp theo.
@@ -397,200 +337,9 @@ public class PlayingProcess extends Process {
         }
     }
 
-    private void selectMoveBrick() {
-        Brick[][] arrBrick = new Brick[8][13];
-        Random rand = new Random();
-        // Nếu không có gạch thì không thể chọn được gạch di chuyển tự do
-        if (bricks.isEmpty()) {
-            return;
-        }
-        int[] hasMoveBrick = new  int[8];
-        Iterator <Brick> it = bricks.iterator();
-        while(it.hasNext()){
-            Brick b = it.next();
-            double bx = b.getX() -  ( map.getX() + 30); // do lui them 30 so bien
-            double by = b.getY() - ( minLocateY );
-            // đưa vào mảng
-            arrBrick[(int)Math.round(by/brickH)][(int)Math.round(bx/brickW)] = b;
-
-            if (b.movedist != 0) {
-                // nếu đã có ô được chọn tự do di chuyển ở hàng này
-                // thì đánh số nó
-                hasMoveBrick[(int)Math.round(by/brickH)] = (int)Math.round(bx/brickW) + 1;
-
-                // cộng thêm 1 : để tránh chỉ mục 0 ( do mặc định mảng int[] chứa phần tử 0 )
-            }
-
-        }
-
-
-        for (int i = 0; i < 8; i++) {
-            if(hasMoveBrick[i] > 0) {
-                // cập nhật lại
-                int k_l = 0 ;
-                int k_r = 0; // biên trái và phải đối với ô đang xét
-                Brick b =  arrBrick[i][hasMoveBrick[i]-1];
-                // đếm bên trái
-                for( int k = hasMoveBrick[i] - 2; k >= 0; k--) {
-                    if (arrBrick[i][k] == null) {
-                        k_l++;
-                    } else break;
-
-                }
-                // đếm bên phải
-                for( int k = hasMoveBrick[i] ; k < 13; k++) {
-                    if (arrBrick[i][k] == null) {
-                        k_r++;
-                    } else break;
-                }
-                b.left = (int)(map.getX() + 30 + (hasMoveBrick[i] -1 - k_l) * brickW); // biên trái trên màn hình
-                b.right = (int)(map.getX() + 30 + (hasMoveBrick[i] -1 + k_r) * brickW); // biên phải trên màn hình
-                // chuyển sang hàng tiếp
-                continue;
-            }
-
-            int pick = -1; // ô được chọn trên hàng
-            int dist =  0; // phạm vi di chuyển
-
-            int l = 0; // khoảng biên trái nếu di chuyển được
-            int r = 0; // khoảng cách biên phải nếu di chuyển được
-
-            for (int j = 0; j < 13; j++) {
-                if(arrBrick[i][j] == null) {
-                    // vị trí rỗng , sang khối tiếp
-                    continue;
-                }
-                // nếu không rỗng đếm số ô mà nó có thể di chuyển
-                int k_dist = 1; // bao gồm cả chính nó
-                int k_l = 0 ;
-                int k_r = 0; // biên trái và phải đối với ô đang xét
-
-                // đếm bên trái
-                for( int k = j - 1; k >= 0; k--) {
-                    if (arrBrick[i][k] == null) {
-                        k_dist ++;
-                        k_l++;
-                    } else break;
-
-                }
-                // đếm bên phải
-                for( int k = j + 1; k < 13; k++) {
-                    if (arrBrick[i][k] == null) {
-                        k_dist ++;
-                        k_r++;
-                    } else break;
-                }
-
-                if (k_dist > dist) {
-                    // lấy ô có thể tự do di chuyển tốt nhất đến hiện tại
-                    pick = j;
-                    dist = k_dist;
-                    l = k_l;
-                    r = k_r;
-                }
-
-            }
-
-            if ( pick != -1 && dist > 1) {
-                // thực thi , lấy brick sẽ di chuyển tự do
-                Brick b =  arrBrick[i][pick];
-                b.movedist = 3*(rand.nextInt(3) - 1); // ta mặc định vận tốc là -3/0/3 khi dịch chuyển trái / phải
-                b.left = (int)(map.getX() + 30 + (pick - l)* brickW); // biên trái trên màn hình
-                b.right = (int)(map.getX() + 30 + (pick + r) * brickW); // biên phải trên màn hình
-            }
-        }
-
-    }
+    
 
     int help = 0; // biến trợ giúp
-
-    private void randomRow () {
-        // Sử dụng cho chế độ vô hạn
-        if(playingState != PlayingState.RUNNING){
-            // tạm thời xem xét với running
-            return;
-        }
-
-        if (50 + brickH + map.getY() > minLocateY) {
-            // khi này nếu không thể chèn gạch thì cũng dừng lại
-            return;
-        }
-
-        if (currentMap >= 14 ) {
-            randRowCount = 1000000;
-            // làm cho random vô tận với ultimate 1 & 2
-        } else {
-            randRowCount --; // các level từ 9 - > 14 đều có giới hạn random
-        }
-
-        // Hiện tại có thể vẽ
-        Random rand = new Random();
-        // Nó sẽ lấy một map được tạo từ map đã tạo : 13 -> 18;
-        int[][] arr = LM.getMapByCode(rand.nextInt(5) + 7);
-        int i = rand.nextInt(arr.length); // lấy một hàng bất kỳ từ map đã nhận
-
-        double by;
-
-        if (bricks.isEmpty()) {
-            // Nếu khay đã rỗng thì in lên trên cùng
-            by = 50 + map.getY();
-
-        } else {
-            by = minLocateY - brickH; // đảm bảo khoảng cách đẹp nhất
-            while (by - brickH >= 50 + map.getY()) {
-                // Giải làm sao để in ra gạch mới trên cùng nhất
-                by -= brickH;
-            }
-        }
-        // Để giảm độ khó mỗi một hàng đẩy xuống sẽ đảm bảo có 1 trong hai trợ giúp lifeUp và pushBrick
-        if (help == 0){
-            // thêm máu
-            arr[i][rand.nextInt(13)] = 3;
-            help++;
-        } else {
-            // thêm đẩy lên pushBrick
-            arr[i][rand.nextInt(13)] = 8;
-            help = 1; // reset lại biến
-        }
-        // dùng lại code của initMap  ( hàm này cũng được viết trong class này )
-        for (int j = 0; j < arr[i].length; j++) {
-            System.out.print(arr[i][j] + " ");
-            if(arr[i][j] == 0){
-                continue;
-            }
-            // map.getX và map.getY để lấy vị trí cục bộ của màn hình chơi
-
-            double bx = 30 + j * brickW + map.getX();
-
-
-            // có 8 loại gạch hehe
-            // brickW - 6  : mỗi viên cách nhau 6 pixel ( ngang)
-            // brickH - 6  : mỗi viên gạch cách nhau 6 pixel ( dọc )
-            //(bx,by) : vị trí góc trái cùng
-            //(w,h) : kích thước
-            //(r,c) vị trí trong int map[][]
-            if(arr[i][j] == 1) {
-                bricks.add(new NormalBrick(bx, by, brickW - 6, brickH - 6, i, j));
-            } else if(arr[i][j] == 2){
-                bricks.add(new ImmortalBrick(bx, by, brickW - 6, brickH - 6, i, j));
-            } else if (arr[i][j] == 3){
-                bricks.add(new LifeUpBrick(bx, by, brickW - 6, brickH - 6, i, j));
-            } else if (arr[i][j] == 4){
-                bricks.add(new GoldBrick(bx, by, brickW - 6, brickH -6, i, j));
-            } else if (arr[i][j] == 5){
-                bricks.add(new FallBombBrick(bx, by, brickW - 6, brickH - 6, i, j));
-            } else if (arr[i][j] == 6){
-                bricks.add(new AreaBlastBrick(bx, by, brickW - 6, brickH - 6, i, j));
-            } else if (arr[i][j] == 7){
-                bricks.add(new LuckyWheelBrick(bx, by, brickW - 6, brickH - 6, i, j));
-            } else if (arr[i][j] == 8 && levelType != LevelType.ULTIMATE_TWO){
-                bricks.add(new PushBrick(bx, by, brickW - 6, brickH - 6, i, j));
-            }
-        }
-        // gán độ cao mới cho minLoctateY
-        minLocateY = (int) by;
-        System.out.println();
-    }
 
     @Override
 
@@ -668,7 +417,22 @@ public class PlayingProcess extends Process {
 
             if ( currentMap > 9 && randRowCount > 0) {
                 // khi level từ 10 trở đi render thêm hàng
-                randomRow(); // đồng thời gọi random map
+                SpecialBrickEffect.RandomRowResult rr = SpecialBrickEffect.randomRow(
+                        bricks,
+                        map,
+                        brickW,
+                        brickH,
+                        minLocateY,
+                        currentMap,
+                        randRowCount,
+                        LM,
+                        playingState == PlayingState.RUNNING,
+                        levelType != LevelType.ULTIMATE_TWO,
+                        help
+                );
+                minLocateY = rr.minLocateY;
+                randRowCount = rr.randRowCount;
+                help = rr.help;
             }
             // lấy lại độ cao
             for (Brick b : bricks) {
@@ -676,7 +440,7 @@ public class PlayingProcess extends Process {
             }
             if (currentMap >= 4) {
                 // các viên gạch có thể tự do di chuyển từ level 4
-                selectMoveBrick();
+                SpecialBrickEffect.selectMoveBrick(bricks, map, minLocateY, brickW, brickH);
             }
 
         } else  if (playingState == PlayingState.RUNNING) {

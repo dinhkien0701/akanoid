@@ -6,6 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d187c723-39e4-4b2e-9886-2b9f92bdb635" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/CreateMap/CreateMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/CreateMap/CreateMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/map/CreatSpecialBrick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/map/CreatSpecialBrick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/map/CreateMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/map/CreateMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/map/DFS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/map/DFS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/process/PickLevel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/process/PickLevel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/process/PlayingProcess.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,6 +57,10 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;#2 on Kien__Upgrade&quot;,
@@ -132,7 +141,16 @@
       <workItem from="1762139802075" duration="3290000" />
       <workItem from="1762143209647" duration="5353000" />
       <workItem from="1762152244479" duration="624000" />
-      <workItem from="1762176649839" duration="707000" />
+      <workItem from="1762176649839" duration="1671000" />
+      <workItem from="1762193076803" duration="233000" />
+      <workItem from="1762218993496" duration="74000" />
+      <workItem from="1762219286108" duration="809000" />
+      <workItem from="1762220149155" duration="629000" />
+      <workItem from="1762221031862" duration="561000" />
+      <workItem from="1762307142979" duration="407000" />
+      <workItem from="1762307586318" duration="592000" />
+      <workItem from="1762308489464" duration="1046000" />
+      <workItem from="1762311232128" duration="1718000" />
     </task>
     <servers />
   </component>
@@ -155,7 +173,7 @@
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/core/GameManager.java</url>
           <line>73</line>
-          <properties class="core.GameManager">
+          <properties class="core.GameManager" method="finishPickLevel">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
