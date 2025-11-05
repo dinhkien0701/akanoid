@@ -8,31 +8,29 @@ import java.util.Map;
 
 public class LoadImage {
 
-    /* sử dụng static chính lớp để không cần tạo đối tượng
-     mà một phương thức tĩnh sẽ chiếu đến chính một bản khác của nó chứ hình ảnh
+    /*
+     * sử dụng static chính lớp để không cần tạo đối tượng mà một phương thức tĩnh sẽ chiếu đến
+     * chính một bản khác của nó chứ hình ảnh
      */
 
-    // Tạo instance để có thể lấy từ mọi nơi qua phuong thức  loadImage
-    //private static LoadImage instance; // Instance duy nhất của LoadImage
-    private static final Map<String, Image> imageMap  = new HashMap<>(); // Lưu trữ các ảnh đã tải
+    // Tạo instance để có thể lấy từ mọi nơi qua phuong thức loadImage
+    // private static LoadImage instance; // Instance duy nhất của LoadImage
+    private static final Map<String, Image> imageMap = new HashMap<>(); // Lưu trữ các ảnh đã tải
 
     // Private constructor để ngăn việc tạo đối tượng từ bên ngoài
-    /*private LoadImage() {
-        imageMap = new HashMap<>();
-    }*/
+    /*
+     * private LoadImage() { imageMap = new HashMap<>(); }
+     */
 
     // Phương thức để lấy instance duy nhất
-    /*public static LoadImage getInstance() {
-        if (instance == null) {
-            instance = new LoadImage();
-        }
-        return instance;
-    } */
+    /*
+     * public static LoadImage getInstance() { if (instance == null) { instance = new LoadImage(); }
+     * return instance; }
+     */
 
     /**
-     * Tải và lưu trữ một hình ảnh vào cache nếu nó chưa được tải.
-     * Sử dụng ClassPath để tải (tốt nhất khi đóng gói game).
-     * Ví dụ: "/image/gach_do.png"
+     * Tải và lưu trữ một hình ảnh vào cache nếu nó chưa được tải. Sử dụng ClassPath để tải (tốt
+     * nhất khi đóng gói game). Ví dụ: "/image/gach_do.png"
      *
      * @param resourcePath Đường dẫn tài nguyên bắt đầu bằng "/"
      * @return Đối tượng Image đã tải, hoặc null nếu có lỗi.
@@ -57,21 +55,23 @@ public class LoadImage {
             }
             image = new Image(is);
             if (image.isError()) {
-                System.err.println("Lỗi tải ảnh (resource): " + resourcePath + " - " + image.exceptionProperty().get().getMessage());
+                System.err.println("Lỗi tải ảnh (resource): " + resourcePath + " - "
+                        + image.exceptionProperty().get().getMessage());
                 image = null;
             } else {
                 imageMap.put(resourcePath, image); // Lưu vào cache nếu tải thành công
             }
             is.close();
         } catch (Exception e) {
-            System.err.println("Lỗi tải ảnh (Exception từ resource): " + resourcePath + " - " + e.getMessage());
+            System.err.println("Lỗi tải ảnh (Exception từ resource): " + resourcePath + " - "
+                    + e.getMessage());
         }
         return image;
     }
 
     /**
-     * Phương thức này có thể được dùng để tải trước tất cả các ảnh khi khởi tạo game.
-     * Ví dụ: ImageCache.getInstance().preloadImages();
+     * Phương thức này có thể được dùng để tải trước tất cả các ảnh khi khởi tạo game. Ví dụ:
+     * ImageCache.getInstance().preloadImages();
      */
     public static void preloadImages() {
         // Ví dụ tải trước các ảnh. Bạn có thể mở rộng danh sách này.

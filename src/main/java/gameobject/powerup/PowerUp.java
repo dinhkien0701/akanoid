@@ -7,33 +7,34 @@ import gameobject.paddle.Paddle;
 import process.PlayingProcess;
 
 public abstract class PowerUp extends MovableObject {
-    public static final double FALLING_SPEED = 3.0;
-    public static final double SIZE = 25;
-    public static final long DURATION_SECONDS = 6000;
+  public static final double FALLING_SPEED = 3.0;
+  public static final double SIZE = 50;
+  public static final long DURATION_SECONDS = 6000;
+  public static final long MAX_POWER_UP_PER_LEVEL = 20;
 
-    private POWERUPSTATE powerupstate;
-    private long timer;
+  private POWERUPSTATE powerupstate;
+  private long timer;
 
-    public PowerUp(double x, double y, double width, double height) {
-        super(x, y, width, height, 0, FALLING_SPEED);
-        timer = System.currentTimeMillis();
-        powerupstate = POWERUPSTATE.FALLING;
-    }
+  public PowerUp(double x, double y, double width, double height) {
+    super(x, y, width, height, 0, FALLING_SPEED);
+    timer = System.currentTimeMillis();
+    powerupstate = POWERUPSTATE.FALLING;
+  }
 
   public long getTimer() {
-      return this.timer;
+    return this.timer;
   }
 
   public void setTimer(long timer) {
-      this.timer = timer;
+    this.timer = timer;
   }
 
   public boolean isFallOut() {
-      return this.powerupstate == POWERUPSTATE.FALLOUT;
+    return this.powerupstate == POWERUPSTATE.FALLOUT;
   }
 
   public boolean isEnd() {
-      return this.powerupstate == POWERUPSTATE.END;
+    return this.powerupstate == POWERUPSTATE.END;
   }
 
   public boolean isApplying() {
@@ -41,11 +42,11 @@ public abstract class PowerUp extends MovableObject {
   }
 
   public void setIsEnd() {
-      this.powerupstate = POWERUPSTATE.END;
+    this.powerupstate = POWERUPSTATE.END;
   }
 
   public void setPowerUpState(POWERUPSTATE powerupstate) {
-      this.powerupstate = powerupstate;
+    this.powerupstate = powerupstate;
   }
 
   public boolean checkCollision(GameObject other) {
@@ -62,33 +63,31 @@ public abstract class PowerUp extends MovableObject {
     super.setDy(FALLING_SPEED);
   }
 
+
   @Override
   public void update(PlayingProcess pp) {
-      if (isFalling()) {
-          move();
-          if (getY() > pp.getMap().getY() + pp.getMap().getHeight()) {
-              powerupstate = POWERUPSTATE.FALLOUT;
-          } else if (checkCollision(pp.getPaddle())) {
-              applyEffect(pp);
-              setTimer(System.currentTimeMillis());
-              powerupstate = POWERUPSTATE.APPLYING;
-          }
+    if (isFalling()) {
+      move();
+      if (getY() > pp.getMap().getY() + pp.getMap().getHeight()) {
+        powerupstate = POWERUPSTATE.FALLOUT;
+      } else if (checkCollision(pp.getPaddle())) {
+        applyEffect(pp);
+        setTimer(System.currentTimeMillis());
+        powerupstate = POWERUPSTATE.APPLYING;
       }
+    }
   }
 
 
-    public boolean isFalling() {
-      return powerupstate == POWERUPSTATE.FALLING;
-    }
+  public boolean isFalling() {
+    return powerupstate == POWERUPSTATE.FALLING;
+  }
 
 
-    public abstract void applyEffect(PlayingProcess pp);
+  public abstract void applyEffect(PlayingProcess pp);
 
   public enum POWERUPSTATE {
-      FALLING,
-      FALLOUT,
-      APPLYING,
-      END
+    FALLING, FALLOUT, APPLYING, END
   };
 }
 
