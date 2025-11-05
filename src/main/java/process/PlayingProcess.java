@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import process.PauseMenu;
 import gamemanager.GameManager;
 import gameobject.ball.Ball;
 import gameobject.brick.*;
@@ -55,7 +56,7 @@ public class PlayingProcess extends Process {
     private final List<Ball> listOfBall;
     private final List<Ball> deletedBall;
     private Ball mainBall;
-    //private PauseMenu pauseMenu;
+    private PauseMenu pauseMenu;
 
     // Thuộc tính khung hình chứa logic chơi game và kích thước gạch
     private Rectangle map;
@@ -99,10 +100,18 @@ public class PlayingProcess extends Process {
         mainBall = new Ball(map.getWidth() / 2 - 60 + map.getX() + 50 - 8,
                 map.getHeight() - 40 + map.getY() - 16);
         listOfBall.add(mainBall);
-        pauseMenu = new PauseMenu(width/2, height/2);
         this.numPowerUpSpawnThisLevel = 0;
         initBall();
         initPaddle();
+    }
+
+    public void addPause(GameManager gm, Stage stage) {
+        pauseMenu = new PauseMenu(
+                () -> this.resumeGame(),           // Resume
+                () -> gm.LeadToPickLevel(stage),   // Replay
+                () -> System.exit(0)               // Quit
+        );
+        pane.getChildren().add(pauseMenu);
     }
 
     public void setCurrentMap( int level) {
@@ -223,7 +232,6 @@ public class PlayingProcess extends Process {
         return this.mainBall;
     }
 
-
     public boolean isEnoughPowerUpsSpawnedThisLevel(){
         return this.numPowerUpSpawnThisLevel >= PowerUp.MAX_POWER_UP_PER_LEVEL;
     }
@@ -308,12 +316,14 @@ public class PlayingProcess extends Process {
                 case ESCAPE:
                     if(playingState == PlayingState.RUNNING ||  playingState == PlayingState.READY) {
                         this.pauseGame();
+                        pauseMenu.show();  // hiển thị PauseMenu
                     } else if(playingState == PlayingState.PAUSE) {
                         this.resumeGame();
+                        pauseMenu.hide();  // ẩn PauseMenu
                     }
                     break;
                 case SPACE:
-                    if ((playingState).equals(PlayingState.READY)) {
+                    if (playingState == PlayingState.READY) {
                         this.startGame();
                     }
                     break;
@@ -327,8 +337,10 @@ public class PlayingProcess extends Process {
         });
 
         this.scene.setOnKeyReleased(e -> {
-            if (e.getCode() == KeyCode.LEFT) pressedLeft = false;
-            if (e.getCode() == KeyCode.RIGHT) pressedRight = false;
+            if (e.getCode() == KeyCode.LEFT)
+                pressedLeft = false;
+            if (e.getCode() == KeyCode.RIGHT)
+                pressedRight = false;
         });
 
         if (pressedLeft) {
@@ -338,7 +350,10 @@ public class PlayingProcess extends Process {
         } else {
             paddle.stop();
         }
+
+
     }
+
 
     int frameBlast = 1;
 
@@ -420,6 +435,12 @@ public class PlayingProcess extends Process {
 
         if (playingState == PlayingState.RUNNING){
             frameBlast = SpecialBrickEffect.areaBlast(bricks, pairList, brickW, brickH, frameBlast);
+        }
+
+        for(Brick b : bricks){
+            if (b.getY() + b.getHeight() >= map.getY() + map.getHeight()) {
+                deadPaddle();
+            }
         }
 
         // Nếu đã phá hủy toàn bộ brick , sang level tiếp theo.

@@ -54,11 +54,15 @@ public class GameManager {
             AudioClip clip = new AudioClip(
                     Objects.requireNonNull(getClass().getResource("/sound/mapsound1.mp3")).toExternalForm()
             );
-            clip.setCycleCount(AudioClip.INDEFINITE); // lặp lại vô hạn
-            GlobalSound.play(clip); // sẽ tự phát nếu bật âm thanh
+            clip.setCycleCount(AudioClip.INDEFINITE); // lặp vô hạn
+
+            GlobalSound.register(clip);  // thêm clip vào GlobalSound
+            GlobalSound.play(clip);      // phát nếu bật âm thanh
+
         } catch (Exception e) {
             System.out.println("Không tìm thấy mapsound1.mp3");
         }
+
 
     }
 
@@ -95,6 +99,7 @@ public class GameManager {
         // ultimate level 14 - 15
         playing.setCurrentMap(level); // cài level cho màn
         playing.reset();
+        playing.addPause(this,stage);
         stage.setScene(playing.getScene());
         gameState = GameState.PLAYING;
     }
