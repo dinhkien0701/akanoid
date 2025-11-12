@@ -8,6 +8,10 @@ Akanoid là trò chơi phá gạch xây dựng bằng JavaFX mang cảm hứng t
 - Hệ thống trạng thái (`GameState`) điều hướng toàn bộ trải nghiệm: LoadingProcess, MenuProcess, PickLevelProcess, PlayingProcess, OptionProcess, TutorialProcess, GameOverProcess.
 - HUD hiển thị điểm, số mạng và level hiện tại; khi phá hết gạch, PlayingProcess tự động chuyển sang level kế tiếp.
 
+
+## Biểu đồ lớp
+<img width="4920" height="1990" alt="java" src="https://github.com/user-attachments/assets/d1dfb9c0-474d-4105-b0c1-361754628a17" />
+
 ## Paddle
 - Có ba kích thước: ngắn, chuẩn, mở rộng; việc đổi kích thước giữ nguyên tâm paddle để hạn chế cảm giác "giật".
 - Sở hữu số mạng riêng; mất hết mạng sẽ chuyển sang Game Over.
@@ -19,6 +23,8 @@ Akanoid là trò chơi phá gạch xây dựng bằng JavaFX mang cảm hứng t
 - Sau mỗi pha va chạm, tốc độ tăng nhẹ nhưng bị giới hạn để tránh vượt kiểm soát.
 - Điều kiện đặc biệt (góc 0°/90°) được hiệu chỉnh để tránh vòng lặp vô tận.
 - Rơi khỏi đáy màn sẽ gọi `onBallLost`; nếu còn bóng phụ, hệ thống chuyển sang bóng tiếp theo.
+- Ball collision:
+<img width="599" height="261" alt="image" src="https://github.com/user-attachments/assets/b54eebc4-dd33-4cf2-86c8-1910ab20c23c" />
 
 ## Hệ thống gạch
 | Loại gạch | Đặc điểm |
@@ -100,3 +106,10 @@ Nếu chạy ngoài Maven, bảo đảm thêm module JavaFX tương ứng vào `
 - Tài nguyên ảnh kích thước lớn, nên tối ưu nếu chuẩn bị phát hành chính thức.
 
 - Có thể sẽ mở rộng thêm sau này để tạo thành sản phẩm ổn hơn.
+## Thành viên
+Nhóm trưởng: Nguyễn Ngọc Phú
+Thành viên: Ma Đình Kiên, Phạm Tuấn Phong
+## Phân công công việc 
+<a href="https://docs.google.com/document/d/1OFlPN_8zJcJBUnvsHOD6V-ZPiNAUXaWzxZwewSnSOd8/edit?tab=t.0" target="_blank">Xem tài liệu chi tiết tại Google Docs</a>
+## Video demo: 
+Sẽ thêm sau...
