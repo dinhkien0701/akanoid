@@ -107,8 +107,8 @@ Nếu chạy ngoài Maven, bảo đảm thêm module JavaFX tương ứng vào `
 
 - Có thể sẽ mở rộng thêm sau này để tạo thành sản phẩm ổn hơn.
 ## Thành viên
-Nhóm trưởng: Nguyễn Ngọc Phú
-Thành viên: Ma Đình Kiên, Phạm Tuấn Phong
+-Nhóm trưởng: Nguyễn Ngọc Phú.
+-Thành viên: Ma Đình Kiên, Phạm Tuấn Phong
 ## Phân công công việc 
 <a href="https://docs.google.com/document/d/1OFlPN_8zJcJBUnvsHOD6V-ZPiNAUXaWzxZwewSnSOd8/edit?tab=t.0" target="_blank">Xem tài liệu chi tiết tại Google Docs</a>
 ## Video demo: 
