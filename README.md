@@ -113,3 +113,22 @@ Nếu chạy ngoài Maven, bảo đảm thêm module JavaFX tương ứng vào `
 <a href="https://docs.google.com/document/d/1OFlPN_8zJcJBUnvsHOD6V-ZPiNAUXaWzxZwewSnSOd8/edit?tab=t.0" target="_blank">Xem tài liệu chi tiết tại Google Docs</a>
 ## Video demo: 
 Sẽ thêm sau...
+## Hình ảnh demo
+- Màn hình load game
+<img width="1497" height="973" alt="image" src="https://github.com/user-attachments/assets/86c0f64a-6101-469f-af31-72b546799557" />
+- Mở đầu
+<img width="1503" height="972" alt="image" src="https://github.com/user-attachments/assets/d51b8988-41df-4a85-865d-d96202b4f29b" />
+- Option và Tutorial
+<img width="1497" height="977" alt="image" src="https://github.com/user-attachments/assets/895fff7a-e84c-4727-8f63-308d99493744" />
+<img width="1496" height="977" alt="image" src="https://github.com/user-attachments/assets/be8610ad-1667-4107-b85b-6cda6eb2d6c2" />
+- Pick level - 2 độ khó
+<img width="1495" height="976" alt="image" src="https://github.com/user-attachments/assets/7e0078cb-626c-48b4-be51-6ba1432e67a0" />
+<img width="1501" height="977" alt="image" src="https://github.com/user-attachments/assets/b3a18981-9762-4b69-8cae-a099086646d1" />
+- Gameplay
+<img width="1506" height="975" alt="Screenshot 2025-11-12 190859" src="https://github.com/user-attachments/assets/79748044-5e7a-4396-aeb3-c0c831a1e9e8" />
+- Gameover
+<img width="1506" height="973" alt="image" src="https://github.com/user-attachments/assets/1992b51c-4350-4300-974e-831cda4effd5" />
+
+
+
+
