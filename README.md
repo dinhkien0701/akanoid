@@ -111,9 +111,8 @@ Nếu chạy ngoài Maven, bảo đảm thêm module JavaFX tương ứng vào `
 - Thành viên: Ma Đình Kiên, Phạm Tuấn Phong
 ## Phân công công việc 
 <a href="https://docs.google.com/document/d/1OFlPN_8zJcJBUnvsHOD6V-ZPiNAUXaWzxZwewSnSOd8/edit?tab=t.0" target="_blank">Xem tài liệu chi tiết tại Google Docs</a>
-## Video demo: 
-https://drive.google.com/file/d/18CLS8GrBo6uLRoVoOXtPZS19hjr8TbDp/view?usp=sharing
-
+## Video demo
+<a href="https://drive.google.com/file/d/18CLS8GrBo6uLRoVoOXtPZS19hjr8TbDp/view?usp=sharing" target="_blank">Video demo</a>
 ## Hình ảnh demo
 - Màn hình load game
 <img width="1497" height="973" alt="image" src="https://github.com/user-attachments/assets/86c0f64a-6101-469f-af31-72b546799557" />
