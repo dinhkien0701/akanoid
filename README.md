@@ -107,12 +107,13 @@ Nếu chạy ngoài Maven, bảo đảm thêm module JavaFX tương ứng vào `
 
 - Có thể sẽ mở rộng thêm sau này để tạo thành sản phẩm ổn hơn.
 ## Thành viên
--Nhóm trưởng: Nguyễn Ngọc Phú.
--Thành viên: Ma Đình Kiên, Phạm Tuấn Phong
+- Nhóm trưởng: Nguyễn Ngọc Phú.
+- Thành viên: Ma Đình Kiên, Phạm Tuấn Phong
 ## Phân công công việc 
 <a href="https://docs.google.com/document/d/1OFlPN_8zJcJBUnvsHOD6V-ZPiNAUXaWzxZwewSnSOd8/edit?tab=t.0" target="_blank">Xem tài liệu chi tiết tại Google Docs</a>
 ## Video demo: 
-Sẽ thêm sau...
+<a href="[https://docs.google.com/document/d/1OFlPN_8zJcJBUnvsHOD6V-ZPiNAUXaWzxZwewSnSOd8/edit?tab=t.0](https://drive.google.com/file/d/18CLS8GrBo6uLRoVoOXtPZS19hjr8TbDp/view?usp=sharing)" target="_blank">Xem tài liệu chi tiết tại Google Docs</a>
+
 ## Hình ảnh demo
 - Màn hình load game
 <img width="1497" height="973" alt="image" src="https://github.com/user-attachments/assets/86c0f64a-6101-469f-af31-72b546799557" />
@@ -124,6 +125,8 @@ Sẽ thêm sau...
 - Pick level - 2 độ khó
 <img width="1495" height="976" alt="image" src="https://github.com/user-attachments/assets/7e0078cb-626c-48b4-be51-6ba1432e67a0" />
 <img width="1501" height="977" alt="image" src="https://github.com/user-attachments/assets/b3a18981-9762-4b69-8cae-a099086646d1" />
+- PauseMenu
+<img width="1201" height="788" alt="image" src="https://github.com/user-attachments/assets/037e4d4e-acec-45c0-803b-9e775759e8e5" />
 - Gameplay
 <img width="1506" height="975" alt="Screenshot 2025-11-12 190859" src="https://github.com/user-attachments/assets/79748044-5e7a-4396-aeb3-c0c831a1e9e8" />
 - Gameover
