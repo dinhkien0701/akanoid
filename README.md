@@ -112,7 +112,7 @@ Nếu chạy ngoài Maven, bảo đảm thêm module JavaFX tương ứng vào `
 ## Phân công công việc 
 <a href="https://docs.google.com/document/d/1OFlPN_8zJcJBUnvsHOD6V-ZPiNAUXaWzxZwewSnSOd8/edit?tab=t.0" target="_blank">Xem tài liệu chi tiết tại Google Docs</a>
 ## Video demo: 
-<a href="https://drive.google.com/file/d/18CLS8GrBo6uLRoVoOXtPZS19hjr8TbDp/view?usp=sharing" target="_blank">video demo</a>
+https://drive.google.com/file/d/18CLS8GrBo6uLRoVoOXtPZS19hjr8TbDp/view?usp=sharing
 
 ## Hình ảnh demo
 - Màn hình load game
